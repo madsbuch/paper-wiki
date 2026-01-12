@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router";
+import Logo from "./Logo";
 
 interface EssayLayoutProps {
   children: ReactNode;
@@ -50,11 +51,11 @@ export default function EssayLayout({
       <header className="bg-white border-b border-slate-200 shadow-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link
-              to="/"
-              className="text-2xl font-bold text-slate-900 hover:text-violet-600 transition-colors"
-            >
-              ML Wiki
+            <Link to="/" className="flex items-center gap-3 group">
+              <Logo className="w-8 h-8 group-hover:scale-110 transition-transform" />
+              <span className="text-2xl font-bold text-slate-900 group-hover:text-violet-600 transition-colors">
+                ML Wiki
+              </span>
             </Link>
             <nav className="flex gap-6">
               <Link

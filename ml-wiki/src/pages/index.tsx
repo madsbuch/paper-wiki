@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import Logo from "../components/Logo";
 
 export default function Home() {
   console.log("Showing index.tsx");
@@ -52,9 +53,12 @@ export default function Home() {
       {/* Hero Section */}
       <header className="container mx-auto px-4 pt-20 pb-16">
         <div className="text-center max-w-4xl mx-auto">
-          <h1 className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-purple-600 mb-6">
-            ML Wiki
-          </h1>
+          <div className="flex items-center justify-center mb-6 gap-4">
+            <Logo className="w-20 h-20" />
+            <h1 className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-purple-600">
+              ML Wiki
+            </h1>
+          </div>
           <p className="text-2xl text-slate-700 mb-8 leading-relaxed">
             Making machine learning papers accessible through
             <br />
