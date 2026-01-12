@@ -1,0 +1,359 @@
+import ProjectLayout from "../../components/ProjectLayout";
+
+export const meta = {
+  title: "Building a Small Transformer for Translation",
+  description: "Learn how to implement a complete Transformer model for sequence-to-sequence translation, following the architecture from the original 'Attention Is All You Need' paper.",
+  difficulty: "Advanced",
+  estimatedTime: "2-3 weeks",
+  relatedPapers: [
+    { title: "Attention Is All You Need", slug: "attention-is-all-you-need" }
+  ],
+  relatedConcepts: [
+    { name: "Transformer Architecture", slug: "transformer-architecture" },
+    { name: "Self-Attention", slug: "self-attention" },
+    { name: "Multi-Head Attention", slug: "multi-head-attention" },
+    { name: "Positional Encoding", slug: "positional-encoding" }
+  ],
+  prerequisites: [
+    "Understanding of neural networks and backpropagation",
+    "Linear algebra basics (matrix multiplication, vector operations)",
+    "Familiarity with sequence-to-sequence models",
+    "Basic knowledge of attention mechanisms"
+  ]
+};
+
+<ProjectLayout {...meta}>
+
+## Overview
+
+The Transformer architecture revolutionized natural language processing by replacing recurrence with attention mechanisms. In this project, you'll implement a complete Transformer model for machine translation, capable of translating sentences from one language to another.
+
+This implementation follows the original "Attention Is All You Need" paper (Vaswani et al., 2017), which describes an architecture that achieves state-of-the-art translation results while being more parallelizable than RNN-based models.
+
+## What You'll Build
+
+By the end of this project, you'll have a working Transformer model that includes:
+
+- **Encoder stack** with multi-head self-attention
+- **Decoder stack** with masked self-attention and encoder-decoder attention
+- **Positional encodings** to capture sequence order
+- **Feed-forward networks** for transformation
+- **Training loop** with teacher forcing
+- **Inference mechanism** with beam search
+
+The model will be able to translate simple sentences between two languages (e.g., English to French).
+
+## Architecture Overview
+
+The Transformer consists of two main components:
+
+### Encoder
+
+The encoder processes the input sequence and creates rich representations. Each encoder layer contains:
+
+1. **Multi-head self-attention**: Allows each position to attend to all positions in the input
+2. **Feed-forward network**: Applies transformation to each position independently
+3. **Layer normalization**: Stabilizes training
+4. **Residual connections**: Helps gradient flow
+
+The paper uses 6 identical encoder layers stacked on top of each other.
+
+### Decoder
+
+The decoder generates the output sequence one token at a time. Each decoder layer contains:
+
+1. **Masked multi-head self-attention**: Prevents attending to future positions
+2. **Encoder-decoder attention**: Allows decoder to focus on relevant input positions
+3. **Feed-forward network**: Same as encoder
+4. **Layer normalization and residual connections**: Same as encoder
+
+The paper also uses 6 identical decoder layers.
+
+## Implementation Steps
+
+### Step 1: Scaled Dot-Product Attention
+
+The core of the Transformer is the attention mechanism. The formula is:
+
+```
+Attention(Q, K, V) = softmax(QK^T / √d_k)V
+```
+
+Where:
+- Q (queries), K (keys), and V (values) are matrices
+- d_k is the dimension of the keys
+- The scaling factor 1/√d_k prevents large dot products
+
+**Implementation guidance:**
+1. Compute dot products between queries and keys
+2. Scale by √d_k to prevent saturation of softmax
+3. Apply softmax to get attention weights
+4. Multiply weights by values to get output
+
+**Verification:** For a simple 3x3 attention matrix, manually compute expected values and compare.
+
+### Step 2: Multi-Head Attention
+
+Instead of single attention, use multiple attention "heads" running in parallel:
+
+```
+MultiHead(Q, K, V) = Concat(head_1, ..., head_h)W^O
+
+where head_i = Attention(QW_i^Q, KW_i^K, VW_i^V)
+```
+
+**Implementation guidance:**
+1. Create h sets of learned projection matrices (W^Q, W^K, W^V)
+2. Project Q, K, V through each set
+3. Apply attention mechanism to each projection
+4. Concatenate all attention outputs
+5. Apply final linear projection W^O
+
+The paper uses h=8 attention heads with d_k = d_v = 64 (for d_model=512).
+
+**Verification:** Check that output dimensions match input dimensions. Visualize attention weights for each head.
+
+### Step 3: Positional Encoding
+
+Since Transformers have no inherent notion of sequence order, add positional information:
+
+```
+PE(pos, 2i) = sin(pos / 10000^(2i/d_model))
+PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
+```
+
+Where:
+- pos is the position in the sequence
+- i is the dimension
+
+**Implementation guidance:**
+1. Create a matrix of size (max_seq_len, d_model)
+2. For each position and dimension, apply the sine/cosine formula
+3. Add these encodings to the input embeddings
+
+**Verification:** Plot the positional encodings as a heatmap. Check that similar positions have similar encodings.
+
+### Step 4: Feed-Forward Network
+
+Each layer includes a position-wise feed-forward network:
+
+```
+FFN(x) = max(0, xW_1 + b_1)W_2 + b_2
+```
+
+**Implementation guidance:**
+1. Linear transformation expanding from d_model to d_ff (typically 2048)
+2. ReLU activation
+3. Linear transformation back to d_model
+4. Apply independently to each position
+
+**Verification:** Check that output dimensions match input. Ensure no information sharing between positions.
+
+### Step 5: Encoder Layer
+
+Combine the components into a single encoder layer:
+
+```
+x' = LayerNorm(x + MultiHeadAttention(x, x, x))
+output = LayerNorm(x' + FFN(x'))
+```
+
+**Implementation guidance:**
+1. Apply multi-head self-attention
+2. Add residual connection and layer normalization
+3. Apply feed-forward network
+4. Add another residual connection and layer normalization
+
+**Verification:** Test with random input, ensure gradients flow through all paths.
+
+### Step 6: Decoder Layer
+
+Similar to encoder but with three sub-layers:
+
+```
+x' = LayerNorm(x + MaskedMultiHeadAttention(x, x, x))
+x'' = LayerNorm(x' + MultiHeadAttention(x', encoder_output, encoder_output))
+output = LayerNorm(x'' + FFN(x''))
+```
+
+The key difference is the masked attention (prevents looking ahead) and encoder-decoder attention.
+
+**Implementation guidance:**
+1. Apply masked self-attention (queries, keys, values all from decoder)
+2. Apply encoder-decoder attention (queries from decoder, keys and values from encoder)
+3. Apply feed-forward network
+4. Use residual connections and layer normalization throughout
+
+**Verification:** Ensure masking prevents information leakage from future positions.
+
+### Step 7: Full Encoder and Decoder
+
+Stack multiple layers (paper uses 6 each):
+
+```
+Encoder: embedding → positional encoding → [encoder layer] × 6
+Decoder: embedding → positional encoding → [decoder layer] × 6 → linear → softmax
+```
+
+**Implementation guidance:**
+1. Create token embeddings (learned)
+2. Add positional encodings
+3. Stack 6 encoder layers
+4. Stack 6 decoder layers
+5. Add final linear projection to vocabulary size
+6. Apply softmax for probability distribution
+
+### Step 8: Training
+
+Train with teacher forcing and cross-entropy loss:
+
+**Implementation guidance:**
+1. Feed source sentence through encoder
+2. Feed target sentence through decoder (shifted right by one position)
+3. Compute cross-entropy loss against true target
+4. Use Adam optimizer with learning rate schedule:
+   ```
+   lr = d_model^(-0.5) * min(step^(-0.5), step * warmup_steps^(-1.5))
+   ```
+5. The paper uses warmup_steps = 4000
+
+**Training tips:**
+- Use dropout (0.1) on attention weights and sublayer outputs
+- Use label smoothing (0.1) to prevent overconfidence
+- Train on parallel sentence pairs
+- Use batching to group similar-length sequences
+
+### Step 9: Inference
+
+Generate translations using beam search:
+
+**Implementation guidance:**
+1. Encode source sentence
+2. Start with special `<start>` token
+3. For each position:
+   - Run decoder with current sequence
+   - Sample top-k most likely next tokens
+   - Keep k beams (sequences) with highest cumulative probability
+4. Stop when `<end>` token is generated
+5. Return sequence with highest probability
+
+The paper uses beam width of 4 for translation tasks.
+
+**Verification:** Test on training examples first, then unseen sentences.
+
+## Data Requirements
+
+For a small working model, you'll need:
+
+- **Parallel corpus**: 10,000+ sentence pairs minimum
+- **Vocabulary**: 8,000-16,000 tokens per language
+- **Preprocessing**: Tokenization (word-level or subword), lowercasing, special tokens
+
+Suggested datasets:
+- Tatoeba (small, simple sentences)
+- IWSLT (larger, conversation-style)
+- Start with a subset for faster iteration
+
+## Evaluation
+
+Measure translation quality using:
+
+**BLEU Score**: Compares n-gram overlap between generated and reference translations
+- BLEU-4 (4-grams) is standard
+- Score ranges 0-100, higher is better
+- 30+ is reasonable for small models
+
+**Manual Inspection**: Check if translations are:
+- Grammatically correct
+- Semantically accurate
+- Natural-sounding
+
+## Expected Results
+
+With a small model trained on 10,000 sentence pairs:
+- **BLEU score**: 15-25 (depends heavily on data and training time)
+- **Training time**: 2-4 hours on GPU for basic convergence
+- **Model size**: ~40-60M parameters for base configuration
+
+The original paper achieved BLEU scores of 28+ on WMT datasets with much more data and compute.
+
+## Common Pitfalls
+
+### 1. Masking Issues
+- Ensure decoder self-attention is properly masked
+- Padding tokens should be masked in attention
+- Check that future positions are never attended to
+
+### 2. Dimension Mismatches
+- Carefully track tensor dimensions through all operations
+- d_model = 512, d_ff = 2048, h = 8, d_k = d_v = 64 (paper defaults)
+- Ensure projections maintain correct dimensions
+
+### 3. Training Instability
+- Use learning rate warmup (critical!)
+- Apply layer normalization correctly
+- Monitor gradient norms, clip if necessary
+- Use smaller model (d_model=256) if training is unstable
+
+### 4. Memory Issues
+- Attention requires O(n²) memory for sequence length n
+- Batch smaller sequences together
+- Use gradient checkpointing for long sequences
+
+## Extensions
+
+Once you have a working model:
+
+1. **Byte-Pair Encoding**: Use subword tokenization for better vocabulary coverage
+2. **Relative Positional Encodings**: More flexible position representation
+3. **Larger Model**: Scale to d_model=1024, more layers
+4. **Different Tasks**: Apply to summarization, question-answering
+5. **Efficient Attention**: Implement sparse attention patterns to reduce O(n²) complexity
+
+## Key Insights from the Paper
+
+The Transformer architecture makes several important choices:
+
+1. **No Recurrence**: Eliminates sequential computation bottleneck, enables full parallelization
+2. **Multi-Head Attention**: Allows model to jointly attend to information from different representation subspaces
+3. **Positional Encoding**: Injects order information without recurrence
+4. **Layer Normalization**: Applied before each sub-layer (pre-norm) for training stability
+5. **Residual Connections**: Enable gradient flow through deep networks
+
+As Vaswani et al. note: "The Transformer allows for significantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs" (p. 2).
+
+## Resources for Implementation
+
+### Mathematical Details
+- Read the paper carefully, especially Section 3 (Model Architecture)
+- Pay attention to the dimension calculations in Section 3.2.2
+- Study Figure 1 (the architecture diagram) thoroughly
+
+### Debugging Tips
+- Start with a tiny model (2 layers, d_model=64) and overfit on 10 examples
+- Print tensor shapes at each step to catch dimension errors
+- Visualize attention weights to understand what the model learns
+- Compare with reference implementations but implement yourself first
+
+### Testing Strategy
+1. Test each component independently with known inputs
+2. Verify encoder output has expected dimensions
+3. Verify decoder can generate sequences (even if nonsensical initially)
+4. Check that loss decreases on training set
+5. Evaluate on held-out validation set
+
+## Conclusion
+
+Building a Transformer from scratch is challenging but deeply educational. You'll gain understanding of:
+- How attention mechanisms enable parallelization
+- Why positional encodings are necessary
+- How encoder-decoder architectures work for translation
+- The importance of architectural details (normalization, residual connections)
+
+The Transformer architecture has become the foundation for modern NLP (BERT, GPT, T5, etc.), so understanding its core mechanics will serve you well in many applications.
+
+Good luck with your implementation!
+
+</ProjectLayout>
+
+export default ({ children }) => children;

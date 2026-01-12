@@ -1,43 +1,50 @@
 import { Link } from "react-router";
 
 export default function Home() {
+  console.log("Showing index.tsx");
+
   const featuredConcepts = [
     {
       title: "Transformer Architecture",
-      description: "A revolutionary neural network architecture based solely on attention mechanisms",
+      description:
+        "A revolutionary neural network architecture based solely on attention mechanisms",
       slug: "transformer-architecture",
-      color: "violet"
+      color: "violet",
     },
     {
       title: "Self-Attention",
-      description: "An attention mechanism that relates different positions of a single sequence",
+      description:
+        "An attention mechanism that relates different positions of a single sequence",
       slug: "self-attention",
-      color: "blue"
+      color: "blue",
     },
     {
       title: "Multi-Head Attention",
-      description: "Multiple attention mechanisms running in parallel to capture different aspects",
+      description:
+        "Multiple attention mechanisms running in parallel to capture different aspects",
       slug: "multi-head-attention",
-      color: "purple"
+      color: "purple",
     },
     {
       title: "In-Context Learning",
-      description: "Learning to perform tasks from examples in context without weight updates",
+      description:
+        "Learning to perform tasks from examples in context without weight updates",
       slug: "in-context-learning",
-      color: "emerald"
+      color: "emerald",
     },
     {
       title: "Few-Shot Learning",
       description: "Adapting to new tasks with just a handful of examples",
       slug: "few-shot-learning",
-      color: "amber"
+      color: "amber",
     },
     {
       title: "Meta-Learning",
-      description: "Learning how to learn - developing rapid task adaptation abilities",
+      description:
+        "Learning how to learn - developing rapid task adaptation abilities",
       slug: "meta-learning",
-      color: "rose"
-    }
+      color: "rose",
+    },
   ];
 
   return (
@@ -51,13 +58,18 @@ export default function Home() {
           <p className="text-2xl text-slate-700 mb-8 leading-relaxed">
             Making machine learning papers accessible through
             <br />
-            <span className="font-semibold text-violet-600">wiki entries</span>,{" "}
+            <span className="font-semibold text-violet-600">
+              wiki entries
+            </span>,{" "}
             <span className="font-semibold text-purple-600">stories</span>, and{" "}
-            <span className="font-semibold text-pink-600">creative explanations</span>
+            <span className="font-semibold text-pink-600">
+              creative explanations
+            </span>
           </p>
           <div className="inline-block bg-amber-100 border-l-4 border-amber-500 px-6 py-4 rounded-r-lg">
             <p className="text-slate-700 text-lg">
-              <strong className="text-amber-900">🔬 Evidence-Based:</strong> All content backed by citations from academic papers
+              <strong className="text-amber-900">🔬 Evidence-Based:</strong> All
+              content backed by citations from academic papers
             </p>
           </div>
         </div>
@@ -76,7 +88,9 @@ export default function Home() {
               to={`/wiki/${concept.slug}`}
               className={`group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border-t-4 border-${concept.color}-500 hover:-translate-y-1`}
             >
-              <h3 className={`text-2xl font-bold text-${concept.color}-600 mb-3 group-hover:text-${concept.color}-700`}>
+              <h3
+                className={`text-2xl font-bold text-${concept.color}-600 mb-3 group-hover:text-${concept.color}-700`}
+              >
                 {concept.title}
               </h3>
               <p className="text-slate-600 leading-relaxed">
@@ -91,32 +105,31 @@ export default function Home() {
 
         {/* Papers Section */}
         <div className="mt-20 max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-3xl font-bold text-slate-900 mb-6">📄 Available Papers</h2>
+          <h2 className="text-3xl font-bold text-slate-900 mb-6">
+            📄 Available Papers
+          </h2>
           <div className="space-y-4">
             <div className="bg-gradient-to-r from-violet-50 to-purple-50 rounded-lg p-6 border border-violet-200">
               <h3 className="text-xl font-bold text-slate-900 mb-2">
                 Attention Is All You Need
               </h3>
-              <p className="text-slate-600 mb-2">
-                Vaswani et al. (2017)
-              </p>
+              <p className="text-slate-600 mb-2">Vaswani et al. (2017)</p>
               <p className="text-slate-700 leading-relaxed">
-                The groundbreaking paper that introduced the Transformer architecture,
-                revolutionizing natural language processing and becoming the foundation
-                for models like GPT, BERT, and countless others.
+                The groundbreaking paper that introduced the Transformer
+                architecture, revolutionizing natural language processing and
+                becoming the foundation for models like GPT, BERT, and countless
+                others.
               </p>
             </div>
             <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg p-6 border border-emerald-200">
               <h3 className="text-xl font-bold text-slate-900 mb-2">
                 Language Models are Few-Shot Learners
               </h3>
-              <p className="text-slate-600 mb-2">
-                Brown et al. (2020)
-              </p>
+              <p className="text-slate-600 mb-2">Brown et al. (2020)</p>
               <p className="text-slate-700 leading-relaxed">
-                The GPT-3 paper that demonstrated powerful in-context learning at scale,
-                showing that 175 billion parameter models can perform tasks from just
-                a few examples without fine-tuning.
+                The GPT-3 paper that demonstrated powerful in-context learning
+                at scale, showing that 175 billion parameter models can perform
+                tasks from just a few examples without fine-tuning.
               </p>
             </div>
           </div>

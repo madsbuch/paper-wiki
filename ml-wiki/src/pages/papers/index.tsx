@@ -17,6 +17,26 @@ export default function PapersIndex() {
 
   const papers: Paper[] = [
     {
+      title: "Neural Machine Translation by Jointly Learning to Align and Translate",
+      authors: "Bahdanau, D., Cho, K., & Bengio, Y.",
+      year: "2014",
+      venue: "ICLR 2015",
+      arxivId: "1409.0473v7",
+      slug: "bahdanau-attention",
+      abstract: "Neural machine translation is a recently proposed approach to machine translation. Unlike the traditional statistical machine translation, the neural machine translation aims at building a single neural network that can be jointly tuned to maximize the translation performance. The models proposed recently for neural machine translation often belong to a family of encoder-decoders and encode a source sentence into a fixed-length vector from which a decoder generates a translation. In this paper, we conjecture that the use of a fixed-length vector is a bottleneck in improving the performance of this basic encoder-decoder architecture, and propose to extend this by allowing a model to automatically (soft-)search for parts of a source sentence that are relevant to predicting a target word, without having to form these parts as a hard segment explicitly. With this new approach, we achieve a translation performance comparable to the existing state-of-the-art phrase-based system on the task of English-to-French translation.",
+      tags: ["Attention", "NMT", "Encoder-Decoder", "RNN", "Alignment"]
+    },
+    {
+      title: "Deep Residual Learning for Image Recognition",
+      authors: "He, K., Zhang, X., Ren, S., & Sun, J.",
+      year: "2015",
+      venue: "CVPR 2016",
+      arxivId: "1512.03385v1",
+      slug: "resnet",
+      abstract: "Deeper neural networks are more difficult to train. We present a residual learning framework to ease the training of networks that are substantially deeper than those used previously. We explicitly reformulate the layers as learning residual functions with reference to the layer inputs, instead of learning unreferenced functions. We provide comprehensive empirical evidence showing that these residual networks are easier to optimize, and can gain accuracy from considerably increased depth. On the ImageNet dataset we evaluate residual nets with a depth of up to 152 layers—8× deeper than VGG nets but still having lower complexity. An ensemble of these residual nets achieves 3.57% error on the ImageNet test set. This result won the 1st place on the ILSVRC 2015 classification task. We also present analysis on CIFAR-10 with 100 and 1000 layers.",
+      tags: ["ResNet", "Residual Connections", "Computer Vision", "Deep Learning", "Architecture"]
+    },
+    {
       title: "Attention Is All You Need",
       authors: "Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I.",
       year: "2017",
@@ -90,10 +110,16 @@ export default function PapersIndex() {
             </Link>
             <nav className="flex gap-6">
               <Link to="/wiki" className="text-slate-600 hover:text-violet-600 transition-colors">
-                All Concepts
+                Wiki
               </Link>
               <Link to="/papers" className="text-violet-600 font-semibold">
                 Papers
+              </Link>
+              <Link to="/essays" className="text-slate-600 hover:text-violet-600 transition-colors">
+                Essays
+              </Link>
+              <Link to="/projects" className="text-slate-600 hover:text-violet-600 transition-colors">
+                Projects
               </Link>
             </nav>
           </div>

@@ -1,0 +1,528 @@
+import ProjectLayout from "../../components/ProjectLayout";
+
+export const meta = {
+  title: "Implementing Few-Shot Learning with Prompt Engineering",
+  description: "Build a practical few-shot learning system using prompt engineering techniques. Learn how to select examples, design templates, and integrate chain-of-thought reasoning for better performance.",
+  difficulty: "Intermediate",
+  estimatedTime: "1-2 weeks",
+  relatedPapers: [
+    { title: "Language Models are Few-Shot Learners", slug: "gpt3-few-shot-learners" },
+    { title: "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models", slug: "chain-of-thought-prompting" }
+  ],
+  relatedConcepts: [
+    { name: "In-Context Learning", slug: "in-context-learning" },
+    { name: "Few-Shot Learning", slug: "few-shot-learning" },
+    { name: "Chain-of-Thought Prompting", slug: "chain-of-thought-prompting" },
+    { name: "Prompt Engineering", slug: "prompt-engineering" }
+  ],
+  prerequisites: [
+    "Access to a large language model API (GPT-3.5, GPT-4, or similar)",
+    "Basic understanding of how language models work",
+    "Familiarity with API calls and text processing",
+    "Programming experience in any language"
+  ]
+};
+
+<ProjectLayout {...meta}>
+
+## Overview
+
+Few-shot learning is one of the most powerful capabilities of large language models. Unlike traditional machine learning that requires thousands of labeled examples, few-shot learning allows models to adapt to new tasks from just a handful of demonstrations—all without any weight updates or fine-tuning.
+
+This project will guide you through building a practical few-shot learning system. You'll learn how to design effective prompts, select good examples, and integrate chain-of-thought reasoning to improve performance on complex tasks.
+
+## What You'll Build
+
+By the end of this project, you'll have a working few-shot learning framework that includes:
+
+- **Prompt template system** for consistent formatting
+- **Example selection strategies** (random, similarity-based, diversity-based)
+- **Chain-of-thought integration** for reasoning tasks
+- **Evaluation framework** to measure performance
+- **Task-specific adaptations** for different problem types
+
+The system will be language-agnostic and work with any large language model API.
+
+## Core Concepts
+
+### In-Context Learning
+
+The GPT-3 paper introduced a paradigm shift: "In-context learning uses the text input of a pretrained language model as a form of task specification: the model is conditioned on a natural language instruction and/or a few demonstrations of the task and is then expected to complete further instances of the task simply by predicting what comes next" [Brown et al., 2020, p. 2].
+
+This means the model learns at inference time, purely from the examples you provide in the context window.
+
+### Three Learning Regimes
+
+The GPT-3 paper distinguishes three approaches:
+
+1. **Zero-shot**: Only a task description, no examples
+2. **One-shot**: Single example demonstration
+3. **Few-shot**: Multiple examples (typically 2-100)
+
+As the paper notes: "For all tasks, GPT-3 is applied without any gradient updates or fine-tuning, with tasks and few-shot demonstrations specified purely via text interaction with the model" [Brown et al., 2020, p. 2].
+
+## Implementation Steps
+
+### Step 1: Design Your Prompt Template
+
+A good prompt template has three components: instruction, examples, and query.
+
+**Basic Structure:**
+```
+<Instruction>
+Translate English to French.
+
+<Examples>
+English: sea otter
+French: loutre de mer
+
+English: peppermint
+French: menthe poivrée
+
+English: plush giraffe
+French: girafe peluche
+
+<Query>
+English: cheese
+French:
+```
+
+**Implementation guidance:**
+1. Create a template class that accepts instruction, examples, and query
+2. Format examples consistently (same delimiter, same order)
+3. Ensure clear separation between examples and the query
+4. Use natural formatting that matches training data patterns
+
+**Design considerations:**
+- Keep instructions clear and concise
+- Use consistent formatting across all examples
+- The final query should follow the exact same format as examples
+- Include explicit markers (like "English:" and "French:") to guide the model
+
+### Step 2: Implement Example Selection
+
+Not all examples are equally useful. The GPT-3 paper found that "the gap between zero-, one-, and few-shot performance often grows with model capacity" [Brown et al., 2020, p. 5-6], suggesting that good examples matter more for larger models.
+
+**Strategy 1: Random Selection**
+
+Start simple—randomly sample examples from your dataset.
+
+**Implementation guidance:**
+1. Shuffle your example pool
+2. Select k examples (typically 3-10)
+3. Verify examples don't duplicate the query
+
+**Pros:** Simple, unbiased
+**Cons:** May miss relevant examples
+
+**Strategy 2: Similarity-Based Selection**
+
+Select examples most similar to the query.
+
+**Implementation guidance:**
+1. Embed all examples using sentence embeddings (e.g., sentence-transformers)
+2. Embed the query
+3. Compute cosine similarity between query and all examples
+4. Select top-k most similar examples
+
+**Pros:** Examples are relevant to the query
+**Cons:** May lack diversity, computationally expensive
+
+**Strategy 3: Diversity-Based Selection**
+
+Balance relevance with diversity to cover different patterns.
+
+**Implementation guidance:**
+1. Start with most similar example to query
+2. Iteratively add examples that are:
+   - Somewhat similar to query (relevance)
+   - Dissimilar to already-selected examples (diversity)
+3. Use a weighted combination: `score = α * similarity_to_query - β * similarity_to_selected`
+
+**Pros:** Covers diverse patterns
+**Cons:** More complex to implement
+
+**Verification:** Test each strategy on a validation set to see which performs best for your task.
+
+### Step 3: Integrate Chain-of-Thought Reasoning
+
+For tasks requiring reasoning, add explicit reasoning steps to your examples.
+
+The Chain-of-Thought paper demonstrates: "Experiments on three large language models show that chain-of-thought prompting improves performance on a range of arithmetic, commonsense, and symbolic reasoning tasks" [Wei et al., 2022, p. 1].
+
+**Standard vs Chain-of-Thought:**
+
+**Standard:**
+```
+Q: Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls. How many tennis balls does he have now?
+A: 11
+```
+
+**Chain-of-Thought:**
+```
+Q: Roger has 5 tennis balls. He buys 2 more cans of tennis balls. Each can has 3 tennis balls. How many tennis balls does he have now?
+A: Roger started with 5 balls. 2 cans of 3 tennis balls each is 6 tennis balls. 5 + 6 = 11. The answer is 11.
+```
+
+**Implementation guidance:**
+1. For reasoning tasks, collect or generate examples with explicit reasoning steps
+2. Structure reasoning as: problem → intermediate steps → final answer
+3. Use natural language (no formal notation unless necessary)
+4. Keep reasoning concise but complete
+
+**When to use chain-of-thought:**
+- Multi-step reasoning problems (math, logic)
+- Commonsense reasoning tasks
+- Tasks requiring explicit justification
+- Complex decision-making
+
+**When NOT to use it:**
+- Simple classification or labeling
+- Tasks where reasoning is obvious
+- Very short context windows
+
+### Step 4: Build the Inference Pipeline
+
+Connect your prompt template to a language model API.
+
+**Implementation guidance:**
+1. **Construct prompt**: Use template + selected examples + query
+2. **API call**: Send prompt to model with appropriate parameters
+   - Temperature: 0.0 for deterministic tasks, 0.7+ for creative tasks
+   - Max tokens: Sufficient for complete response
+   - Stop sequences: Define where model should stop (e.g., "\n\n")
+3. **Parse response**: Extract answer from model output
+4. **Handle errors**: Retry on API failures, validate output format
+
+**Example API structure (pseudo-code):**
+```
+function generate_response(prompt, temperature=0.0, max_tokens=100):
+    response = api.call(
+        prompt=prompt,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        stop=["\n\n"]
+    )
+    return response.text
+```
+
+**Verification:** Test with known examples to ensure output matches expected format.
+
+### Step 5: Create Evaluation Framework
+
+Measure how well your few-shot system performs.
+
+**Implementation guidance:**
+1. **Split data**: Hold out test set separate from example pool
+2. **Define metrics**:
+   - Accuracy for classification
+   - Exact match for structured tasks
+   - BLEU/ROUGE for generation
+   - Task-specific metrics as needed
+3. **Run evaluation**: For each test item:
+   - Select examples (excluding test item if in pool)
+   - Generate response
+   - Compare to ground truth
+4. **Aggregate results**: Compute mean and variance across test set
+
+**Comparison experiments:**
+- Zero-shot vs one-shot vs few-shot (k=3, 5, 10)
+- Random selection vs similarity-based vs diversity-based
+- Standard prompting vs chain-of-thought
+- Different instruction phrasings
+
+**Statistical significance:** Run multiple trials with different random seeds to ensure results are consistent.
+
+### Step 6: Optimize for Your Task
+
+Different tasks benefit from different strategies.
+
+**Classification Tasks:**
+```
+Classify the sentiment of the following reviews.
+
+Review: This movie was fantastic! I loved every minute.
+Sentiment: Positive
+
+Review: Terrible experience, would not recommend.
+Sentiment: Negative
+
+Review: It was okay, nothing special.
+Sentiment: Neutral
+
+Review: The best restaurant I've been to in years!
+Sentiment:
+```
+
+**Tips for classification:**
+- Use balanced examples (equal representation of each class)
+- Keep examples concise
+- Use clear, consistent labels
+- 3-5 examples often sufficient
+
+**Translation Tasks:**
+```
+Translate the following sentences from English to Spanish.
+
+English: Good morning, how are you?
+Spanish: Buenos días, ¿cómo estás?
+
+English: I would like to order coffee.
+Spanish: Me gustaría pedir café.
+
+English: Where is the nearest library?
+Spanish:
+```
+
+**Tips for translation:**
+- Include diverse sentence structures
+- Vary complexity across examples
+- 5-10 examples recommended
+- Consider similarity-based selection
+
+**Reasoning Tasks:**
+```
+Solve the following math word problems step by step.
+
+Q: A store sells notebooks for $3 each. If you buy 4 notebooks and pay with a $20 bill, how much change do you get?
+A: The notebooks cost 4 × $3 = $12. Change is $20 - $12 = $8. The answer is $8.
+
+Q: Sarah runs 2 miles every day. How many miles does she run in a week?
+A: There are 7 days in a week. 2 miles × 7 days = 14 miles. The answer is 14 miles.
+
+Q: A recipe calls for 2 cups of flour for every 3 cups of sugar. If you use 6 cups of sugar, how much flour do you need?
+A:
+```
+
+**Tips for reasoning:**
+- Always use chain-of-thought
+- Show all intermediate steps
+- State the final answer explicitly
+- 3-8 examples typical
+- Ensure examples cover different reasoning patterns
+
+### Step 7: Handle Edge Cases
+
+Real-world applications require robustness.
+
+**Common issues:**
+
+1. **Context length limits**: If examples + query exceed model's context window
+   - Solution: Reduce number of examples
+   - Solution: Truncate or summarize examples
+   - Solution: Use shorter instruction text
+
+2. **Inconsistent output format**: Model doesn't follow the pattern
+   - Solution: Add explicit format instruction
+   - Solution: Include more examples demonstrating format
+   - Solution: Use stop sequences to truncate at right point
+
+3. **Examples too similar**: Overfitting to narrow pattern
+   - Solution: Use diversity-based selection
+   - Solution: Manually curate diverse example set
+
+4. **Poor zero-shot baseline**: Task is too difficult without examples
+   - Solution: Increase number of examples
+   - Solution: Add clearer instruction
+   - Solution: Use chain-of-thought reasoning
+
+**Implementation guidance:**
+1. Log all failures and edge cases during testing
+2. Create test cases for each edge case
+3. Implement fallbacks (e.g., retry with different examples)
+4. Validate output format before returning to user
+
+### Step 8: Build Task-Specific Adapters
+
+Create specialized configurations for different task types.
+
+**Implementation guidance:**
+1. Define task categories (classification, translation, reasoning, generation)
+2. For each category, set defaults:
+   - Number of examples
+   - Selection strategy
+   - Chain-of-thought enabled/disabled
+   - Temperature
+   - Stop sequences
+3. Allow overrides for specific use cases
+
+**Example configuration structure:**
+```
+ClassificationTask:
+  num_examples: 5
+  selection: "balanced_random"  # Ensure class balance
+  chain_of_thought: false
+  temperature: 0.0
+
+ReasoningTask:
+  num_examples: 5
+  selection: "similarity"
+  chain_of_thought: true
+  temperature: 0.0
+
+GenerativeTask:
+  num_examples: 3
+  selection: "diversity"
+  chain_of_thought: false
+  temperature: 0.7
+```
+
+## Evaluation Metrics
+
+### Task-Specific Metrics
+
+**Classification:**
+- Accuracy: % of correctly classified examples
+- F1 Score: Harmonic mean of precision and recall
+- Confusion matrix: Understand error patterns
+
+**Structured Output (e.g., translation, Q&A):**
+- Exact Match: % of outputs exactly matching reference
+- BLEU/ROUGE: N-gram overlap for text generation
+- Task-specific metrics (e.g., translation quality scores)
+
+**Reasoning Tasks:**
+- Answer Accuracy: % of correct final answers
+- Reasoning Quality: Manual evaluation of intermediate steps
+- Step Correctness: % of correct reasoning steps
+
+### Few-Shot Analysis
+
+**Key comparisons:**
+1. **Performance by k** (number of examples):
+   - Plot accuracy vs k (0, 1, 3, 5, 10)
+   - Identify point of diminishing returns
+
+2. **Selection strategy impact**:
+   - Random vs similarity vs diversity
+   - Measure on same test set
+
+3. **Chain-of-thought impact**:
+   - Standard vs CoT on reasoning tasks
+   - The paper reports: "On the GSM8K math dataset, chain-of-thought prompting increased GPT-3's accuracy from 17.9% to 40.7%" [Wei et al., 2022, p. 4]
+
+## Expected Results
+
+Performance varies greatly by task and model:
+
+**Classification tasks:**
+- Zero-shot: 40-60% accuracy (depends on task)
+- Few-shot (k=5): 70-85% accuracy
+- Human performance: ~90%+
+
+**Translation tasks:**
+- Zero-shot: Usable for common language pairs
+- Few-shot (k=10): Significant improvement on domain-specific vocabulary
+- BLEU score gains: +5-15 points
+
+**Reasoning tasks:**
+- Zero-shot: Often poor (< 20% on complex problems)
+- Few-shot with CoT: 2-3x improvement
+- Highly dependent on model size
+
+As the GPT-3 paper notes: "One notable pattern is that the gap between zero-, one-, and few-shot performance often grows with model capacity" [Brown et al., 2020, p. 5-6].
+
+## Common Pitfalls
+
+### 1. Example Quality Issues
+
+**Problem:** Examples don't represent the task well
+- Examples are too easy or too hard
+- Examples lack diversity
+- Examples contain errors
+
+**Solutions:**
+- Manually review examples for quality
+- Include range of difficulties
+- Verify ground truth labels
+
+### 2. Prompt Engineering Mistakes
+
+**Problem:** Poor prompt design reduces performance
+- Instruction is ambiguous
+- Format is inconsistent
+- Examples don't match query format
+
+**Solutions:**
+- Test multiple instruction phrasings
+- Ensure strict format consistency
+- Follow patterns seen in training data
+
+### 3. Context Window Management
+
+**Problem:** Running out of context space
+- Too many or too long examples
+- Verbose instructions
+
+**Solutions:**
+- Truncate examples intelligently
+- Use concise instructions
+- Prioritize quality over quantity
+
+### 4. Evaluation Issues
+
+**Problem:** Misleading evaluation results
+- Test examples contaminate training pool
+- Evaluation on examples too similar to demonstrations
+- Cherry-picking results
+
+**Solutions:**
+- Strict train/test split
+- Use diverse test set
+- Report variance across multiple runs
+
+## Extensions
+
+Once you have a working system, consider:
+
+1. **Automatic Example Generation**: Use the model itself to generate reasoning chains for examples
+
+2. **Dynamic k Selection**: Automatically determine optimal number of examples based on query difficulty
+
+3. **Multi-Task Learning**: Single system that adapts to multiple task types
+
+4. **Active Learning**: Iteratively add examples that most improve performance
+
+5. **Ensemble Methods**: Combine predictions from different example sets
+
+## Key Insights from Research
+
+The few-shot learning paradigm challenges traditional ML assumptions:
+
+**No gradient descent required:** "For all tasks, GPT-3 is applied without any gradient updates or fine-tuning" [Brown et al., 2020, p. 2]
+
+**Scale enables meta-learning:** The ability emerges with larger models, suggesting they develop internal representations of "learning to learn"
+
+**Reasoning can be elicited:** Chain-of-thought reveals that models have latent reasoning capabilities that emerge with proper prompting [Wei et al., 2022, p. 1]
+
+**Example selection matters:** Not all examples contribute equally—strategic selection improves efficiency
+
+## Best Practices
+
+1. **Start simple**: Begin with random example selection and standard prompting before optimizing
+
+2. **Iterate on instructions**: Small wording changes can significantly impact performance
+
+3. **Log everything**: Track which examples were used for each query for debugging
+
+4. **Validate outputs**: Check that model responses follow expected format
+
+5. **Use consistent formatting**: Match patterns the model saw during training
+
+6. **Test across models**: Different models respond differently to prompting strategies
+
+7. **Document task-specific learnings**: Build a knowledge base of what works for each task type
+
+## Conclusion
+
+Few-shot learning represents a fundamental shift in how we deploy machine learning systems. Instead of collecting thousands of examples and training task-specific models, we can adapt powerful general-purpose models to new tasks using just a few demonstrations.
+
+This project gives you the tools to leverage this capability effectively. By carefully designing prompts, selecting good examples, and integrating chain-of-thought reasoning, you can build systems that rapidly adapt to new tasks without any model training.
+
+The key insight from the research is that these models have learned to learn from context. As the GPT-3 paper demonstrates, this capability scales with model size, and as the Chain-of-Thought paper shows, it can be enhanced with appropriate prompting strategies.
+
+Good luck building your few-shot learning system!
+
+</ProjectLayout>
+
+export default ({ children }) => children;

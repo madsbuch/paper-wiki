@@ -186,6 +186,69 @@ export default function WikiIndex() {
       slug: "ppo",
       category: "Algorithm",
       difficulty: "Advanced"
+    },
+    {
+      title: "Tokenization",
+      description: "The process of converting text into discrete units (tokens) that language models can process. Essential preprocessing step for all NLP systems.",
+      slug: "tokenization",
+      category: "Fundamentals",
+      difficulty: "Beginner"
+    },
+    {
+      title: "Layer Normalization",
+      description: "A normalization technique that standardizes activations across features within each layer, stabilizing training and enabling deeper networks.",
+      slug: "layer-normalization",
+      category: "Architecture Components",
+      difficulty: "Intermediate"
+    },
+    {
+      title: "Residual Connections",
+      description: "Skip connections that allow gradients to flow directly through deep networks by adding layer inputs to their outputs. Critical for training very deep architectures.",
+      slug: "residual-connections",
+      category: "Architecture Components",
+      difficulty: "Intermediate"
+    },
+    {
+      title: "Attention Mechanism",
+      description: "A mechanism that allows neural networks to focus on relevant parts of the input when producing outputs, solving the fixed-length bottleneck in encoder-decoder architectures.",
+      slug: "attention-mechanism",
+      category: "Mechanism",
+      difficulty: "Intermediate"
+    },
+    {
+      title: "Soft Alignment",
+      description: "A differentiable approach to alignment where all positions contribute with learned weights, enabling end-to-end training without explicit alignment supervision.",
+      slug: "soft-alignment",
+      category: "Technique",
+      difficulty: "Intermediate"
+    },
+    {
+      title: "Bidirectional RNN",
+      description: "A recurrent neural network that processes sequences in both forward and backward directions, allowing each position to have context from both past and future.",
+      slug: "bidirectional-rnn",
+      category: "Architecture Components",
+      difficulty: "Intermediate"
+    },
+    {
+      title: "Bottleneck Architecture",
+      description: "A design pattern that reduces dimensionality before expensive operations and then restores it, creating an efficiency bottleneck that enables deeper networks.",
+      slug: "bottleneck-architecture",
+      category: "Architecture Components",
+      difficulty: "Advanced"
+    },
+    {
+      title: "Identity Mapping",
+      description: "A function that returns its input unchanged (f(x) = x), serving as a critical reference point for residual learning and enabling training of very deep networks.",
+      slug: "identity-mapping",
+      category: "Architecture Components",
+      difficulty: "Intermediate"
+    },
+    {
+      title: "Sequence-to-Sequence Models",
+      description: "A neural network architecture that transforms one sequence into another, consisting of an encoder that processes the input and a decoder that generates the output.",
+      slug: "seq2seq",
+      category: "Architecture",
+      difficulty: "Intermediate"
     }
   ];
 
@@ -200,7 +263,7 @@ export default function WikiIndex() {
     );
   }, [searchQuery]);
 
-  const categories = ["Architecture", "Mechanism", "Training Method", "Technique", "Learning Paradigm", "Prompting Technique", "Phenomenon", "Task", "Capability", "Research Area", "Algorithm"];
+  const categories = ["Architecture", "Architecture Components", "Mechanism", "Training Method", "Technique", "Learning Paradigm", "Prompting Technique", "Phenomenon", "Task", "Capability", "Research Area", "Algorithm", "Fundamentals"];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -213,10 +276,16 @@ export default function WikiIndex() {
             </Link>
             <nav className="flex gap-6">
               <Link to="/wiki" className="text-violet-600 font-semibold">
-                All Concepts
+                Wiki
               </Link>
               <Link to="/papers" className="text-slate-600 hover:text-violet-600 transition-colors">
                 Papers
+              </Link>
+              <Link to="/essays" className="text-slate-600 hover:text-violet-600 transition-colors">
+                Essays
+              </Link>
+              <Link to="/projects" className="text-slate-600 hover:text-violet-600 transition-colors">
+                Projects
               </Link>
             </nav>
           </div>
@@ -344,6 +413,18 @@ export default function WikiIndex() {
                 All concepts on this page are derived from:
               </p>
               <div className="space-y-3">
+                <div className="bg-white rounded-lg p-4 border border-amber-200">
+                  <h4 className="font-bold text-slate-900">Neural Machine Translation by Jointly Learning to Align and Translate</h4>
+                  <p className="text-slate-600 text-sm">
+                    Bahdanau, D., Cho, K., & Bengio, Y. (2014)
+                  </p>
+                </div>
+                <div className="bg-white rounded-lg p-4 border border-amber-200">
+                  <h4 className="font-bold text-slate-900">Deep Residual Learning for Image Recognition</h4>
+                  <p className="text-slate-600 text-sm">
+                    He, K., Zhang, X., Ren, S., & Sun, J. (2015)
+                  </p>
+                </div>
                 <div className="bg-white rounded-lg p-4 border border-amber-200">
                   <h4 className="font-bold text-slate-900">Attention Is All You Need</h4>
                   <p className="text-slate-600 text-sm">

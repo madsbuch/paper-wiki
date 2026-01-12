@@ -5,26 +5,40 @@ import { components, hooks, utils } from '@generouted/react-router/client'
 
 export type Path =
   | `/`
+  | `/essays`
+  | `/essays/alignment-challenge`
+  | `/essays/evolution-of-attention`
+  | `/essays/learning-without-examples`
   | `/papers`
   | `/papers/attention-is-all-you-need`
+  | `/papers/bahdanau-attention`
   | `/papers/bert`
   | `/papers/chain-of-thought-prompting`
   | `/papers/gpt3-few-shot-learners`
   | `/papers/instructgpt`
+  | `/papers/resnet`
+  | `/projects`
+  | `/projects/few-shot-learning`
+  | `/projects/transformer-translation`
   | `/test`
   | `/wiki`
   | `/wiki/ai-alignment`
   | `/wiki/arithmetic-reasoning`
+  | `/wiki/attention-mechanism`
   | `/wiki/autoregressive-language-model`
   | `/wiki/bidirectional-pretraining`
+  | `/wiki/bidirectional-rnn`
+  | `/wiki/bottleneck-architecture`
   | `/wiki/chain-of-thought-prompting`
   | `/wiki/emergent-abilities`
   | `/wiki/encoder-decoder`
   | `/wiki/few-shot-learning`
   | `/wiki/few-shot-prompting`
   | `/wiki/fine-tuning`
+  | `/wiki/identity-mapping`
   | `/wiki/in-context-learning`
   | `/wiki/instruction-following`
+  | `/wiki/layer-normalization`
   | `/wiki/masked-language-model`
   | `/wiki/meta-learning`
   | `/wiki/multi-head-attention`
@@ -32,12 +46,15 @@ export type Path =
   | `/wiki/positional-encoding`
   | `/wiki/ppo`
   | `/wiki/reasoning-steps`
+  | `/wiki/residual-connections`
   | `/wiki/reward-modeling`
   | `/wiki/rlhf`
   | `/wiki/scaled-dot-product-attention`
   | `/wiki/self-attention`
+  | `/wiki/seq2seq`
+  | `/wiki/soft-alignment`
+  | `/wiki/tokenization`
   | `/wiki/transfer-learning`
-  | `/wiki/transformer`
   | `/wiki/transformer-architecture`
   | `/wiki/zero-shot-learning`
 
