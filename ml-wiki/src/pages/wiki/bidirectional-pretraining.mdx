@@ -1,0 +1,51 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "Bidirectional Pretraining",
+  description: "Training a language model by conditioning on context from both left and right directions simultaneously in all layers.",
+  category: "Training Method",
+  difficulty: "Intermediate",
+  citations: [
+    {
+      paper: "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+      authors: "Devlin, J., Chang, M.-W., Lee, K., & Toutanova, K.",
+      year: "2018",
+      pages: "1-2"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+Bidirectional pretraining is the technique of training language models by jointly conditioning on both left and right context in all layers, enabling the model to learn representations that understand meaning from both directions [Devlin et al., 2018, p. 1].
+
+## The Breakthrough
+
+Traditional language models only looked in one direction (left-to-right or right-to-left). BERT changed this by pretraining deep bidirectional representations, allowing each token to attend to tokens on both sides [Devlin et al., 2018, p. 2].
+
+## Why Bidirectional Matters
+
+Consider the sentence: "The bank by the river was flooded."
+
+- **Left-to-right only**: When processing "bank," the model only sees "The"
+- **Bidirectional**: The model sees both "The" before and "by the river" after, understanding "bank" means riverbank, not a financial institution
+
+This bidirectional context is crucial for tasks like question answering where understanding requires seeing the full context [Devlin et al., 2018, p. 1].
+
+## A Story About Context
+
+Imagine reading a mystery novel where you can only read forward—you might misunderstand clues early on. But if you could see ahead and behind simultaneously, you'd understand each clue's true meaning immediately. That's what bidirectional pretraining gives language models.
+
+## Technical Implementation
+
+BERT achieves bidirectionality through masked language modeling, which randomly masks tokens and requires the model to predict them using full bidirectional context [Devlin et al., 2018, p. 4].
+
+---
+
+**Related Concepts:** [Masked Language Model](/wiki/masked-language-model) · [Transfer Learning](/wiki/transfer-learning)
+
+</WikiLayout>
+
+export default ({ children }) => children;

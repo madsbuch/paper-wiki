@@ -1,0 +1,82 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "Self-Attention",
+  citations: [
+    {
+      paper: "Attention Is All You Need",
+      authors: "Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I.",
+      year: "2017",
+      pages: "2-5"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+**Self-attention**, sometimes called **intra-attention**, is an attention mechanism that relates different positions of a single sequence in order to compute a representation of that sequence [Vaswani et al., 2017, p. 2].
+
+## How It Works
+
+In a self-attention layer, all of the keys, values, and queries come from the same place—in the Transformer's case, from the output of the previous layer in the encoder. This allows each position in the encoder to attend to all positions in the previous layer [Vaswani et al., 2017, p. 5].
+
+## Key Properties
+
+### Connecting All Positions
+
+Self-attention connects all positions with a **constant number of sequentially executed operations**, whereas a recurrent layer requires O(n) sequential operations, where n is the sequence length [Vaswani et al., 2017, p. 6].
+
+This constant-time connectivity has profound implications:
+- **Learning long-range dependencies becomes easier**: The path between any two positions is O(1) instead of O(n)
+- **Parallelization**: All positions can be processed simultaneously
+- **No information bottleneck**: Unlike RNNs which compress information through hidden states
+
+### Computational Complexity
+
+Self-attention layers are faster than recurrent layers when the sequence length n is smaller than the representation dimensionality d, which is typically the case with modern word-piece and byte-pair representations [Vaswani et al., 2017, p. 6-7].
+
+- **Self-Attention Complexity**: O(n² · d)
+- **Recurrent Complexity**: O(n · d²)
+- **Maximum Path Length**: O(1) vs O(n) for recurrent
+
+## Applications in the Transformer
+
+Self-attention is used in three different ways in the Transformer [Vaswani et al., 2017, p. 5]:
+
+1. **Encoder Self-Attention**: Each position in the encoder can attend to all positions in the previous encoder layer
+
+2. **Decoder Self-Attention**: Each position in the decoder attends to all positions in the decoder up to and including that position (with masking to preserve auto-regressive property)
+
+3. **Encoder-Decoder Attention**: Queries come from the previous decoder layer, while keys and values come from the encoder output
+
+## Interpretability
+
+One of the side benefits of self-attention is that it yields more interpretable models. Individual attention heads clearly learn to perform different tasks, and many exhibit behavior related to the syntactic and semantic structure of sentences [Vaswani et al., 2017, p. 7].
+
+For example, attention visualizations show heads that:
+- Track long-distance dependencies (e.g., verb-object relationships)
+- Perform anaphora resolution (connecting pronouns to their referents)
+- Learn sentence structure patterns
+
+---
+
+## The Cocktail Party Analogy: A Story
+
+Imagine you're at a bustling cocktail party with many conversations happening simultaneously. You're trying to understand what people are saying to you.
+
+**Without Self-Attention (Sequential Processing)**: You must listen to each person one at a time, in order around the circle. By the time you get back to the first person, you've forgotten what they were talking about. If someone at position 1 said something relevant to what person 10 is saying, you can't easily connect those ideas.
+
+**With Self-Attention**: You have a superpower—you can simultaneously hear and weigh every conversation in the room. When someone mentions "neural networks," your attention automatically highlights everyone else who mentioned related terms like "layers," "training," or "GPT." You instantly recognize that:
+- Person A's comment about "attention" connects to Person F's mention of "transformers"
+- Person C's pronoun "it" clearly refers to the concept Person B introduced
+- The discussion between Person D and Person H forms a coherent sub-topic
+
+You don't process people sequentially—you process the entire party as a connected web of information, where every person can directly reference what anyone else said. The "distance" between any two people's comments is always just one step, regardless of their physical positions in the room.
+
+This is self-attention: allowing every position in a sequence to directly attend to every other position, creating a rich, interconnected understanding rather than a linear, sequential one.
+
+</WikiLayout>
+
+export default ({ children }) => children;

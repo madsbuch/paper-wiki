@@ -1,0 +1,105 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "Scaled Dot-Product Attention",
+  citations: [
+    {
+      paper: "Attention Is All You Need",
+      authors: "Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I.",
+      year: "2017",
+      pages: "3-4"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+**Scaled Dot-Product Attention** is the specific attention mechanism used in the Transformer architecture. An attention function maps a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key [Vaswani et al., 2017, p. 3].
+
+## The Mathematical Formula
+
+The attention is computed as [Vaswani et al., 2017, p. 4]:
+
+```
+Attention(Q, K, V) = softmax(QK^T / √d_k) V
+```
+
+Where:
+- **Q**: Matrix of queries
+- **K**: Matrix of keys
+- **V**: Matrix of values
+- **d_k**: Dimension of the keys
+
+## The Algorithm Steps
+
+1. **Compute dot products**: Calculate QK^T to measure compatibility between all queries and keys
+2. **Scale**: Divide each dot product by √d_k
+3. **Apply softmax**: Convert scores to probabilities (weights)
+4. **Weight the values**: Multiply the weights by V to get the output
+
+## Why Scaling Matters
+
+The scaling factor 1/√d_k is crucial for performance [Vaswani et al., 2017, p. 4].
+
+### The Problem Without Scaling
+
+For large values of d_k, the dot products grow large in magnitude. This pushes the softmax function into regions where it has extremely small gradients, making learning difficult [Vaswani et al., 2017, p. 4].
+
+**Statistical Explanation**: If the components of q and k are independent random variables with mean 0 and variance 1, then their dot product q · k = Σq_i k_i has mean 0 and variance d_k. As d_k grows, the variance increases, causing the dot products to spread out to larger values [Vaswani et al., 2017, p. 4, footnote 4].
+
+### The Solution: Scaling
+
+By dividing by √d_k, we normalize the variance back to 1, keeping the dot products in a reasonable range for the softmax function. This maintains good gradient flow during training [Vaswani et al., 2017, p. 4].
+
+## Comparison to Other Attention Types
+
+The two most commonly used attention functions are [Vaswani et al., 2017, p. 4]:
+
+1. **Additive Attention**: Uses a feed-forward network with a single hidden layer to compute the compatibility function
+2. **Dot-Product Attention**: Identical to scaled dot-product attention, except without the scaling factor
+
+While theoretically similar in complexity, dot-product attention is:
+- **Much faster** in practice (highly optimized matrix multiplication)
+- **More space-efficient** (no learned parameters for the attention function itself)
+
+However, additive attention outperforms unscaled dot-product attention for larger values of d_k, which is why the scaling factor is essential [Vaswani et al., 2017, p. 4].
+
+## Practical Implementation
+
+The formula is computed on **sets of queries simultaneously**, packed together into matrices. This enables parallel processing and makes the operation highly efficient on modern hardware [Vaswani et al., 2017, p. 4].
+
+---
+
+## The Search Engine Analogy: A Story
+
+Imagine you're building a search engine for a vast digital library. Users type queries, and you need to find the most relevant documents.
+
+### The Matching Process
+
+**Step 1: Compute Similarity (QK^T)**
+When a user searches for "machine learning," you compute how similar this query is to every document in your library. Each document (key) gets a similarity score with the query. Documents about "neural networks," "AI," and "deep learning" get high scores. Documents about "cooking recipes" get low scores.
+
+**Step 2: The Scaling Problem (Why √d_k?)**
+Imagine your library has two sections:
+- **Simple Library**: Documents described by 10 features (d_k = 10)
+- **Detailed Library**: Documents described by 1000 features (d_k = 1000)
+
+In the Detailed Library, similarity scores naturally become much larger just because you're summing 1000 numbers instead of 10. A good match might score 500, a bad match -300. These huge numbers cause problems!
+
+When you try to convert these scores to probabilities using softmax, the large numbers create extreme values: 0.99999 for the top match and 0.00001 for everything else. The top match completely dominates, and the model can't learn from subtle differences—it's too confident, too quickly.
+
+**The Scaling Fix**: Divide all scores by √1000 ≈ 31.6. Now scores are back in a reasonable range (maybe +16 for good matches, -10 for bad ones). The softmax can now produce more balanced probabilities like 0.7, 0.2, 0.1, allowing the model to learn from multiple relevant documents.
+
+**Step 3: Softmax (Converting to Weights)**
+Now you convert similarity scores to probabilities. Documents with higher similarity get higher weights. This creates a probability distribution—weights sum to 1, and each weight represents how much attention to pay to that document.
+
+**Step 4: Weighted Sum (Multiply by V)**
+Finally, you combine the actual content (values) of documents according to their weights. If the "neural networks" document has weight 0.7 and the "deep learning" document has weight 0.3, your output is 70% from the first and 30% from the second.
+
+This is scaled dot-product attention: intelligently weighted averaging, where the weights come from measuring relevance (dot products), carefully scaled to avoid extreme confidence, and converted to probabilities that determine how to mix the information.
+
+</WikiLayout>
+
+export default ({ children }) => children;

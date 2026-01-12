@@ -1,0 +1,66 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "Chain-of-Thought Prompting",
+  description: "A prompting technique that elicits reasoning in large language models by demonstrating intermediate reasoning steps in few-shot exemplars.",
+  category: "Prompting Technique",
+  difficulty: "Intermediate",
+  citations: [
+    {
+      paper: "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+      authors: "Wei, J., Wang, X., Schuurmans, D., Bosma, M., et al.",
+      year: "2022",
+      pages: "1-3"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+Chain-of-thought prompting is a technique where language models are prompted with exemplars that include intermediate reasoning steps, significantly improving their ability to solve complex reasoning tasks [Wei et al., 2022, p. 1].
+
+## The Simple Yet Powerful Idea
+
+Instead of just showing input-output pairs, chain-of-thought prompting shows the model how to think through a problem step by step. For example:
+
+**Standard Prompting:**
+- Q: Roger has 5 balls. He buys 2 cans of 3 balls each. How many does he have?
+- A: 11
+
+**Chain-of-Thought Prompting:**
+- Q: Roger has 5 balls. He buys 2 cans of 3 balls each. How many does he have?
+- A: Roger started with 5 balls. 2 cans of 3 balls each is 6 balls. 5 + 6 = 11. The answer is 11.
+
+This simple change led to dramatic improvements on reasoning tasks [Wei et al., 2022, p. 1].
+
+## Why It Works
+
+Chain-of-thought prompting enables models to:
+1. Decompose complex problems into manageable steps
+2. Show their reasoning process explicitly
+3. Achieve better performance on multi-step reasoning
+4. Self-correct through intermediate steps
+
+The technique is particularly powerful because it requires no additional training—just better prompts [Wei et al., 2022, p. 2].
+
+## The Emergence of Reasoning
+
+Remarkably, chain-of-thought reasoning only emerges at sufficient model scale (around 100B parameters). Smaller models don't benefit from the technique, suggesting reasoning is an emergent ability of large language models [Wei et al., 2022, p. 3].
+
+## A Story About Learning
+
+Think of how a math teacher doesn't just write the answer on the board—they show each step of solving the problem. Students learn better by seeing the process, not just the result. Chain-of-thought prompting teaches language models the same way.
+
+## Impact
+
+Chain-of-thought prompting achieved state-of-the-art results on the GSM8K math benchmark, with PaLM 540B improving from 18% to 57% accuracy using this technique alone [Wei et al., 2022, p. 2].
+
+---
+
+**Related Concepts:** [Few-Shot Prompting](/wiki/few-shot-prompting) · [Emergent Abilities](/wiki/emergent-abilities) · [Reasoning Steps](/wiki/reasoning-steps)
+
+</WikiLayout>
+
+export default ({ children }) => children;

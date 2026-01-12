@@ -1,0 +1,75 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "PPO (Proximal Policy Optimization)",
+  description: "A reinforcement learning algorithm that makes stable, incremental updates to policies, widely used for fine-tuning language models with human feedback.",
+  category: "Algorithm",
+  difficulty: "Advanced",
+  citations: [
+    {
+      paper: "Training language models to follow instructions with human feedback",
+      authors: "Ouyang, L., Wu, J., Jiang, X., Almeida, D., et al.",
+      year: "2022",
+      pages: "9"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+PPO is a reinforcement learning algorithm that enables stable training by making small, controlled updates to the policy, preventing catastrophic deviations from good behavior [Ouyang et al., 2022, p. 9].
+
+## The Core Idea
+
+PPO constrains how much the policy can change in a single update. This "proximal" (nearby) optimization prevents the model from making large, destabilizing changes that could destroy previously learned good behavior.
+
+## Why PPO for Language Models?
+
+Language model fine-tuning with RL faces unique challenges:
+- Large action spaces (vocabulary size)
+- Long sequences (many timesteps)
+- Risk of mode collapse
+- Need to preserve language capabilities
+
+PPO's stable updates make it ideal for this setting [Ouyang et al., 2022, p. 9].
+
+## InstructGPT's PPO Implementation
+
+InstructGPT used PPO with two key components:
+
+### 1. Reward Model Optimization
+Maximize the reward predicted by the trained reward model
+
+### 2. KL Penalty
+Add a penalty for deviating too far from the supervised fine-tuned model. This prevents over-optimization of the reward model [Ouyang et al., 2022, p. 9].
+
+The combined objective:
+```
+reward - β * KL_divergence(policy || SFT_model)
+```
+
+## The Pretraining Mix
+
+InstructGPT also mixed in pretraining gradients during PPO to prevent performance regressions on academic benchmarks—creating "PPO-ptx" [Ouyang et al., 2022, p. 9].
+
+## A Balance Analogy
+
+Imagine training a dog. You want it to learn new tricks (optimize reward) while maintaining good basic behavior (KL penalty) and general health (pretraining mix). PPO balances these competing goals.
+
+## Why It Works
+
+PPO's success in RLHF stems from:
+- Preventing catastrophic forgetting
+- Stable, reliable training
+- Flexibility to add constraints (KL, pretraining)
+- Sample efficiency
+
+---
+
+**Related Concepts:** [RLHF](/wiki/rlhf) · [Reward Modeling](/wiki/reward-modeling) · [Instruction Following](/wiki/instruction-following)
+
+</WikiLayout>
+
+export default ({ children }) => children;

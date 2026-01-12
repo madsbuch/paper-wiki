@@ -1,0 +1,76 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "AI Alignment",
+  description: "The challenge of ensuring AI systems behave in accordance with human values and intentions.",
+  category: "Research Area",
+  difficulty: "Advanced",
+  citations: [
+    {
+      paper: "Training language models to follow instructions with human feedback",
+      authors: "Ouyang, L., Wu, J., Jiang, X., Almeida, D., et al.",
+      year: "2022",
+      pages: "2-3, 19"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+AI alignment is the problem of ensuring that AI systems pursue goals and exhibit behaviors that align with human values and intentions [Ouyang et al., 2022, p. 2].
+
+## The Core Challenge
+
+Language models are trained to predict text from the internet. But predicting internet text ≠ being helpful to users. This is a misalignment between the training objective and what we actually want from AI systems [Ouyang et al., 2022, p. 2].
+
+## The InstructGPT Approach
+
+InstructGPT demonstrated one approach to alignment:
+1. Define what "aligned" behavior means (helpful, honest, harmless)
+2. Collect human feedback on model outputs
+3. Use that feedback to train the model to behave as desired
+
+This isn't perfect alignment, but it's practical progress [Ouyang et al., 2022, p. 2].
+
+## The Three H's
+
+InstructGPT aimed for models that are:
+- **Helpful**: They solve the user's task effectively
+- **Honest**: They don't fabricate information or mislead
+- **Harmless**: They don't cause harm to people or society
+
+[Ouyang et al., 2022, p. 2]
+
+## Why It Matters
+
+As AI systems become more capable and deployed more widely, alignment becomes critical. An extremely capable but misaligned AI could:
+- Provide harmful advice
+- Spread misinformation
+- Reinforce biases
+- Cause unintended consequences
+
+## The Alignment Tax
+
+Sometimes alignment hurts performance on academic benchmarks—an "alignment tax." But InstructGPT showed this can be minimized while still improving real-world helpfulness [Ouyang et al., 2022, p. 3].
+
+## A Philosophical Challenge
+
+Who decides what "aligned" means? InstructGPT aligned to preferences of their labelers, but broader societal alignment remains an open challenge [Ouyang et al., 2022, p. 19].
+
+## The Path Forward
+
+InstructGPT represents one step toward alignment, but much work remains:
+- Scaling oversight as models become more capable
+- Aligning with diverse human values
+- Preventing specification gaming
+- Ensuring robustness
+
+---
+
+**Related Concepts:** [RLHF](/wiki/rlhf) · [Instruction Following](/wiki/instruction-following) · [Reward Modeling](/wiki/reward-modeling)
+
+</WikiLayout>
+
+export default ({ children }) => children;

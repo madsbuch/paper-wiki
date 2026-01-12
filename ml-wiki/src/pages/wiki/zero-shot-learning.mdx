@@ -1,0 +1,95 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "Zero-Shot Learning",
+  citations: [
+    {
+      paper: "Language Models are Few-Shot Learners (GPT-3)",
+      authors: "Brown, T. B., Mann, B., Ryder, N., Subbiah, M., et al.",
+      year: "2020",
+      pages: "5-7"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+**Zero-shot learning** is the setting where a language model is given only a natural language instruction describing a task, with **no demonstrations** allowed and **no weight updates** performed [Brown et al., 2020, p. 7]. The model must predict the answer based purely on the task description.
+
+## How It Works
+
+In zero-shot learning, the model receives only a text instruction and must infer what to do [Brown et al., 2020, p. 7]:
+
+```
+Translate English to French:
+cheese => ?
+```
+
+No examples are provided - just the task description "Translate English to French".
+
+## Characteristics
+
+Zero-shot learning provides [Brown et al., 2020, p. 7]:
+
+1. **Maximum convenience**: No examples needed at all
+2. **Potential for robustness**: Avoids spurious correlations from training examples
+3. **Avoidance of spurious correlations**: Unless they occur broadly across pre-training data
+4. **Most challenging**: Hardest of the in-context learning settings
+
+## The Challenge
+
+Zero-shot is sometimes considered "unfairly hard" [Brown et al., 2020, p. 7]. In some cases, it may even be difficult for humans to understand the format of the task without prior examples. For example, being asked to "make a table of world records for the 200m dash" can be ambiguous regarding the exact format and what should be included.
+
+## Performance with GPT-3
+
+For the 175B parameter GPT-3 model, zero-shot achieves [Brown et al., 2020, p. 5]:
+- **42% aggregate accuracy** across 42 benchmarks
+- **81.5 F1** on CoQA (conversational question answering)
+- **64.3% accuracy** on TriviaQA
+- **76% accuracy** on LAMBADA (8% gain over previous SOTA)
+
+While this is impressive without any examples, it's significantly below few-shot performance (58% aggregate accuracy).
+
+## Scaling Behavior
+
+Zero-shot performance improves steadily with model size, but the improvement is more gradual than for few-shot learning [Brown et al., 2020, p. 5]:
+
+| Model Size | Zero-Shot Accuracy |
+|------------|-------------------|
+| 0.1B params | 23% |
+| 1.3B params | 32% |
+| 13B params | 41% |
+| 175B params | 42% |
+
+## Comparison to Human Performance
+
+Zero-shot is often closest to how humans actually perform tasks [Brown et al., 2020, p. 7]. For example, in translation, a human would likely know what to do from just the text instruction "Translate English to French" without needing examples.
+
+This makes zero-shot an important target for future work and a fairer comparison to human performance than few-shot learning.
+
+---
+
+## The Cold Call Story
+
+Imagine you're an expert consultant who gets called into emergency situations.
+
+**Zero-Shot**: You get a phone call: "We need you to optimize our database queries." Click. That's it. No context, no examples of what's wrong, no sample queries. You show up and have to figure out what "optimize" means in their context, what their performance goals are, and what kinds of queries they run - all from scratch.
+
+Despite the challenge, because you're an expert (large model with extensive pre-training), you can often do a reasonable job. You've seen so many database systems that you can make educated guesses about common issues and solutions.
+
+**Few-Shot (for comparison)**: Would be like arriving and seeing 10-20 examples of their slow queries and the desired performance metrics. Much easier.
+
+**Fine-Tuning (for comparison)**: Would be like spending weeks embedded in their organization, studying thousands of their specific queries until you're hyper-specialized.
+
+Zero-shot is the hardest, but also the most flexible and closest to how expert humans actually work - we often figure out what to do from just a task description, using our broad background knowledge.
+
+## Related Concepts
+
+- [Few-Shot Learning](/wiki/few-shot-learning)
+- [In-Context Learning](/wiki/in-context-learning)
+
+</WikiLayout>
+
+export default ({ children }) => children;

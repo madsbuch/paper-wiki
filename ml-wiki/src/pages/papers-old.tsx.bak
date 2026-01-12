@@ -1,0 +1,313 @@
+import { Link } from "react-router";
+
+export default function Papers() {
+  const papers = [
+    {
+      title: "Attention Is All You Need",
+      authors: "Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I.",
+      year: "2017",
+      venue: "31st Conference on Neural Information Processing Systems (NIPS 2017)",
+      arxivId: "1706.03762v7",
+      pdfPath: "/papers/1706.03762v7.pdf",
+      abstract: "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.",
+      keyContributions: [
+        "Introduced the Transformer architecture",
+        "Proposed scaled dot-product attention",
+        "Demonstrated multi-head attention mechanism",
+        "Achieved state-of-the-art results on machine translation",
+        "Enabled massive parallelization in training"
+      ],
+      relatedConcepts: [
+        { name: "Transformer Architecture", slug: "transformer-architecture" },
+        { name: "Self-Attention", slug: "self-attention" },
+        { name: "Multi-Head Attention", slug: "multi-head-attention" },
+        { name: "Scaled Dot-Product Attention", slug: "scaled-dot-product-attention" },
+        { name: "Positional Encoding", slug: "positional-encoding" },
+        { name: "Encoder-Decoder Architecture", slug: "encoder-decoder" }
+      ],
+      impact: "This paper revolutionized natural language processing and became the foundation for modern language models including GPT, BERT, T5, and countless others. It has been cited over 100,000 times and fundamentally changed how we approach sequence modeling tasks."
+    },
+    {
+      title: "Language Models are Few-Shot Learners",
+      authors: "Brown, T. B., Mann, B., Ryder, N., Subbiah, M., Kaplan, J., Dhariwal, P., et al.",
+      year: "2020",
+      venue: "Advances in Neural Information Processing Systems 33 (NeurIPS 2020)",
+      arxivId: "2005.14165v4",
+      pdfPath: "/papers/2005.14165v4.pdf",
+      abstract: "We train GPT-3, a 175 billion parameter autoregressive language model, and test its in-context learning abilities. We evaluate GPT-3 on over two dozen NLP datasets in zero-shot, one-shot, and few-shot settings. GPT-3 achieves strong performance on many NLP tasks without any gradient updates or fine-tuning, sometimes matching or exceeding state-of-the-art despite being evaluated without task-specific fine-tuning.",
+      keyContributions: [
+        "Introduced GPT-3, a 175 billion parameter language model",
+        "Demonstrated in-context learning without weight updates",
+        "Showed few-shot learning scales with model size",
+        "Proved larger models are better meta-learners",
+        "Achieved near state-of-the-art on many tasks without fine-tuning"
+      ],
+      relatedConcepts: [
+        { name: "In-Context Learning", slug: "in-context-learning" },
+        { name: "Few-Shot Learning", slug: "few-shot-learning" },
+        { name: "Zero-Shot Learning", slug: "zero-shot-learning" },
+        { name: "Meta-Learning", slug: "meta-learning" },
+        { name: "Autoregressive Language Model", slug: "autoregressive-language-model" }
+      ],
+      impact: "GPT-3 demonstrated that scaling language models to 175 billion parameters unlocks powerful in-context learning capabilities. This paper fundamentally changed how we think about task adaptation in AI, showing that models can perform new tasks from just a few examples without retraining. It sparked the modern era of large language models and prompted widespread exploration of emergent abilities at scale."
+    },
+    {
+      title: "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+      authors: "Devlin, J., Chang, M.-W., Lee, K., & Toutanova, K.",
+      year: "2018",
+      venue: "NAACL 2019",
+      arxivId: "1810.04805v2",
+      pdfPath: "/papers/1810.04805v2.pdf",
+      abstract: "We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers. Unlike recent language representation models, BERT is designed to pretrain deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers. As a result, the pre-trained BERT model can be finetuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial task-specific architecture modifications.",
+      keyContributions: [
+        "Introduced bidirectional pretraining for language models",
+        "Proposed masked language model (MLM) training objective",
+        "Introduced next sentence prediction (NSP) task",
+        "Achieved state-of-the-art on 11 NLP tasks",
+        "Demonstrated the power of transfer learning via fine-tuning"
+      ],
+      relatedConcepts: [
+        { name: "Masked Language Model", slug: "masked-language-model" },
+        { name: "Bidirectional Pretraining", slug: "bidirectional-pretraining" },
+        { name: "Next Sentence Prediction", slug: "next-sentence-prediction" },
+        { name: "Fine-Tuning", slug: "fine-tuning" },
+        { name: "Transfer Learning", slug: "transfer-learning" }
+      ],
+      impact: "BERT revolutionized NLP by showing that bidirectional pretraining produces representations that understand context from both directions. This approach became foundational for countless downstream applications and inspired a generation of BERT-based models. It demonstrated that a single pretrained model could be adapted to many tasks with minimal architecture changes, making NLP more accessible and practical."
+    },
+    {
+      title: "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+      authors: "Wei, J., Wang, X., Schuurmans, D., Bosma, M., Ichter, B., Xia, F., Chi, E., Le, Q., & Zhou, D.",
+      year: "2022",
+      venue: "36th Conference on Neural Information Processing Systems (NeurIPS 2022)",
+      arxivId: "2201.11903v6",
+      pdfPath: "/papers/2201.11903v6.pdf",
+      abstract: "We explore how generating a chain of thought—a series of intermediate reasoning steps—significantly improves the ability of large language models to perform complex reasoning. In particular, we show how such reasoning abilities emerge naturally in sufficiently large language models via a simple method called chain-of-thought prompting, where a few chain of thought demonstrations are provided as exemplars in prompting. Experiments on three large language models show that chain-of-thought prompting improves performance on a range of arithmetic, commonsense, and symbolic reasoning tasks.",
+      keyContributions: [
+        "Introduced chain-of-thought prompting technique",
+        "Showed intermediate reasoning steps improve performance",
+        "Demonstrated emergent reasoning in large models",
+        "Achieved state-of-the-art on GSM8K math benchmark",
+        "Proved reasoning abilities scale with model size"
+      ],
+      relatedConcepts: [
+        { name: "Chain-of-Thought Prompting", slug: "chain-of-thought-prompting" },
+        { name: "Reasoning Steps", slug: "reasoning-steps" },
+        { name: "Few-Shot Prompting", slug: "few-shot-prompting" },
+        { name: "Emergent Abilities", slug: "emergent-abilities" },
+        { name: "Arithmetic Reasoning", slug: "arithmetic-reasoning" }
+      ],
+      impact: "Chain-of-thought prompting unlocked reasoning capabilities in large language models without requiring additional training. This simple yet powerful technique showed that models could solve complex multi-step problems by breaking them down into intermediate steps, making LLMs far more capable on mathematical and logical reasoning tasks. It has become a standard technique in prompt engineering."
+    },
+    {
+      title: "Training language models to follow instructions with human feedback",
+      authors: "Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C. L., Mishkin, P., et al.",
+      year: "2022",
+      venue: "arXiv preprint",
+      arxivId: "2203.02155v1",
+      pdfPath: "/papers/2203.02155v1.pdf",
+      abstract: "Making language models bigger does not inherently make them better at following a user's intent. For example, large language models can generate outputs that are untruthful, toxic, or simply not helpful to the user. In other words, these models are not aligned with their users. In this paper, we show an avenue for aligning language models with user intent on a wide range of tasks by fine-tuning with human feedback. We call the resulting models InstructGPT. In human evaluations on our prompt distribution, outputs from the 1.3B parameter InstructGPT model are preferred to outputs from the 175B GPT-3, despite having 100x fewer parameters.",
+      keyContributions: [
+        "Introduced InstructGPT using RLHF for alignment",
+        "Demonstrated human feedback improves instruction following",
+        "Showed smaller aligned models outperform larger unaligned ones",
+        "Improved truthfulness and reduced toxicity",
+        "Established three-step RLHF training procedure"
+      ],
+      relatedConcepts: [
+        { name: "RLHF", slug: "rlhf" },
+        { name: "Instruction Following", slug: "instruction-following" },
+        { name: "AI Alignment", slug: "ai-alignment" },
+        { name: "Reward Modeling", slug: "reward-modeling" },
+        { name: "PPO", slug: "ppo" }
+      ],
+      impact: "InstructGPT demonstrated that alignment through human feedback is more important than raw model scale. This work established RLHF as the standard approach for making language models helpful, honest, and harmless. It directly led to ChatGPT and influenced how modern AI systems are trained to follow user intentions safely and effectively."
+    }
+  ];
+
+  // Generate slug from paper title for anchor links
+  const generateSlug = (title: string): string => {
+    const slugMap: Record<string, string> = {
+      "Attention Is All You Need": "attention-is-all-you-need",
+      "Language Models are Few-Shot Learners": "gpt3-few-shot-learners",
+      "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding": "bert",
+      "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models": "chain-of-thought-prompting",
+      "Training language models to follow instructions with human feedback": "instructgpt",
+    };
+    return slugMap[title] || title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Header */}
+      <header className="bg-white border-b border-slate-200 shadow-sm">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <Link to="/" className="text-2xl font-bold text-slate-900 hover:text-violet-600 transition-colors">
+              ML Wiki
+            </Link>
+            <nav className="flex gap-6">
+              <Link to="/wiki" className="text-slate-600 hover:text-violet-600 transition-colors">
+                All Concepts
+              </Link>
+              <Link to="/papers" className="text-violet-600 font-semibold">
+                Papers
+              </Link>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-12">
+        <div className="max-w-6xl mx-auto">
+          {/* Title Section */}
+          <div className="mb-12">
+            <h1 className="text-5xl font-bold text-slate-900 mb-4">
+              Academic Papers
+            </h1>
+            <p className="text-xl text-slate-600">
+              Source materials for all concepts in this wiki. Every claim is derived from and cited back to these papers.
+            </p>
+          </div>
+
+          {/* Papers List */}
+          <div className="space-y-8">
+            {papers.map((paper, index) => (
+              <article key={index} id={generateSlug(paper.title)} className="bg-white rounded-xl shadow-lg overflow-hidden border-t-4 border-violet-500 scroll-mt-20">
+                {/* Paper Header */}
+                <div className="bg-gradient-to-r from-violet-50 to-purple-50 p-8 border-b border-violet-100">
+                  <div className="flex items-start justify-between gap-4 mb-4">
+                    <div className="flex-1">
+                      <h2 className="text-3xl font-bold text-slate-900 mb-2">
+                        {paper.title}
+                      </h2>
+                      <p className="text-lg text-slate-600 mb-2">
+                        {paper.authors}
+                      </p>
+                      <div className="flex flex-wrap gap-4 text-sm text-slate-500">
+                        <span className="flex items-center gap-1">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          {paper.year}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                          </svg>
+                          {paper.venue}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                          </svg>
+                          arXiv:{paper.arxivId}
+                        </span>
+                      </div>
+                    </div>
+                    <a
+                      href={paper.pdfPath}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-shrink-0 bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      View PDF
+                    </a>
+                  </div>
+                </div>
+
+                {/* Paper Content */}
+                <div className="p-8">
+                  {/* Abstract */}
+                  <div className="mb-8">
+                    <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+                      <span className="w-1 h-6 bg-violet-500 rounded"></span>
+                      Abstract
+                    </h3>
+                    <p className="text-slate-700 leading-relaxed">
+                      {paper.abstract}
+                    </p>
+                  </div>
+
+                  {/* Key Contributions */}
+                  <div className="mb-8">
+                    <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+                      <span className="w-1 h-6 bg-violet-500 rounded"></span>
+                      Key Contributions
+                    </h3>
+                    <ul className="space-y-2">
+                      {paper.keyContributions.map((contribution, idx) => (
+                        <li key={idx} className="flex items-start gap-3 text-slate-700">
+                          <span className="text-violet-500 mt-1">✓</span>
+                          <span>{contribution}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Impact */}
+                  <div className="mb-8 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg p-6">
+                    <h3 className="text-xl font-bold text-blue-900 mb-3 flex items-center gap-2">
+                      <span className="text-2xl">🌟</span>
+                      Impact
+                    </h3>
+                    <p className="text-slate-700 leading-relaxed">
+                      {paper.impact}
+                    </p>
+                  </div>
+
+                  {/* Related Concepts */}
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                      <span className="w-1 h-6 bg-violet-500 rounded"></span>
+                      Related Wiki Concepts
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {paper.relatedConcepts.map((concept, idx) => (
+                        <Link
+                          key={idx}
+                          to={`/wiki/${concept.slug}`}
+                          className="group bg-gradient-to-br from-violet-50 to-purple-50 hover:from-violet-100 hover:to-purple-100 border border-violet-200 rounded-lg p-4 transition-all"
+                        >
+                          <span className="text-slate-800 font-medium group-hover:text-violet-700 transition-colors">
+                            {concept.name}
+                          </span>
+                          <span className="text-violet-600 ml-2 group-hover:translate-x-1 inline-block transition-transform">
+                            →
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          {/* Add More Papers CTA */}
+          <div className="mt-12 bg-gradient-to-r from-slate-100 to-slate-200 rounded-xl p-8 text-center border-2 border-dashed border-slate-300">
+            <h3 className="text-2xl font-bold text-slate-700 mb-3">
+              More Papers Coming Soon
+            </h3>
+            <p className="text-slate-600 mb-4">
+              This wiki is continuously growing. Add more papers to <code className="bg-slate-300 px-2 py-1 rounded">ml-wiki/public/papers/</code> to expand the knowledge base.
+            </p>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-slate-900 text-slate-300 mt-20">
+        <div className="container mx-auto px-4 py-8 text-center">
+          <p className="text-sm">
+            All content derived from academic papers. Citations required for accuracy.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}

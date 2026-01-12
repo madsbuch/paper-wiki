@@ -1,0 +1,108 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "In-Context Learning",
+  citations: [
+    {
+      paper: "Language Models are Few-Shot Learners (GPT-3)",
+      authors: "Brown, T. B., Mann, B., Ryder, N., Subbiah, M., et al.",
+      year: "2020",
+      pages: "5-7"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+**In-context learning** is the ability of large language models to perform tasks by conditioning on a few demonstrations provided at inference time as context, without any gradient updates or fine-tuning [Brown et al., 2020, p. 6]. This approach represents a fundamental shift from traditional fine-tuning methods.
+
+## How It Works
+
+In-context learning works by giving the model K examples of a task (context and desired completion) in its context window, then providing a final context for which the model must generate a completion [Brown et al., 2020, p. 6]. For example, to translate English to French:
+
+```
+Translate English to French:
+sea otter => loutre de mer
+peppermint => menthe poivrée
+plush giraffe => girafe peluche
+cheese => [model generates: fromage]
+```
+
+The key characteristic is that **no weight updates are performed** - the model adapts to the task purely through the forward pass [Brown et al., 2020, p. 6].
+
+## Three Settings
+
+The GPT-3 paper identifies three main settings for in-context learning [Brown et al., 2020, p. 6-7]:
+
+### 1. Zero-Shot Learning
+
+The model is given only a natural language description of the task with no demonstrations [Brown et al., 2020, p. 7]. This provides maximum convenience but is the most challenging setting.
+
+### 2. One-Shot Learning
+
+The model receives one demonstration of the task in addition to a natural language description [Brown et al., 2020, p. 6]. This most closely matches how some tasks are communicated to humans.
+
+### 3. Few-Shot Learning
+
+The model is given K demonstrations of the task (typically 10-100 examples, limited by the context window of n_ctx = 2048 tokens) [Brown et al., 2020, p. 6]. This provides the strongest performance while still requiring no weight updates.
+
+## Key Advantages
+
+In-context learning offers several advantages over traditional fine-tuning [Brown et al., 2020, p. 6]:
+
+1. **Reduced Data Requirements**: Major reduction in the need for task-specific labeled data
+2. **Avoids Narrow Distributions**: Reduced potential to learn overly narrow distributions from fine-tuning datasets
+3. **Prevents Spurious Correlations**: Less likely to exploit spurious features present only in narrow training data
+4. **Task Agnostic**: No need to update model weights for each new task
+
+## Performance Scaling
+
+A critical finding from the GPT-3 paper is that **larger models are more proficient at in-context learning** [Brown et al., 2020, p. 6]. The gap between zero-shot, one-shot, and few-shot performance grows with model capacity, suggesting that larger models are better meta-learners [Brown et al., 2020, p. 6].
+
+For the 175B parameter GPT-3 model [Brown et al., 2020, p. 5]:
+- **Zero-shot**: 42% aggregate accuracy
+- **One-shot**: 52% aggregate accuracy
+- **Few-shot**: 58% aggregate accuracy
+
+In contrast, smaller models (e.g., 125M parameters) show much smaller differences between these settings, indicating limited in-context learning ability.
+
+## Typical K Values
+
+For few-shot learning, K is typically set in the range of **10 to 100 examples**, which is how many can fit in the model's context window [Brown et al., 2020, p. 6]. The exact number depends on:
+- The length of each example
+- The complexity of the task
+- The model's context window size (2048 tokens for GPT-3)
+
+## Connection to Meta-Learning
+
+In-context learning has structural similarities to meta-learning in machine learning more broadly [Brown et al., 2020, p. 6]:
+
+- **Outer loop**: Language model pre-training on a broad distribution of tasks (implicit in the pre-training data)
+- **Inner loop**: Rapid adaptation to a new task at inference time through in-context examples
+
+The model learns during pre-training to recognize and adapt to task patterns, then applies this meta-learned ability at inference time.
+
+---
+
+## The Apprentice Story
+
+Imagine two apprentice craftspeople learning to make furniture:
+
+**Traditional Apprentice (Fine-Tuning)**: Gets sent to a specialized workshop for weeks where they practice making one specific type of chair over and over, thousands of times. Their muscle memory becomes perfectly tuned to that exact chair. When asked to make a different type of furniture, they need to go back to another specialized workshop and retrain for weeks.
+
+**In-Context Learning Apprentice (GPT-3)**: Has spent years watching master craftspeople create thousands of different furniture pieces. Now, when you show them 2-3 examples of a new chair design, they can immediately start making that chair reasonably well - not from specialized drilling, but from their broad understanding of furniture-making principles. Show them table examples instead, and they pivot immediately to making tables.
+
+The in-context learning apprentice doesn't need retraining for each task. Their broad experience lets them recognize "Oh, this is a chair-making task" from just a few examples and apply their general knowledge appropriately.
+
+The magic happens because during their years of observation (pre-training), they didn't just memorize specific pieces - they learned the **meta-skill of recognizing and adapting to different furniture-making tasks**.
+
+## Related Concepts
+
+- [Few-Shot Learning](/wiki/few-shot-learning)
+- [Zero-Shot Learning](/wiki/zero-shot-learning)
+
+</WikiLayout>
+
+export default ({ children }) => children;

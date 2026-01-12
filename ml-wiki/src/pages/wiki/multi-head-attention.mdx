@@ -1,0 +1,106 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "Multi-Head Attention",
+  citations: [
+    {
+      paper: "Attention Is All You Need",
+      authors: "Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I.",
+      year: "2017",
+      pages: "4-5"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+**Multi-head attention** is a mechanism that, instead of performing a single attention function with d_model-dimensional keys, values, and queries, linearly projects the queries, keys, and values h times with different learned linear projections. The attention function is then performed in parallel on each of these projected versions [Vaswani et al., 2017, p. 4].
+
+## The Mathematical Definition
+
+The multi-head attention formula is defined as [Vaswani et al., 2017, p. 5]:
+
+```
+MultiHead(Q, K, V) = Concat(head₁, ..., headₕ)W^O
+
+where head_i = Attention(QW^Q_i, KW^K_i, VW^V_i)
+```
+
+Where the projections are parameter matrices:
+- W^Q_i ∈ ℝ^(d_model × d_k)
+- W^K_i ∈ ℝ^(d_model × d_k)
+- W^V_i ∈ ℝ^(d_model × d_v)
+- W^O ∈ ℝ^(h·d_v × d_model)
+
+## Why Multiple Heads?
+
+Multi-head attention allows the model to jointly attend to information from different representation subspaces at different positions. With a single attention head, averaging inhibits this capability [Vaswani et al., 2017, p. 5].
+
+Think of it this way: different heads can specialize in different types of relationships:
+- One head might focus on syntactic relationships
+- Another on semantic relationships
+- Yet another on positional patterns
+
+## Implementation Details
+
+In the Transformer implementation [Vaswani et al., 2017, p. 5]:
+- **Number of heads (h)**: 8
+- **Dimension per head (d_k = d_v)**: 64
+- **Model dimension (d_model)**: 512
+- **Relation**: d_k = d_v = d_model / h = 512 / 8 = 64
+
+Due to the reduced dimension of each head, the total computational cost is similar to that of single-head attention with full dimensionality [Vaswani et al., 2017, p. 5].
+
+## What Different Heads Learn
+
+Analysis of trained Transformer models reveals that individual attention heads clearly learn to perform different, specialized tasks [Vaswani et al., 2017, p. 7]:
+
+1. **Long-Distance Dependencies**: Some heads track relationships between words far apart in the sequence
+2. **Anaphora Resolution**: Other heads learn to connect pronouns to their antecedents
+3. **Syntactic Structure**: Certain heads appear to capture phrase structure and grammatical relationships
+4. **Semantic Relationships**: Some focus on meaning-based connections
+
+This specialization happens naturally through training—the model learns to partition the attention space in useful ways without explicit supervision.
+
+## Advantages
+
+The multi-head mechanism provides several key benefits:
+
+1. **Diverse Representations**: Different heads can capture different types of relationships simultaneously
+2. **Robust Learning**: Multiple perspectives make the model less likely to miss important patterns
+3. **Interpretability**: Individual heads often develop clear, understandable specializations
+4. **Efficiency**: Despite having multiple heads, the total compute is similar to single-head attention due to dimension reduction
+
+---
+
+## The Detective Team Analogy: A Story
+
+Imagine you're investigating a complex crime scene, and you have a team of 8 specialized detectives (just like the Transformer's 8 attention heads).
+
+**Detective 1** specializes in **physical evidence**—fingerprints, DNA, material traces. When examining the scene, she focuses intensely on physical connections between objects and locations.
+
+**Detective 2** is an expert in **timeline reconstruction**—he tracks when events happened and their temporal relationships.
+
+**Detective 3** specializes in **motive and psychology**—understanding why people acted and their emotional connections.
+
+**Detective 4** focuses on **communication patterns**—who talked to whom, what was said, and what was left unsaid.
+
+The remaining detectives each have their own specializations: financial trails, geographical patterns, social relationships, and background histories.
+
+**The Single Detective Problem**: If you had only one generalist detective, they'd try to notice everything, but would inevitably average out their attention across all aspects. They might notice the fingerprint AND the timeline AND the motive, but none deeply enough. Important connections would be lost in the noise.
+
+**The Multi-Head Solution**: With 8 specialized detectives working in parallel:
+- Detective 1 notices the fingerprint on the door connects to the suspect's apartment
+- Detective 2 realizes the timing of phone calls contradicts the alibi
+- Detective 3 identifies the emotional motivation linking the suspect to the victim
+- Each detective produces their own theory based on their specialty
+
+Finally, all 8 reports are **concatenated and projected** through a final analysis (the W^O matrix), where a master detective weighs each specialist's findings to create a comprehensive understanding.
+
+This is multi-head attention: parallel specialists, each attending to different aspects of the data, their insights combined to form a richer, more nuanced understanding than any single perspective could provide.
+
+</WikiLayout>
+
+export default ({ children }) => children;

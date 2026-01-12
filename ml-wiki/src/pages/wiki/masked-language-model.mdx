@@ -1,0 +1,57 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "Masked Language Model",
+  description: "A pretraining objective where random tokens are masked and the model learns to predict them based on bidirectional context.",
+  category: "Training Method",
+  difficulty: "Intermediate",
+  citations: [
+    {
+      paper: "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+      authors: "Devlin, J., Chang, M.-W., Lee, K., & Toutanova, K.",
+      year: "2018",
+      pages: "2-4"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+A masked language model is a pretraining objective that enables deep bidirectional representations by randomly masking tokens in the input and training the model to predict the original masked tokens based on their surrounding context.
+
+## The Core Idea
+
+Unlike traditional left-to-right language models that can only see previous tokens, MLM allows the model to see context from both directions. This is achieved by randomly masking some percentage of input tokens (typically 15%) and having the model predict the masked tokens using the full bidirectional context [Devlin et al., 2018, p. 4].
+
+## The Masking Strategy
+
+BERT uses a clever masking strategy to avoid mismatch between pretraining and fine-tuning [Devlin et al., 2018, p. 4]:
+
+- 80% of the time: Replace with [MASK] token
+- 10% of the time: Replace with a random token
+- 10% of the time: Keep the original token
+
+This prevents the model from relying too heavily on the [MASK] token, which doesn't appear during fine-tuning.
+
+## Why It Works
+
+The masked language model objective forces the model to:
+1. Learn rich contextual representations of each word
+2. Understand relationships between words in both directions
+3. Develop deep bidirectional understanding of language
+
+Think of it like a fill-in-the-blank exercise where you need to understand the entire sentence, not just what comes before the blank.
+
+## Impact
+
+MLM revolutionized NLP by enabling truly bidirectional pretraining. This led to dramatic improvements on downstream tasks and spawned countless BERT-inspired models [Devlin et al., 2018, p. 1].
+
+---
+
+**Related Concepts:** [Bidirectional Pretraining](/wiki/bidirectional-pretraining) · [Fine-Tuning](/wiki/fine-tuning) · [Transfer Learning](/wiki/transfer-learning)
+
+</WikiLayout>
+
+export default ({ children }) => children;

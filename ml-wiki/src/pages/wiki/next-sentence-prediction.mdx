@@ -1,0 +1,54 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "Next Sentence Prediction",
+  description: "A binary classification task that predicts whether two sentences appear consecutively in the original text.",
+  category: "Training Method",
+  difficulty: "Intermediate",
+  citations: [
+    {
+      paper: "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+      authors: "Devlin, J., Chang, M.-W., Lee, K., & Toutanova, K.",
+      year: "2018",
+      pages: "4, 8"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+Next sentence prediction is a pretraining task where the model learns to predict whether sentence B follows sentence A in the original text [Devlin et al., 2018, p. 4].
+
+## How It Works
+
+During pretraining, BERT is given pairs of sentences:
+- 50% of the time: B actually follows A (label: IsNext)
+- 50% of the time: B is a random sentence (label: NotNext)
+
+The model must predict which case it is [Devlin et al., 2018, p. 4].
+
+## Why It Matters
+
+Many NLP tasks require understanding relationships between sentences:
+- Question answering: Understanding the relationship between question and passage
+- Natural language inference: Determining if one sentence implies another
+
+NSP helps BERT learn these sentence-level relationships [Devlin et al., 2018, p. 4].
+
+## The Results
+
+BERT's ablation studies showed that removing NSP hurt performance significantly on question answering and NLI tasks, confirming its importance [Devlin et al., 2018, p. 8].
+
+## A Teaching Analogy
+
+NSP is like teaching a student reading comprehension by asking: "Does this sentence logically follow the previous one?" The student learns to understand how ideas connect across sentences, not just within them.
+
+---
+
+**Related Concepts:** [Masked Language Model](/wiki/masked-language-model) · [Bidirectional Pretraining](/wiki/bidirectional-pretraining) · [Fine-Tuning](/wiki/fine-tuning)
+
+</WikiLayout>
+
+export default ({ children }) => children;

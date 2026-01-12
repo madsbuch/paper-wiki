@@ -1,0 +1,62 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "Emergent Abilities",
+  description: "Capabilities that arise in large language models at sufficient scale but are not present in smaller models.",
+  category: "Phenomenon",
+  difficulty: "Advanced",
+  citations: [
+    {
+      paper: "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+      authors: "Wei, J., Wang, X., Schuurmans, D., Bosma, M., et al.",
+      year: "2022",
+      pages: "3"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+Emergent abilities are capabilities that suddenly appear in language models when they reach sufficient scale, but are absent in smaller models [Wei et al., 2022, p. 3].
+
+## The Scaling Phenomenon
+
+As models grow from millions to billions to hundreds of billions of parameters, new abilities emerge that weren't explicitly trained for:
+- Multi-step reasoning
+- Following complex instructions
+- Solving math word problems
+- Performing analogical reasoning
+
+These abilities aren't present in smaller models—they emerge at scale [Wei et al., 2022, p. 3].
+
+## Chain-of-Thought as Emergent
+
+Chain-of-thought reasoning is a prime example of emergence. Models below ~100B parameters show no benefit from chain-of-thought prompting. But at 100B+ parameters, the ability suddenly appears [Wei et al., 2022, p. 3].
+
+## The Mystery of Emergence
+
+Why do these abilities emerge? We don't fully understand, but theories include:
+- Models cross a capability threshold
+- Sufficient capacity to represent complex patterns
+- Combination of simpler skills learned at scale
+
+## A Phase Transition Analogy
+
+Think of water freezing. As temperature drops, nothing happens... until suddenly at 0°C, the entire structure changes from liquid to solid. Emergent abilities work similarly—models gradually improve until suddenly, at a certain scale, a new capability appears.
+
+## Implications
+
+Emergent abilities suggest that:
+- Scaling continues to unlock new capabilities
+- We can't predict all abilities from small-scale experiments
+- There may be more capabilities waiting at even larger scales
+
+---
+
+**Related Concepts:** [Chain-of-Thought Prompting](/wiki/chain-of-thought-prompting) · [Few-Shot Learning](/wiki/few-shot-learning) · [Reasoning Steps](/wiki/reasoning-steps)
+
+</WikiLayout>
+
+export default ({ children }) => children;

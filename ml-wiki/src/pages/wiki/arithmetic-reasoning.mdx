@@ -1,0 +1,65 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "Arithmetic Reasoning",
+  description: "The ability to solve mathematical word problems by combining mathematical operations with natural language understanding.",
+  category: "Task",
+  difficulty: "Intermediate",
+  citations: [
+    {
+      paper: "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+      authors: "Wei, J., Wang, X., Schuurmans, D., Bosma, M., et al.",
+      year: "2022",
+      pages: "1-3"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+Arithmetic reasoning is the capability to solve math word problems by understanding the linguistic description, extracting relevant numbers, and performing appropriate mathematical operations [Wei et al., 2022, p. 1].
+
+## The Challenge
+
+Arithmetic reasoning is surprisingly difficult for language models because it requires:
+- Understanding natural language descriptions
+- Identifying relevant numbers and relationships
+- Selecting appropriate operations
+- Performing multi-step calculations
+- Combining linguistic and mathematical reasoning
+
+## The Chain-of-Thought Breakthrough
+
+Chain-of-thought prompting dramatically improved arithmetic reasoning. On the GSM8K benchmark, PaLM 540B improved from 18% to 57% accuracy just by showing reasoning steps [Wei et al., 2022, p. 2].
+
+## Example Problem
+
+"Josh decides to try flipping a house. He buys a house for $80,000 and then puts in $50,000 in repairs. This increased the value of the house by 150%. How much profit did he make?"
+
+**Chain-of-thought solution:**
+- Cost: $80,000 + $50,000 = $130,000
+- Value increase: 150% of $80,000 = $120,000
+- New value: $80,000 + $120,000 = $200,000
+- Profit: $200,000 - $130,000 = $70,000
+
+## Why Show the Steps?
+
+Breaking down the problem into steps allows the model to:
+1. Handle multi-step reasoning
+2. Keep track of intermediate results
+3. Apply operations in the correct order
+4. Self-correct along the way
+
+## Beyond Simple Arithmetic
+
+Arithmetic reasoning benchmarks test more than calculation—they test linguistic understanding, logical reasoning, and the ability to extract relevant information from text [Wei et al., 2022, p. 3].
+
+---
+
+**Related Concepts:** [Chain-of-Thought Prompting](/wiki/chain-of-thought-prompting) · [Reasoning Steps](/wiki/reasoning-steps) · [Emergent Abilities](/wiki/emergent-abilities)
+
+</WikiLayout>
+
+export default ({ children }) => children;
