@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router";
 import Header from "./Header";
+import { useAudio } from "../contexts/AudioContext";
 
 interface EssayLayoutProps {
   children: ReactNode;
@@ -45,8 +46,18 @@ export default function EssayLayout({
   relatedConcepts,
   citations,
 }: EssayLayoutProps) {
+  const { playAudio, currentAudio, isPlaying } = useAudio();
+
+  const handlePlayClick = () => {
+    if (audioPath) {
+      playAudio(audioPath, title);
+    }
+  };
+
+  const isCurrentAudio = currentAudio === audioPath;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 pb-24">
       <Header />
 
       {/* Main Content */}
@@ -117,7 +128,7 @@ export default function EssayLayout({
             </div>
           </div>
 
-          {/* Audio Player */}
+          {/* Audio Player Button */}
           {audioPath && (
             <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-l-4 border-emerald-500">
               <div className="flex items-start gap-3 sm:gap-4 mb-3">
@@ -134,19 +145,39 @@ export default function EssayLayout({
                     d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
                   />
                 </svg>
-                <div>
+                <div className="flex-1">
                   <h3 className="text-base sm:text-lg font-bold text-slate-900">
                     Listen to this essay
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600">
-                    Perfect for walks, commutes, or while doing other activities
+                    Perfect for walks, commutes, or while browsing other pages
                   </p>
                 </div>
               </div>
-              <audio controls className="w-full" preload="metadata">
-                <source src={audioPath} type="audio/mpeg" />
-                Your browser does not support the audio element.
-              </audio>
+              <button
+                onClick={handlePlayClick}
+                className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-all flex items-center justify-center gap-2 ${
+                  isCurrentAudio && isPlaying
+                    ? "bg-emerald-700 hover:bg-emerald-800"
+                    : "bg-emerald-600 hover:bg-emerald-700"
+                }`}
+              >
+                {isCurrentAudio && isPlaying ? (
+                  <>
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                    </svg>
+                    Now Playing
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                    {isCurrentAudio ? "Resume" : "Play Audio"}
+                  </>
+                )}
+              </button>
               <div className="mt-3 text-xs text-slate-500 flex flex-wrap items-center gap-3 sm:gap-4">
                 <span>Audio generated with OpenAI TTS</span>
                 <a
