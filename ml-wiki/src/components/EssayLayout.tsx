@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router";
-import Logo from "./Logo";
+import Header from "./Header";
 
 interface EssayLayoutProps {
   children: ReactNode;
@@ -47,56 +47,18 @@ export default function EssayLayout({
 }: EssayLayoutProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200 shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3 group">
-              <Logo className="w-8 h-8 group-hover:scale-110 transition-transform" />
-              <span className="text-2xl font-bold text-slate-900 group-hover:text-violet-600 transition-colors">
-                ML Wiki
-              </span>
-            </Link>
-            <nav className="flex gap-6">
-              <Link
-                to="/wiki"
-                className="text-slate-600 hover:text-violet-600 transition-colors"
-              >
-                Wiki
-              </Link>
-              <Link
-                to="/papers"
-                className="text-slate-600 hover:text-violet-600 transition-colors"
-              >
-                Papers
-              </Link>
-              <Link
-                to="/essays"
-                className="text-slate-600 hover:text-violet-600 transition-colors"
-              >
-                Essays
-              </Link>
-              <Link
-                to="/projects"
-                className="text-slate-600 hover:text-violet-600 transition-colors"
-              >
-                Projects
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-8 sm:py-12">
         <article className="max-w-4xl mx-auto">
           {/* Back Button */}
           <Link
             to="/essays"
-            className="inline-flex items-center gap-2 text-violet-600 hover:text-violet-800 mb-6 transition-colors"
+            className="inline-flex items-center gap-2 text-violet-600 hover:text-violet-800 mb-4 sm:mb-6 transition-colors text-sm sm:text-base"
           >
             <svg
-              className="w-5 h-5"
+              className="w-4 h-4 sm:w-5 sm:h-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -112,17 +74,17 @@ export default function EssayLayout({
           </Link>
 
           {/* Essay Header */}
-          <div className="mb-8">
-            <h1 className="text-5xl font-bold text-slate-900 mb-4 leading-tight">
+          <div className="mb-6 sm:mb-8">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 mb-3 sm:mb-4 leading-tight">
               {title}
             </h1>
-            <p className="text-xl text-slate-600 mb-4 leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-slate-600 mb-3 sm:mb-4 leading-relaxed">
               {description}
             </p>
-            <div className="flex items-center gap-4 text-sm text-slate-500">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-slate-500">
               <span className="flex items-center gap-1">
                 <svg
-                  className="w-4 h-4"
+                  className="w-3 h-3 sm:w-4 sm:h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -138,7 +100,7 @@ export default function EssayLayout({
               </span>
               <span className="flex items-center gap-1">
                 <svg
-                  className="w-4 h-4"
+                  className="w-3 h-3 sm:w-4 sm:h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -157,10 +119,10 @@ export default function EssayLayout({
 
           {/* Audio Player */}
           {audioPath && (
-            <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl shadow-lg p-6 mb-8 border-l-4 border-emerald-500">
-              <div className="flex items-center gap-4 mb-3">
+            <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-l-4 border-emerald-500">
+              <div className="flex items-start gap-3 sm:gap-4 mb-3">
                 <svg
-                  className="w-8 h-8 text-emerald-600"
+                  className="w-6 h-6 sm:w-8 sm:h-8 text-emerald-600 shrink-0"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -173,10 +135,10 @@ export default function EssayLayout({
                   />
                 </svg>
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900">
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900">
                     Listen to this essay
                   </h3>
-                  <p className="text-sm text-slate-600">
+                  <p className="text-xs sm:text-sm text-slate-600">
                     Perfect for walks, commutes, or while doing other activities
                   </p>
                 </div>
@@ -185,7 +147,7 @@ export default function EssayLayout({
                 <source src={audioPath} type="audio/mpeg" />
                 Your browser does not support the audio element.
               </audio>
-              <div className="mt-3 text-xs text-slate-500 flex items-center gap-4">
+              <div className="mt-3 text-xs text-slate-500 flex flex-wrap items-center gap-3 sm:gap-4">
                 <span>Audio generated with OpenAI TTS</span>
                 <a
                   href={audioPath}
@@ -193,7 +155,7 @@ export default function EssayLayout({
                   className="text-emerald-600 hover:text-emerald-700 hover:underline flex items-center gap-1"
                 >
                   <svg
-                    className="w-4 h-4"
+                    className="w-3 h-3 sm:w-4 sm:h-4"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -212,30 +174,30 @@ export default function EssayLayout({
           )}
 
           {/* Essay Content */}
-          <div className="bg-white rounded-lg shadow-lg p-8 md:p-12 mdx-content">
+          <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-12 mdx-content">
             {children}
           </div>
 
           {/* Related Papers */}
           {relatedPapers && relatedPapers.length > 0 && (
-            <div className="mt-8 bg-white rounded-lg shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <span className="text-3xl">📄</span>
+            <div className="mt-6 sm:mt-8 bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3 sm:mb-4 flex items-center gap-2">
+                <span className="text-2xl sm:text-3xl">📄</span>
                 Papers Referenced
               </h2>
-              <div className="grid gap-3">
+              <div className="grid gap-2 sm:gap-3">
                 {relatedPapers.map((paper, index) => (
                   <Link
                     key={index}
                     to={`/papers/${paper.slug}`}
-                    className="group flex items-center gap-3 p-4 bg-slate-50 rounded-lg hover:bg-violet-50 transition-colors border border-slate-200 hover:border-violet-300"
+                    className="group flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-slate-50 rounded-lg hover:bg-violet-50 transition-colors border border-slate-200 hover:border-violet-300"
                   >
-                    <span className="text-2xl">📖</span>
-                    <span className="text-slate-700 group-hover:text-violet-700 font-medium">
+                    <span className="text-xl sm:text-2xl">📖</span>
+                    <span className="text-sm sm:text-base text-slate-700 group-hover:text-violet-700 font-medium">
                       {paper.title}
                     </span>
                     <svg
-                      className="w-5 h-5 ml-auto text-slate-400 group-hover:text-violet-600 transition-colors"
+                      className="w-4 h-4 sm:w-5 sm:h-5 ml-auto text-slate-400 group-hover:text-violet-600 transition-colors"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -255,23 +217,23 @@ export default function EssayLayout({
 
           {/* Related Concepts */}
           {relatedConcepts && relatedConcepts.length > 0 && (
-            <div className="mt-8 bg-white rounded-lg shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <span className="text-3xl">🔗</span>
+            <div className="mt-6 sm:mt-8 bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3 sm:mb-4 flex items-center gap-2">
+                <span className="text-2xl sm:text-3xl">🔗</span>
                 Related Concepts
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
                 {relatedConcepts.map((concept, index) => (
                   <Link
                     key={index}
                     to={`/wiki/${concept.slug}`}
-                    className="group flex items-center gap-2 p-3 bg-slate-50 rounded-lg hover:bg-violet-50 transition-colors border border-slate-200 hover:border-violet-300"
+                    className="group flex items-center gap-2 p-2 sm:p-3 bg-slate-50 rounded-lg hover:bg-violet-50 transition-colors border border-slate-200 hover:border-violet-300"
                   >
-                    <span className="text-slate-700 group-hover:text-violet-700 font-medium text-sm">
+                    <span className="text-xs sm:text-sm text-slate-700 group-hover:text-violet-700 font-medium">
                       {concept.name}
                     </span>
                     <svg
-                      className="w-4 h-4 ml-auto text-slate-400 group-hover:text-violet-600 transition-colors"
+                      className="w-3 h-3 sm:w-4 sm:h-4 ml-auto text-slate-400 group-hover:text-violet-600 transition-colors"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -291,17 +253,17 @@ export default function EssayLayout({
 
           {/* Citations Section */}
           {citations && citations.length > 0 && (
-            <div className="mt-8 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg p-8">
-              <h2 className="text-2xl font-bold text-amber-900 mb-4 flex items-center gap-2">
-                <span className="text-3xl">📚</span>
+            <div className="mt-6 sm:mt-8 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg p-4 sm:p-6 md:p-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-amber-900 mb-3 sm:mb-4 flex items-center gap-2">
+                <span className="text-2xl sm:text-3xl">📚</span>
                 Citations
               </h2>
-              <div className="space-y-3">
+              <div className="space-y-2 sm:space-y-3">
                 {citations.map((citation, index) => {
                   const paperSlug = getPaperSlug(citation.paper);
 
                   return (
-                    <div key={index} className="text-slate-700 leading-relaxed">
+                    <div key={index} className="text-sm sm:text-base text-slate-700 leading-relaxed">
                       <span className="font-semibold text-amber-900">
                         [{index + 1}]
                       </span>{" "}

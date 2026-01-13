@@ -1,6 +1,6 @@
-import { Link } from "react-router";
 import { useState, useMemo } from "react";
-import Logo from "../../components/Logo";
+import { Link } from "react-router";
+import Header from "../../components/Header";
 
 export default function WikiIndex() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -268,43 +268,17 @@ export default function WikiIndex() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200 shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3 group">
-              <Logo className="w-8 h-8 group-hover:scale-110 transition-transform" />
-              <span className="text-2xl font-bold text-slate-900 group-hover:text-violet-600 transition-colors">
-                ML Wiki
-              </span>
-            </Link>
-            <nav className="flex gap-6">
-              <Link to="/wiki" className="text-violet-600 font-semibold">
-                Wiki
-              </Link>
-              <Link to="/papers" className="text-slate-600 hover:text-violet-600 transition-colors">
-                Papers
-              </Link>
-              <Link to="/essays" className="text-slate-600 hover:text-violet-600 transition-colors">
-                Essays
-              </Link>
-              <Link to="/projects" className="text-slate-600 hover:text-violet-600 transition-colors">
-                Projects
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-8 sm:py-12">
         <div className="max-w-6xl mx-auto">
           {/* Title Section */}
-          <div className="mb-12">
-            <h1 className="text-5xl font-bold text-slate-900 mb-4">
+          <div className="mb-8 sm:mb-12">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 mb-3 sm:mb-4">
               All Concepts
             </h1>
-            <p className="text-xl text-slate-600 mb-6">
+            <p className="text-base sm:text-lg md:text-xl text-slate-600 mb-4 sm:mb-6">
               Explore machine learning concepts extracted from academic papers,
               with citations and creative explanations.
             </p>
@@ -317,10 +291,10 @@ export default function WikiIndex() {
                   placeholder="Search concepts by title, description, or category..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-6 py-4 text-lg rounded-lg border-2 border-slate-300 focus:border-violet-500 focus:outline-none shadow-sm transition-all"
+                  className="w-full px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg rounded-lg border-2 border-slate-300 focus:border-violet-500 focus:outline-none shadow-sm transition-all"
                 />
                 <svg
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 w-6 h-6 text-slate-400"
+                  className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 text-slate-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -343,13 +317,13 @@ export default function WikiIndex() {
 
           {/* Concepts by Category */}
           {filteredConcepts.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-2xl text-slate-600">
+            <div className="text-center py-12 sm:py-16">
+              <p className="text-xl sm:text-2xl text-slate-600">
                 No concepts found matching "{searchQuery}"
               </p>
               <button
                 onClick={() => setSearchQuery("")}
-                className="mt-4 text-violet-600 hover:text-violet-700 font-semibold"
+                className="mt-4 text-violet-600 hover:text-violet-700 font-semibold text-sm sm:text-base"
               >
                 Clear search
               </button>
@@ -360,28 +334,28 @@ export default function WikiIndex() {
               if (categoryConceptsCount.length === 0) return null;
 
               return (
-                <div key={category} className="mb-12">
-                  <h2 className="text-3xl font-bold text-slate-800 mb-6 flex items-center gap-3">
-                    <span className="w-2 h-8 bg-violet-500 rounded"></span>
-                    {category}
-                    <span className="text-lg text-slate-500 font-normal">
+                <div key={category} className="mb-8 sm:mb-12">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+                    <span className="w-1.5 sm:w-2 h-6 sm:h-8 bg-violet-500 rounded"></span>
+                    <span className="flex-1">{category}</span>
+                    <span className="text-base sm:text-lg text-slate-500 font-normal">
                       ({categoryConceptsCount.length})
                     </span>
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     {filteredConcepts
                       .filter(concept => concept.category === category)
                       .map(concept => (
                       <Link
                         key={concept.slug}
                         to={`/wiki/${concept.slug}`}
-                        className="group bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 p-6 border-l-4 border-violet-400 hover:border-violet-600"
+                        className="group bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 p-4 sm:p-6 border-l-4 border-violet-400 hover:border-violet-600"
                       >
-                        <div className="flex items-start justify-between mb-3">
-                          <h3 className="text-2xl font-bold text-slate-900 group-hover:text-violet-600 transition-colors">
+                        <div className="flex items-start justify-between gap-2 mb-2 sm:mb-3">
+                          <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900 group-hover:text-violet-600 transition-colors">
                             {concept.title}
                           </h3>
-                          <span className={`text-xs px-2 py-1 rounded ${
+                          <span className={`text-xs px-2 py-1 rounded shrink-0 ${
                             concept.difficulty === 'Beginner' ? 'bg-green-100 text-green-800' :
                             concept.difficulty === 'Intermediate' ? 'bg-blue-100 text-blue-800' :
                             'bg-purple-100 text-purple-800'
@@ -389,12 +363,12 @@ export default function WikiIndex() {
                             {concept.difficulty}
                           </span>
                         </div>
-                        <p className="text-slate-600 leading-relaxed mb-4">
+                        <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-3 sm:mb-4">
                           {concept.description}
                         </p>
-                        <div className="flex items-center text-violet-600 font-semibold group-hover:translate-x-2 transition-transform">
+                        <div className="flex items-center text-violet-600 font-semibold group-hover:translate-x-2 transition-transform text-sm sm:text-base">
                           Read more
-                          <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                         </div>
@@ -408,54 +382,54 @@ export default function WikiIndex() {
 
           {/* Source Attribution */}
           {!searchQuery && (
-            <div className="mt-16 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg p-8">
-              <h3 className="text-2xl font-bold text-amber-900 mb-4 flex items-center gap-2">
-                <span className="text-3xl">📚</span>
+            <div className="mt-12 sm:mt-16 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg p-4 sm:p-6 md:p-8">
+              <h3 className="text-xl sm:text-2xl font-bold text-amber-900 mb-3 sm:mb-4 flex items-center gap-2">
+                <span className="text-2xl sm:text-3xl">📚</span>
                 Source Papers
               </h3>
-              <p className="text-slate-700 mb-4">
+              <p className="text-sm sm:text-base text-slate-700 mb-3 sm:mb-4">
                 All concepts on this page are derived from:
               </p>
-              <div className="space-y-3">
-                <div className="bg-white rounded-lg p-4 border border-amber-200">
-                  <h4 className="font-bold text-slate-900">Neural Machine Translation by Jointly Learning to Align and Translate</h4>
-                  <p className="text-slate-600 text-sm">
+              <div className="space-y-2 sm:space-y-3">
+                <div className="bg-white rounded-lg p-3 sm:p-4 border border-amber-200">
+                  <h4 className="text-sm sm:text-base font-bold text-slate-900">Neural Machine Translation by Jointly Learning to Align and Translate</h4>
+                  <p className="text-xs sm:text-sm text-slate-600">
                     Bahdanau, D., Cho, K., & Bengio, Y. (2014)
                   </p>
                 </div>
-                <div className="bg-white rounded-lg p-4 border border-amber-200">
-                  <h4 className="font-bold text-slate-900">Deep Residual Learning for Image Recognition</h4>
-                  <p className="text-slate-600 text-sm">
+                <div className="bg-white rounded-lg p-3 sm:p-4 border border-amber-200">
+                  <h4 className="text-sm sm:text-base font-bold text-slate-900">Deep Residual Learning for Image Recognition</h4>
+                  <p className="text-xs sm:text-sm text-slate-600">
                     He, K., Zhang, X., Ren, S., & Sun, J. (2015)
                   </p>
                 </div>
-                <div className="bg-white rounded-lg p-4 border border-amber-200">
-                  <h4 className="font-bold text-slate-900">Attention Is All You Need</h4>
-                  <p className="text-slate-600 text-sm">
+                <div className="bg-white rounded-lg p-3 sm:p-4 border border-amber-200">
+                  <h4 className="text-sm sm:text-base font-bold text-slate-900">Attention Is All You Need</h4>
+                  <p className="text-xs sm:text-sm text-slate-600">
                     Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017)
                   </p>
                 </div>
-                <div className="bg-white rounded-lg p-4 border border-amber-200">
-                  <h4 className="font-bold text-slate-900">BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</h4>
-                  <p className="text-slate-600 text-sm">
+                <div className="bg-white rounded-lg p-3 sm:p-4 border border-amber-200">
+                  <h4 className="text-sm sm:text-base font-bold text-slate-900">BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</h4>
+                  <p className="text-xs sm:text-sm text-slate-600">
                     Devlin, J., Chang, M.-W., Lee, K., & Toutanova, K. (2018)
                   </p>
                 </div>
-                <div className="bg-white rounded-lg p-4 border border-amber-200">
-                  <h4 className="font-bold text-slate-900">Language Models are Few-Shot Learners</h4>
-                  <p className="text-slate-600 text-sm">
+                <div className="bg-white rounded-lg p-3 sm:p-4 border border-amber-200">
+                  <h4 className="text-sm sm:text-base font-bold text-slate-900">Language Models are Few-Shot Learners</h4>
+                  <p className="text-xs sm:text-sm text-slate-600">
                     Brown, T. B., Mann, B., Ryder, N., Subbiah, M., Kaplan, J., Dhariwal, P., et al. (2020)
                   </p>
                 </div>
-                <div className="bg-white rounded-lg p-4 border border-amber-200">
-                  <h4 className="font-bold text-slate-900">Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</h4>
-                  <p className="text-slate-600 text-sm">
+                <div className="bg-white rounded-lg p-3 sm:p-4 border border-amber-200">
+                  <h4 className="text-sm sm:text-base font-bold text-slate-900">Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</h4>
+                  <p className="text-xs sm:text-sm text-slate-600">
                     Wei, J., Wang, X., Schuurmans, D., Bosma, M., Ichter, B., Xia, F., Chi, E., Le, Q., & Zhou, D. (2022)
                   </p>
                 </div>
-                <div className="bg-white rounded-lg p-4 border border-amber-200">
-                  <h4 className="font-bold text-slate-900">Training language models to follow instructions with human feedback</h4>
-                  <p className="text-slate-600 text-sm">
+                <div className="bg-white rounded-lg p-3 sm:p-4 border border-amber-200">
+                  <h4 className="text-sm sm:text-base font-bold text-slate-900">Training language models to follow instructions with human feedback</h4>
+                  <p className="text-xs sm:text-sm text-slate-600">
                     Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C. L., Mishkin, P., et al. (2022)
                   </p>
                 </div>

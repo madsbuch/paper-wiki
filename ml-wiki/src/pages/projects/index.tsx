@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import Header from "../../components/Header";
 
 interface Project {
   title: string;
@@ -54,46 +55,23 @@ export default function ProjectsIndex() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200 shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="text-2xl font-bold text-slate-900 hover:text-violet-600 transition-colors">
-              ML Wiki
-            </Link>
-            <nav className="flex gap-6">
-              <Link to="/wiki" className="text-slate-600 hover:text-violet-600 transition-colors">
-                Wiki
-              </Link>
-              <Link to="/papers" className="text-slate-600 hover:text-violet-600 transition-colors">
-                Papers
-              </Link>
-              <Link to="/essays" className="text-slate-600 hover:text-violet-600 transition-colors">
-                Essays
-              </Link>
-              <Link to="/projects" className="text-violet-600 font-semibold">
-                Projects
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-8 sm:py-12">
         {/* Page Header */}
-        <div className="max-w-4xl mx-auto mb-12">
-          <h1 className="text-5xl font-bold text-slate-900 mb-4">
+        <div className="max-w-4xl mx-auto mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 mb-3 sm:mb-4">
             Implementation Projects
           </h1>
-          <p className="text-xl text-slate-600">
+          <p className="text-base sm:text-lg md:text-xl text-slate-600">
             Language-agnostic guides for building systems based on concepts from research papers.
             Learn by implementing complete architectures and algorithms.
           </p>
         </div>
 
         {/* Search Bar */}
-        <div className="max-w-4xl mx-auto mb-8">
+        <div className="max-w-4xl mx-auto mb-6 sm:mb-8">
           <div className="relative">
             <svg
               className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400"
@@ -119,10 +97,10 @@ export default function ProjectsIndex() {
         </div>
 
         {/* Projects Grid */}
-        <div className="max-w-4xl mx-auto grid gap-6">
+        <div className="max-w-4xl mx-auto grid gap-4 sm:gap-6">
           {filteredProjects.length === 0 ? (
-            <div className="bg-white rounded-lg shadow-lg p-12 text-center">
-              <p className="text-slate-600 text-lg">
+            <div className="bg-white rounded-lg shadow-lg p-8 sm:p-12 text-center">
+              <p className="text-slate-600 text-base sm:text-lg">
                 No projects found matching "{searchQuery}"
               </p>
             </div>
@@ -131,14 +109,14 @@ export default function ProjectsIndex() {
               <Link
                 key={project.slug}
                 to={`/projects/${project.slug}`}
-                className="group bg-white rounded-lg shadow-lg hover:shadow-xl transition-all p-6 border-2 border-transparent hover:border-violet-300"
+                className="group bg-white rounded-lg shadow-lg hover:shadow-xl transition-all p-4 sm:p-6 border-2 border-transparent hover:border-violet-300"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <h2 className="text-2xl font-bold text-slate-900 group-hover:text-violet-600 transition-colors">
+                <div className="flex items-start justify-between gap-3 mb-2 sm:mb-3">
+                  <h2 className="text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-violet-600 transition-colors">
                     {project.title}
                   </h2>
                   <svg
-                    className="w-6 h-6 text-slate-400 group-hover:text-violet-600 transition-colors flex-shrink-0 ml-4"
+                    className="w-5 h-5 sm:w-6 sm:h-6 text-slate-400 group-hover:text-violet-600 transition-colors flex-shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -147,22 +125,22 @@ export default function ProjectsIndex() {
                   </svg>
                 </div>
 
-                <p className="text-slate-600 mb-4 leading-relaxed">
+                <p className="text-sm sm:text-base text-slate-600 mb-3 sm:mb-4 leading-relaxed">
                   {project.description}
                 </p>
 
-                <div className="flex items-center gap-3 mb-4 flex-wrap">
-                  <span className={`px-3 py-1 rounded-full border text-sm font-medium ${difficultyColors[project.difficulty]}`}>
+                <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 flex-wrap">
+                  <span className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border text-xs sm:text-sm font-medium ${difficultyColors[project.difficulty]}`}>
                     {project.difficulty}
                   </span>
-                  <span className="flex items-center gap-1 text-sm text-slate-500">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <span className="flex items-center gap-1 text-xs sm:text-sm text-slate-500">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     {project.estimatedTime}
                   </span>
-                  <span className="flex items-center gap-1 text-sm text-slate-500">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <span className="flex items-center gap-1 text-xs sm:text-sm text-slate-500">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                     </svg>
                     Language-agnostic
@@ -171,8 +149,8 @@ export default function ProjectsIndex() {
 
                 {/* Related Papers */}
                 {project.relatedPapers.length > 0 && (
-                  <div className="mb-4">
-                    <p className="text-sm font-semibold text-slate-700 mb-2">Based on papers:</p>
+                  <div className="mb-3 sm:mb-4">
+                    <p className="text-xs sm:text-sm font-semibold text-slate-700 mb-2">Based on papers:</p>
                     <div className="flex flex-wrap gap-2">
                       {project.relatedPapers.map((paper, idx) => (
                         <span

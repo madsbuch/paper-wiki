@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router";
-import Logo from "./Logo";
+import Header from "./Header";
 
 interface PaperLayoutProps {
   title: string;
@@ -31,56 +31,18 @@ export default function PaperLayout({
 }: PaperLayoutProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200 shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3 group">
-              <Logo className="w-8 h-8 group-hover:scale-110 transition-transform" />
-              <span className="text-2xl font-bold text-slate-900 group-hover:text-violet-600 transition-colors">
-                ML Wiki
-              </span>
-            </Link>
-            <nav className="flex gap-6">
-              <Link
-                to="/wiki"
-                className="text-slate-600 hover:text-violet-600 transition-colors"
-              >
-                Wiki
-              </Link>
-              <Link
-                to="/papers"
-                className="text-slate-600 hover:text-violet-600 transition-colors"
-              >
-                Papers
-              </Link>
-              <Link
-                to="/essays"
-                className="text-slate-600 hover:text-violet-600 transition-colors"
-              >
-                Essays
-              </Link>
-              <Link
-                to="/projects"
-                className="text-slate-600 hover:text-violet-600 transition-colors"
-              >
-                Projects
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-8 sm:py-12">
         <article className="max-w-5xl mx-auto">
           {/* Back Button */}
           <Link
             to="/papers"
-            className="inline-flex items-center gap-2 text-violet-600 hover:text-violet-800 mb-6 transition-colors"
+            className="inline-flex items-center gap-2 text-violet-600 hover:text-violet-800 mb-4 sm:mb-6 transition-colors text-sm sm:text-base"
           >
             <svg
-              className="w-5 h-5"
+              className="w-4 h-4 sm:w-5 sm:h-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -96,18 +58,18 @@ export default function PaperLayout({
           </Link>
 
           {/* Paper Header */}
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden border-t-4 border-violet-500 mb-8">
-            <div className="bg-gradient-to-r from-violet-50 to-purple-50 p-8 border-b border-violet-100">
-              <div className="flex items-start justify-between gap-4 mb-4">
-                <div className="flex-1">
-                  <h1 className="text-4xl font-bold text-slate-900 mb-4">
+          <div className="bg-white rounded-xl shadow-lg overflow-hidden border-t-4 border-violet-500 mb-6 sm:mb-8">
+            <div className="bg-gradient-to-r from-violet-50 to-purple-50 p-4 sm:p-6 md:p-8 border-b border-violet-100">
+              <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mb-4">
+                <div className="flex-1 w-full">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-3 sm:mb-4">
                     {title}
                   </h1>
-                  <p className="text-lg text-slate-600 mb-3">{authors}</p>
-                  <div className="flex flex-wrap gap-4 text-sm text-slate-500">
+                  <p className="text-base sm:text-lg text-slate-600 mb-2 sm:mb-3">{authors}</p>
+                  <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-slate-500">
                     <span className="flex items-center gap-1">
                       <svg
-                        className="w-4 h-4"
+                        className="w-3 h-3 sm:w-4 sm:h-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -123,7 +85,7 @@ export default function PaperLayout({
                     </span>
                     <span className="flex items-center gap-1">
                       <svg
-                        className="w-4 h-4"
+                        className="w-3 h-3 sm:w-4 sm:h-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -139,7 +101,7 @@ export default function PaperLayout({
                     </span>
                     <span className="flex items-center gap-1">
                       <svg
-                        className="w-4 h-4"
+                        className="w-3 h-3 sm:w-4 sm:h-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -159,10 +121,10 @@ export default function PaperLayout({
                   href={pdfPath}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 flex items-center gap-2 px-6 py-3 bg-violet-600 text-white font-semibold rounded-lg hover:bg-violet-700 transition-colors shadow-md hover:shadow-lg"
+                  className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-violet-600 text-white text-sm sm:text-base font-semibold rounded-lg hover:bg-violet-700 transition-colors shadow-md hover:shadow-lg"
                 >
                   <svg
-                    className="w-5 h-5"
+                    className="w-4 h-4 sm:w-5 sm:h-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -180,27 +142,27 @@ export default function PaperLayout({
             </div>
 
             {/* Abstract */}
-            <div className="p-8">
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">
+            <div className="p-4 sm:p-6 md:p-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3 sm:mb-4">
                 Abstract
               </h2>
-              <p className="text-slate-700 leading-relaxed text-lg">
+              <p className="text-sm sm:text-base md:text-lg text-slate-700 leading-relaxed">
                 {abstract}
               </p>
             </div>
           </div>
 
           {/* Key Contributions */}
-          <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-            <h2 className="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <span className="text-3xl">🎯</span>
+          <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3 sm:mb-4 flex items-center gap-2">
+              <span className="text-2xl sm:text-3xl">🎯</span>
               Key Contributions
             </h2>
-            <ul className="space-y-3">
+            <ul className="space-y-2 sm:space-y-3">
               {keyContributions.map((contribution, index) => (
-                <li key={index} className="flex items-start gap-3">
-                  <span className="text-violet-500 font-bold mt-1">•</span>
-                  <span className="text-slate-700 leading-relaxed">
+                <li key={index} className="flex items-start gap-2 sm:gap-3">
+                  <span className="text-violet-500 font-bold mt-0.5 sm:mt-1">•</span>
+                  <span className="text-sm sm:text-base text-slate-700 leading-relaxed">
                     {contribution}
                   </span>
                 </li>
@@ -209,33 +171,33 @@ export default function PaperLayout({
           </div>
 
           {/* Impact */}
-          <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl shadow-lg p-8 mb-8 border-l-4 border-amber-500">
-            <h2 className="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <span className="text-3xl">💡</span>
+          <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8 border-l-4 border-amber-500">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3 sm:mb-4 flex items-center gap-2">
+              <span className="text-2xl sm:text-3xl">💡</span>
               Impact
             </h2>
-            <p className="text-slate-700 leading-relaxed text-lg">{impact}</p>
+            <p className="text-sm sm:text-base md:text-lg text-slate-700 leading-relaxed">{impact}</p>
           </div>
 
           {/* Related Concepts */}
-          <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-            <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-              <span className="text-3xl">🔗</span>
+          <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-6 flex items-center gap-2">
+              <span className="text-2xl sm:text-3xl">🔗</span>
               Related Concepts
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               {relatedConcepts.map((concept, index) => (
                 <Link
                   key={index}
                   to={`/wiki/${concept.slug}`}
-                  className="group flex items-center gap-3 p-4 bg-slate-50 rounded-lg hover:bg-violet-50 transition-colors border border-slate-200 hover:border-violet-300"
+                  className="group flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-slate-50 rounded-lg hover:bg-violet-50 transition-colors border border-slate-200 hover:border-violet-300"
                 >
-                  <span className="text-2xl">📖</span>
-                  <span className="text-slate-700 group-hover:text-violet-700 font-medium">
+                  <span className="text-xl sm:text-2xl">📖</span>
+                  <span className="text-sm sm:text-base text-slate-700 group-hover:text-violet-700 font-medium">
                     {concept.name}
                   </span>
                   <svg
-                    className="w-5 h-5 ml-auto text-slate-400 group-hover:text-violet-600 transition-colors"
+                    className="w-4 h-4 sm:w-5 sm:h-5 ml-auto text-slate-400 group-hover:text-violet-600 transition-colors"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -254,7 +216,7 @@ export default function PaperLayout({
 
           {/* Additional Content */}
           {children && (
-            <div className="bg-white rounded-xl shadow-lg p-8">{children}</div>
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8">{children}</div>
           )}
         </article>
       </main>
