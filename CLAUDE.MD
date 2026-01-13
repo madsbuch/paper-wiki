@@ -164,6 +164,7 @@ Essays can take many forms:
 1. **Multi-paper integration** - Must draw from at least 2-3 papers
 2. **Self-contained** - Should be understandable without reading other content
 3. **Length** - Approximately 3,000-5,000 words (20-30 minutes when read aloud)
+   - Audio compression ensures files stay under 25MB limit
 4. **Citations** - Every claim must cite specific papers with page numbers
 5. **Narrative flow** - Should read naturally, not like a reference document
 6. **Accessibility** - Use creative explanations, analogies, stories to enhance understanding
@@ -212,17 +213,26 @@ node scripts/generate-audio.js --all
 ```
 
 **How It Works:**
-1. Script reads the MDX file and extracts text content
+1. Script (located in project root `/scripts/`) reads the MDX file from `/ml-wiki/src/pages/essays/`
 2. Removes MDX/JSX syntax, code blocks, and metadata
 3. Splits text into chunks of ~3,500 characters (OpenAI has 4,096 char limit)
 4. Generates audio for each chunk using OpenAI TTS API
 5. Concatenates all audio chunks into a single MP3 file
-6. Saves to `/public/audio/<essay-slug>.mp3`
+6. Saves audio output to `/ml-wiki/public/audio/<essay-slug>.mp3` (inside web project for serving)
 
 **Configuration:**
 - Voice: `alloy` (options: alloy, echo, fable, onyx, nova, shimmer)
-- Model: `tts-1-hd` (HD quality, recommended)
-- Output: MP3 format
+- Model: `tts-1-hd` (HD quality)
+- Output: MP3 format, automatically compressed with FFmpeg
+- Compression: 64 kbps bitrate, mono, 22.05 kHz (optimized for speech)
+- File size limit: 25MB maximum (enforced after compression)
+
+**Audio Compression:**
+The script automatically compresses audio files using FFmpeg to ensure they stay under 25MB:
+- Original TTS output: ~6-8 MB per 1,000 words
+- After compression: ~1.5-2 MB per 1,000 words (~75% reduction)
+- Quality remains excellent for speech content
+- Typical 4,000-word essay: ~6-8 MB (well under 25MB limit)
 
 **Cost Estimate:**
 - tts-1-hd: $30 per 1M characters
@@ -252,15 +262,15 @@ If you edit an essay and need to regenerate audio:
 
 ```bash
 # Delete the existing audio file
-rm public/audio/essay-slug.mp3
+rm ml-wiki/public/audio/essay-slug.mp3
 
 # Generate new audio
 node scripts/generate-audio.js essay-slug
 ```
 
 **Technical Details:**
-- Script location: `/ml-wiki/scripts/generate-audio.js`
-- Documentation: `/ml-wiki/scripts/README.md`
+- Script location: `/scripts/generate-audio.js` (project root)
+- Documentation: `/scripts/README.md`
 - Text chunking: Splits at sentence boundaries to avoid awkward cuts
 - Handles essays of any length (tested with 15,000+ characters)
 

@@ -16,6 +16,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,7 +31,8 @@ if (!OPENAI_API_KEY) {
 
 // Configuration
 const VOICE = 'alloy'; // Options: alloy, echo, fable, onyx, nova, shimmer
-const MODEL = 'tts-1-hd'; // Use tts-1-hd for higher quality
+const MODEL = 'tts-1-hd'; // Use tts-1-hd for best quality, then compress with FFmpeg
+const MAX_FILE_SIZE_MB = 25; // Maximum file size in MB (enforced after compression)
 const ESSAYS_DIR = path.join(__dirname, '../ml-wiki/src/pages/essays');
 const AUDIO_OUTPUT_DIR = path.join(__dirname, '../ml-wiki/public/audio');
 
@@ -145,6 +147,39 @@ async function generateAudioChunk(text, chunkIndex, totalChunks) {
 }
 
 /**
+ * Compress MP3 file using FFmpeg for smaller file size
+ * Uses lower bitrate (64k) which is perfect for speech
+ */
+function compressAudio(inputPath, outputPath) {
+  const tempPath = inputPath + '.temp.mp3';
+
+  try {
+    console.log(`  Compressing audio with FFmpeg...`);
+
+    // Use FFmpeg to compress the audio
+    // -b:a 64k = 64 kbps bitrate (excellent for speech, much smaller than default)
+    // -ac 1 = mono (speech doesn't need stereo)
+    // -ar 22050 = 22.05 kHz sample rate (sufficient for speech)
+    execSync(
+      `ffmpeg -i "${inputPath}" -b:a 64k -ac 1 -ar 22050 "${tempPath}" -y -loglevel error`,
+      { stdio: 'inherit' }
+    );
+
+    // Replace original with compressed version
+    fs.renameSync(tempPath, outputPath);
+
+    return true;
+  } catch (error) {
+    console.error(`  Warning: FFmpeg compression failed: ${error.message}`);
+    // Clean up temp file if it exists
+    if (fs.existsSync(tempPath)) {
+      fs.unlinkSync(tempPath);
+    }
+    return false;
+  }
+}
+
+/**
  * Generate audio using OpenAI TTS API
  * Handles chunking for texts longer than 4096 characters
  */
@@ -175,8 +210,22 @@ async function generateAudio(text, outputPath) {
       fs.writeFileSync(outputPath, finalAudio);
     }
 
-    const fileSizeMB = (fs.statSync(outputPath).size / (1024 * 1024)).toFixed(2);
-    console.log(`✓ Audio generated: ${outputPath} (${fileSizeMB} MB)`);
+    const originalSizeMB = (fs.statSync(outputPath).size / (1024 * 1024)).toFixed(2);
+    console.log(`✓ Audio generated: ${outputPath} (${originalSizeMB} MB)`);
+
+    // Compress the audio using FFmpeg
+    compressAudio(outputPath, outputPath);
+
+    const finalSizeMB = (fs.statSync(outputPath).size / (1024 * 1024)).toFixed(2);
+    const savings = ((1 - parseFloat(finalSizeMB) / parseFloat(originalSizeMB)) * 100).toFixed(1);
+    console.log(`✓ Compressed: ${originalSizeMB} MB → ${finalSizeMB} MB (${savings}% smaller)`);
+
+    // Check file size after compression
+    if (parseFloat(finalSizeMB) > MAX_FILE_SIZE_MB) {
+      console.error(`⚠ WARNING: File size (${finalSizeMB} MB) exceeds maximum (${MAX_FILE_SIZE_MB} MB)`);
+      console.error(`  Consider reducing essay length or splitting into multiple parts.`);
+      return false;
+    }
 
     return true;
   } catch (error) {
@@ -216,8 +265,8 @@ async function processEssay(essaySlug) {
 
   console.log(`Extracted ${text.length} characters`);
 
-  // Estimate cost (OpenAI charges $15 per 1M characters for tts-1-hd)
-  const estimatedCost = (text.length / 1000000) * 15;
+  // Estimate cost (OpenAI charges $30 per 1M characters for tts-1-hd)
+  const estimatedCost = (text.length / 1000000) * 30;
   console.log(`Estimated cost: $${estimatedCost.toFixed(4)}`);
 
   return await generateAudio(text, audioPath);

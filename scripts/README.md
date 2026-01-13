@@ -52,11 +52,48 @@ You can customize the voice and model in `generate-audio.js`:
 - **Voice options**: `alloy`, `echo`, `fable`, `onyx`, `nova`, `shimmer`
 - **Model options**:
   - `tts-1`: Standard quality, faster, cheaper
-  - `tts-1-hd`: HD quality (recommended)
+  - `tts-1-hd`: HD quality (recommended, used by default)
 
 Current settings:
 - Voice: `alloy`
 - Model: `tts-1-hd`
+- Compression: Enabled (FFmpeg)
+
+## Audio Compression
+
+All generated audio is automatically compressed using FFmpeg to reduce file size while maintaining excellent quality for speech:
+
+- **Bitrate**: 64 kbps (perfect for speech)
+- **Channels**: Mono (speech doesn't need stereo)
+- **Sample rate**: 22.05 kHz (sufficient for speech clarity)
+- **Size reduction**: ~75% smaller than original TTS output
+- **Quality**: Excellent for voice content
+
+### File Size Limits
+
+- Maximum file size: 25MB
+- Typical sizes after compression:
+  - 1,000 words: ~1.5-2 MB
+  - 3,000 words: ~5-6 MB
+  - 5,000 words: ~8-10 MB
+
+The script will warn if a file exceeds 25MB after compression.
+
+### Requirements
+
+FFmpeg must be installed for compression to work:
+```bash
+# macOS
+brew install ffmpeg
+
+# Ubuntu/Debian
+sudo apt-get install ffmpeg
+
+# Windows (using Chocolatey)
+choco install ffmpeg
+```
+
+If FFmpeg is not installed, the script will generate uncompressed audio (which may exceed 25MB for longer essays).
 
 ## Cost
 
@@ -66,7 +103,7 @@ OpenAI TTS pricing (as of 2024):
 
 A typical 4,000-word essay (~25,000 characters) costs approximately:
 - tts-1: $0.38
-- tts-1-hd: $0.75
+- tts-1-hd: $0.75 (recommended for best quality)
 
 ## Adding audio to an essay
 
@@ -124,8 +161,9 @@ node scripts/generate-audio.js essay-slug
 - Ensure the file structure matches the expected format
 
 ### Audio file is too large
-- Consider using `tts-1` instead of `tts-1-hd` for smaller files
-- The quality difference is minimal for most use cases
+- Ensure FFmpeg is installed and working
+- Check if compression is being applied (you should see "Compressed: X MB → Y MB" in output)
+- If still too large, consider splitting the essay into multiple parts
 
 ## Voice Samples
 

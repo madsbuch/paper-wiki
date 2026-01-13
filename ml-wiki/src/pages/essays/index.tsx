@@ -38,6 +38,22 @@ export default function EssaysIndex() {
       readingTime: "24 min read",
       tags: ["Alignment", "RLHF", "Reasoning", "Chain-of-Thought", "InstructGPT"],
       relatedPapers: ["InstructGPT", "Chain-of-Thought Prompting"]
+    },
+    {
+      title: "The Unreasonable Effectiveness of Scale: When Bigger Actually Became Better",
+      slug: "unreasonable-effectiveness-of-scale",
+      description: "How the AI field discovered that making models larger unlocked capabilities no one predicted—from few-shot learning to chain-of-thought reasoning. The story of scale as the great equalizer.",
+      readingTime: "28 min read",
+      tags: ["Scaling", "Emergent Abilities", "Few-Shot Learning", "Chain-of-Thought", "GPT-3", "BERT"],
+      relatedPapers: ["BERT", "Language Models are Few-Shot Learners", "Chain-of-Thought Prompting"]
+    },
+    {
+      title: "From Broken Gradients to Billion-Parameter Models: The Skip Connection Story",
+      slug: "skip-connection-revolution",
+      description: "How a simple architectural trick from computer vision—the residual connection—solved the degradation problem and unlocked the deep networks that power modern AI, from 152-layer image classifiers to GPT-3.",
+      readingTime: "26 min read",
+      tags: ["Architecture", "ResNet", "Transformers", "Deep Learning", "Training", "Residual Connections"],
+      relatedPapers: ["ResNet", "Attention Is All You Need", "BERT", "Language Models are Few-Shot Learners"]
     }
   ];
 

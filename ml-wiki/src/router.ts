@@ -9,6 +9,8 @@ export type Path =
   | `/essays/alignment-challenge`
   | `/essays/evolution-of-attention`
   | `/essays/learning-without-examples`
+  | `/essays/skip-connection-revolution`
+  | `/essays/unreasonable-effectiveness-of-scale`
   | `/papers`
   | `/papers/attention-is-all-you-need`
   | `/papers/bahdanau-attention`
