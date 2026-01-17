@@ -8,7 +8,7 @@ export default function GPT3FewShotLearners() {
       year="2020"
       venue="Advances in Neural Information Processing Systems 33 (NeurIPS 2020)"
       arxivId="2005.14165v4"
-      pdfPath="/papers/2005.14165v4.pdf"
+      arxivUrl="https://arxiv.org/abs/2005.14165"
       abstract="We train GPT-3, a 175 billion parameter autoregressive language model, and test its in-context learning abilities. We evaluate GPT-3 on over two dozen NLP datasets in zero-shot, one-shot, and few-shot settings. GPT-3 achieves strong performance on many NLP tasks without any gradient updates or fine-tuning, sometimes matching or exceeding state-of-the-art despite being evaluated without task-specific fine-tuning."
       keyContributions={[
         "Introduced GPT-3, a 175 billion parameter language model",

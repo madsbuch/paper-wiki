@@ -8,7 +8,7 @@ export default function AttentionIsAllYouNeed() {
       year="2017"
       venue="31st Conference on Neural Information Processing Systems (NIPS 2017)"
       arxivId="1706.03762v7"
-      pdfPath="/papers/1706.03762v7.pdf"
+      arxivUrl="https://arxiv.org/abs/1706.03762"
       abstract="The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely."
       keyContributions={[
         "Introduced the Transformer architecture",

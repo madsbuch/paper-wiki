@@ -1,0 +1,272 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "Integro-Differential Equations for Transformers",
+  description: "A mathematical framework interpreting Transformers as discretizations of continuous integro-differential equations where attention emerges as non-local integral operators",
+  category: "Mathematical Foundations",
+  tags: ["transformers", "differential-equations", "integral-operators", "mathematical-theory"],
+  citations: [
+    {
+      paper: "A Mathematical Explanation of Transformers for Large Language Models and GPTs",
+      authors: "Tai, X., Liu, H., Li, L., & Chan, R. H.",
+      year: "2025",
+      pages: "1-7"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+**Integro-Differential Equations for Transformers** is a rigorous mathematical framework that interprets the Transformer architecture as a discretization of a continuous integro-differential equation, where self-attention emerges naturally as a non-local integral operator and layer normalization as a projection to time-dependent constraints [Tai et al., 2025, p.1].
+
+## Core Concept
+
+The key insight is that Transformers can be understood as solving a continuous evolution equation that combines:
+- **Differential operators** (time evolution)
+- **Integral operators** (non-local attention mechanisms)
+- **Constraint projections** (normalization and activation functions)
+
+This provides a unified mathematical foundation for understanding all components of the Transformer architecture.
+
+## The Continuous Transformer Equation
+
+For a function u(x, y, t) where:
+- **x ∈ Ωx** = token index (position in sequence)
+- **y ∈ Ωy** = feature dimension (entries of token vectors)
+- **t ∈ [0, T]** = time (corresponding to layer depth)
+
+The continuous Transformer solves [Tai et al., 2025, p.3]:
+
+```
+u_t = ⟨γ(x,·,t;u), V(·,y,t;u)⟩_Ωx + ∂I_S1(σ1(t),σ2(t))(u)
+      + Σ_j [⟨W_j(·,y,t), u(x,·,t)⟩_Ωy + b_j(x,t)] + ∂I_S2(u)
+
+u(x, y, 0) = f(x, y)
+```
+
+where the right-hand side decomposes into three sets of operations.
+
+## Component I: Attention as Non-Local Integral Operator
+
+### Integral Transformations
+
+Three kernel functions W^Q, W^K, W^V define integral transformations [Tai et al., 2025, p.4-5]:
+
+```
+Q(x, y, t; u) = ⟨W^Q(·,y,t), u(x,·,t)⟩_Ωy = ∫_Ωy W^Q(ξ,y,t)u(x,ξ,t)dξ
+
+K(x, y, t; u) = ⟨W^K(·,y,t), u(x,·,t)⟩_Ωy = ∫_Ωy W^K(ξ,y,t)u(x,ξ,t)dξ
+
+V(x, y, t; u) = ⟨W^V(·,y,t), u(x,·,t)⟩_Ωy = ∫_Ωy W^V(ξ,y,t)u(x,ξ,t)dξ
+```
+
+### Attention Score
+
+The attention score is computed as a softmax of inner products [Tai et al., 2025, p.5]:
+
+```
+γ(x, x̃, t; u) = Softmax_2[(1/√|Ωy|)⟨Q(x,·,t;u), K(x̃,·,t;u)⟩_Ωy]
+               = exp(⟨Q(x,·,t;u), K(x̃,·,t;u)⟩_Ωy/√|Ωy|)
+                 ────────────────────────────────────────────
+                 ∫_Ωx exp(⟨Q(x,·,t;u), K(η,·,t;u)⟩_Ωy/√|Ωy|)dη
+```
+
+### Non-Local Nature
+
+The attention output ⟨γ(x,·,t;u), V(·,y,t;u)⟩_Ωx is **non-local** because:
+- It integrates over all token positions x̃ ∈ Ωx
+- Each token's update depends on all other tokens through γ
+- This is fundamentally different from local differential operators (like convolutions)
+
+**Mathematical Interpretation:** Attention is a **non-local integral operator** where the kernel γ(x, x̃, t; u) is data-dependent and computed via the softmax mechanism [Tai et al., 2025, p.3].
+
+## Component II: Layer Normalization as Projection
+
+### Constraint Sets
+
+Define sets with specified mean σ1 and variance σ2² [Tai et al., 2025, p.5]:
+
+```
+S1(σ1, σ2) = \{u : (1/|Ωy|)∫_Ωy u(x,ξ,t)dξ = σ1,
+                   (1/|Ωy|)∫_Ωy (u(x,ξ,t) - σ1)²dξ = σ2²\}
+```
+
+The indicator function ∂I_S1(u) enforces this constraint.
+
+### Projection Theorem
+
+**Theorem (Tai et al., 2025):** The solution to u - v = ∂I_S1(σ1,σ2)(u) is [Tai et al., 2025, p.8-9]:
+
+```
+u(x,y) = (v(x,y) - α(x))/√β(x) · σ2 + σ1
+
+where:
+  α(x) = (1/|Ωy|)∫_Ωy v(x,ξ)dξ           (mean of v)
+  β(x) = (1/|Ωy|)∫_Ωy (v(x,ξ) - α(x))²dξ  (variance of v)
+```
+
+**Mathematical Interpretation:** Layer normalization is a **projection** of a function onto the set S1(σ1, σ2), which can be solved in closed form. This is equivalent to standardizing v to have mean 0 and variance 1, then rescaling to mean σ1 and variance σ2² [Tai et al., 2025, p.9].
+
+## Component III: Feedforward Networks
+
+The feedforward component consists of [Tai et al., 2025, p.6]:
+
+```
+Σ_j [⟨W_j(·,y,t), u(x,·,t)⟩_Ωy + b_j(x,t)] + ∂I_S2(u)
+```
+
+where:
+- **First term:** J linear layers with kernels W_j and biases b_j
+- **Second term:** ReLU activation via projection to S2 = \{u : u ≥ 0\}
+
+The ReLU activation solves u - ū = ∂I_S2(u), which has closed-form solution [Tai et al., 2025, p.9]:
+
+```
+u = max{ū, 0} = ReLU(ū)
+```
+
+## Operator Splitting Discretization
+
+### Lie Splitting Scheme
+
+To discretize the continuous equation, use sequential Lie splitting [Tai et al., 2025, p.7]. Given u^n, compute u^(n+1) by M substeps:
+
+1. **Substep 1 (Attention):** Solve u^(1/M) - u^0 = ⟨γ^0(x,·;u^0), V^0(·,y;u^0)⟩_Ωx
+2. **Substep 2 (LayerNorm):** Solve u^(2/M) - u^(1/M) = ∂I_S1(u^(2/M))
+3. **Substeps 3 to 2+J (Feedforward):** For j=1,...,J solve feedforward layer equations
+4. **Substep 3+J (Skip Connection):** u^((3+J)/M) = (1/2)(u^((2+J)/M) + u^(2/M))
+5. **Substep 4+J (LayerNorm):** Solve u^1 - u^((3+J)/M) = ∂I_S1(u^1)
+
+**Critical Insight:** With M = 6 (corresponding to J = 2 feedforward layers), this splitting scheme **exactly recovers** the Transformer encoder architecture from Vaswani et al. (2017) [Tai et al., 2025, p.12].
+
+### Spatial Discretization
+
+Discretize Ωx and Ωy with Nx and Ny grid points:
+- **u^0 ∈ ℝ^(Nx × Ny)** represents Nx tokens with Ny-dimensional embeddings
+- **W^Q, W^K, W^V ∈ ℝ^(Ny × Ny)** are weight matrices
+- **Integral transformations become matrix multiplications:** Q^0(u^0) = u^0 W^Q,0
+
+After spatial discretization, the continuous formulation reduces to standard Transformer operations [Tai et al., 2025, p.10-11].
+
+## Why This Framework Matters
+
+### Theoretical Insights
+
+1. **Unified Understanding:** Connects CNNs, UNets, and Transformers as discretizations of differential/integral equations
+2. **Design Principles:** Systematic exploration of architectures using numerical analysis tools (stability, convergence)
+3. **Interpretability:** Each component has clear mathematical meaning (attention = non-local operator, normalization = projection)
+
+### Practical Implications
+
+1. **Architecture Design:** Can design new architectures by modifying the continuous equation
+2. **Embedding Domain Knowledge:** Can incorporate physical laws or conservation principles directly into the formulation
+3. **Multi-Head Attention:** Naturally extends by adding a head dimension h ∈ Ωh and integrating: ∫_Ωh ⟨γ(x,·,h,t;u), V(·,y,h,t;u)⟩dh [Tai et al., 2025, p.13]
+4. **Convolutional Transformers:** For structured data (images), specialize to convolutions: Q = W^Q * u [Tai et al., 2025, p.14-15]
+
+## Training as PDE-Constrained Optimization
+
+Given dataset \{(ui, vi)\}\_\{i=1\}^B, training solves [Tai et al., 2025, p.6]:
+
+```
+min_θ (1/B)Σ_i ℓ(N_θ(ui), vi)
+
+subject to: N_θ(ui) solves the continuous Transformer equation
+```
+
+where θ = \{W^Q, W^K, W^V, \{W_j, b_j\}\_\{j=1\}^J, σ1(t), σ2(t)\} are control variables.
+
+**Interpretation:** Training is a **PDE-constrained optimization problem**—a classical formulation in optimal control theory connecting deep learning to variational methods and calculus of variations [Tai et al., 2025, p.6].
+
+## Connections to Prior Work
+
+Previous works interpreted Transformers as:
+- **Multi-particle dynamical systems** (Dutta et al., 2021; Geshkovski et al., 2023)
+- **ODE solvers** (Lu et al., 2020)
+- **Nonlocal variational models** (Meng et al., 2024)
+
+This framework differs fundamentally by:
+- Providing a **complete operator-theoretic formulation** for all components
+- Using **operator splitting** to derive the architecture systematically
+- Embedding in **continuous domains for both tokens and features**
+- Offering **variational perspective** via indicator functions and projections
+
+## Creative Analogy: The Flow of a River
+
+Imagine the Transformer as modeling the evolution of a river system:
+
+**Traditional View:** The river consists of discrete water molecules (tokens) that interact through discrete timesteps (layers).
+
+**Integro-Differential View:** The river is a continuous fluid u(x,y,t) where:
+- **x** = position along the river (token index)
+- **y** = depth and properties of water (feature dimension)
+- **t** = time as the river flows (layer depth)
+
+**Attention as Non-Local Operator:** Water at position x is influenced by water at all other positions x̃ through long-range currents and eddies. The attention score γ(x,x̃,t) determines how strongly position x̃ influences position x—like vortices creating non-local interactions.
+
+**Layer Normalization as Projection:** At each cross-section x, the water is constrained to have a certain average depth (mean σ1) and turbulence level (variance σ2²). This projection ensures stable flow.
+
+**Discretization:** We observe the river at discrete positions (tokens) and time snapshots (layers), but the underlying dynamics are continuous. The Transformer is how we sample and approximate this continuous evolution.
+
+The key insight: Just as fluid dynamics equations (Navier-Stokes) describe continuous flow that we discretize for computation, the Transformer solves a continuous integro-differential equation that we discretize into layers and tokens.
+
+## Implementation Considerations
+
+### Choosing Time Discretization
+
+- **Number of layers Nt:** Each layer corresponds to one time step Δt = T/Nt
+- **Operator splitting order:** Lie splitting (M=6) recovers standard Transformer
+- **Hybrid splitting:** Can combine sequential and parallel substeps for multi-stage architectures
+
+### Spatial Discretization
+
+- **Nx (number of tokens):** Determines sequence length
+- **Ny (embedding dimension):** Determines capacity of each token representation
+- **Grid structure:** Uniform grid for language, structured grid for images
+
+## Extensions and Variations
+
+### Multi-Head Attention
+
+Add continuous head dimension h ∈ Ωh [Tai et al., 2025, p.13]:
+
+```
+u_t = ∫_Ωh ⟨γ(x,·,h,t;u), V(·,y,h,t;u)⟩_Ωx dh + ...
+```
+
+After discretizing with Nh heads, this recovers multi-head attention exactly.
+
+### Convolutional Transformers
+
+For image data, define Q, K, V as convolutions [Tai et al., 2025, p.15]:
+
+```
+Q(x,y,t;u) = W^Q(·,t) * u(x,·,t) = ∫_Ωy W^Q(ξ,t)u(x, y-ξ, t)dξ
+```
+
+This incorporates spatial locality while maintaining global context through attention.
+
+## Future Directions
+
+1. **Stability Analysis:** Study stability conditions for the integro-differential equation
+2. **Convergence Theory:** Prove convergence rates as discretization is refined (Nx, Ny → ∞)
+3. **Adaptive Discretization:** Learn optimal token positions x and feature dimensions y
+4. **Physics-Informed Transformers:** Incorporate conservation laws or symmetries into the formulation
+5. **Higher-Order Schemes:** Use Strang splitting or Runge-Kutta methods for better accuracy
+
+## Related Concepts
+
+- [Transformer Architecture](/wiki/transformer-architecture)
+- [Self-Attention](/wiki/self-attention)
+- [Layer Normalization](/wiki/layer-normalization)
+- [Operator Splitting Methods](/wiki/operator-splitting)
+- [Non-Local Integral Operators](/wiki/non-local-operators)
+- [Continuous Neural Networks](/wiki/continuous-neural-networks)
+
+## References
+
+- Tai, X., Liu, H., Li, L., & Chan, R. H. (2025). A Mathematical Explanation of Transformers for Large Language Models and GPTs. arXiv preprint arXiv:2510.03989.
+- Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). Attention Is All You Need. Advances in Neural Information Processing Systems, 30.
+
+</WikiLayout>

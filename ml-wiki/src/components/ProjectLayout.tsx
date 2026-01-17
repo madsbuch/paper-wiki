@@ -2,16 +2,25 @@ import type { ReactNode } from "react";
 import { Link } from "react-router";
 import Header from "./Header";
 
+type ProjectCategory = "Exercise" | "Weekend Project" | "Large Project";
+
 interface ProjectLayoutProps {
   children: ReactNode;
   title: string;
   description: string;
+  category: ProjectCategory;
   difficulty: "Beginner" | "Intermediate" | "Advanced";
   estimatedTime?: string;
-  relatedPapers?: Array<{ title: string; slug: string }>;
   relatedConcepts?: Array<{ name: string; slug: string }>;
   prerequisites?: string[];
+  novel?: string; // For Large Projects
 }
+
+const categoryColors = {
+  "Exercise": "bg-blue-100 text-blue-800 border-blue-300",
+  "Weekend Project": "bg-purple-100 text-purple-800 border-purple-300",
+  "Large Project": "bg-orange-100 text-orange-800 border-orange-300",
+};
 
 const difficultyColors = {
   Beginner: "bg-green-100 text-green-800 border-green-300",
@@ -23,11 +32,12 @@ export default function ProjectLayout({
   children,
   title,
   description,
+  category,
   difficulty,
   estimatedTime,
-  relatedPapers,
   relatedConcepts,
   prerequisites,
+  novel,
 }: ProjectLayoutProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 pb-24">
@@ -35,7 +45,7 @@ export default function ProjectLayout({
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 sm:py-12">
-        <article className="max-w-4xl mx-auto">
+        <article className="max-w-6xl mx-auto">
           {/* Back Button */}
           <Link
             to="/projects"
@@ -66,6 +76,11 @@ export default function ProjectLayout({
               {description}
             </p>
             <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm flex-wrap">
+              <span
+                className={`px-2 sm:px-3 py-1 rounded-full border font-medium ${categoryColors[category]}`}
+              >
+                {category}
+              </span>
               <span
                 className={`px-2 sm:px-3 py-1 rounded-full border font-medium ${difficultyColors[difficulty]}`}
               >
@@ -108,6 +123,29 @@ export default function ProjectLayout({
             </div>
           </div>
 
+          {/* Novel Aspect for Large Projects */}
+          {novel && (
+            <div className="bg-amber-50 border-l-4 border-amber-500 rounded-r-lg p-4 sm:p-6 mb-6 sm:mb-8">
+              <h3 className="text-base sm:text-lg font-bold text-amber-900 mb-2 sm:mb-3 flex items-center gap-2">
+                <svg
+                  className="w-5 h-5 sm:w-6 sm:h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
+                </svg>
+                Novel Aspect
+              </h3>
+              <p className="text-sm sm:text-base text-slate-700">{novel}</p>
+            </div>
+          )}
+
           {/* Prerequisites */}
           {prerequisites && prerequisites.length > 0 && (
             <div className="bg-blue-50 border-l-4 border-blue-500 rounded-r-lg p-4 sm:p-6 mb-6 sm:mb-8">
@@ -142,43 +180,6 @@ export default function ProjectLayout({
           <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-12 mdx-content">
             {children}
           </div>
-
-          {/* Related Papers */}
-          {relatedPapers && relatedPapers.length > 0 && (
-            <div className="mt-6 sm:mt-8 bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8">
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3 sm:mb-4 flex items-center gap-2">
-                <span className="text-2xl sm:text-3xl">📄</span>
-                Papers Referenced
-              </h2>
-              <div className="grid gap-2 sm:gap-3">
-                {relatedPapers.map((paper, index) => (
-                  <Link
-                    key={index}
-                    to={`/papers/${paper.slug}`}
-                    className="group flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-slate-50 rounded-lg hover:bg-violet-50 transition-colors border border-slate-200 hover:border-violet-300"
-                  >
-                    <span className="text-xl sm:text-2xl">📖</span>
-                    <span className="text-sm sm:text-base text-slate-700 group-hover:text-violet-700 font-medium">
-                      {paper.title}
-                    </span>
-                    <svg
-                      className="w-4 h-4 sm:w-5 sm:h-5 ml-auto text-slate-400 group-hover:text-violet-600 transition-colors"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Related Concepts */}
           {relatedConcepts && relatedConcepts.length > 0 && (

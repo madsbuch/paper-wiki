@@ -16,6 +16,14 @@ export default function EssaysIndex() {
 
   const essays: Essay[] = [
     {
+      title: "Transformers as Continuous Mathematics: A Journey from Discrete Layers to Differential Equations",
+      slug: "transformers-continuous-mathematics",
+      description: "An exploration of how Transformers can be rigorously understood as discretizations of continuous integro-differential equations, revealing the deep mathematical structure underlying modern AI.",
+      readingTime: "25 min read",
+      tags: ["Mathematics", "Transformers", "Differential Equations", "Theory", "Architecture"],
+      relatedPapers: ["A Mathematical Explanation of Transformers for Large Language Models and GPTs", "Attention Is All You Need"]
+    },
+    {
       title: "The Evolution of Attention: How Transformers Changed Everything",
       slug: "evolution-of-attention",
       description: "A journey through the history of attention mechanisms in neural networks, from the early days of RNNs to the revolutionary Transformer architecture that powers modern AI.",
@@ -54,6 +62,30 @@ export default function EssaysIndex() {
       readingTime: "26 min read",
       tags: ["Architecture", "ResNet", "Transformers", "Deep Learning", "Training", "Residual Connections"],
       relatedPapers: ["ResNet", "Attention Is All You Need", "BERT", "Language Models are Few-Shot Learners"]
+    },
+    {
+      title: "The LoRA Revolution: How a Mathematical Trick Made AI Accessible",
+      slug: "lora-democratizing-ai",
+      description: "From needing massive compute budgets to fine-tune models, to training on a laptop. The story of how low-rank matrix decomposition made it possible for anyone to customize billion-parameter models.",
+      readingTime: "28 min read",
+      tags: ["LoRA", "Parameter Efficiency", "Fine-Tuning", "Democratization", "Linear Algebra"],
+      relatedPapers: ["LoRA", "BERT", "GPT-3", "InstructGPT"]
+    },
+    {
+      title: "Teaching AI to Teach Itself: The Constitutional AI Story",
+      slug: "constitutional-ai-self-supervision",
+      description: "What happens when AI becomes its own supervisor? The journey from thousands of human labels to a handful of principles—and what it means for the future of AI alignment.",
+      readingTime: "26 min read",
+      tags: ["Constitutional AI", "RLAIF", "Alignment", "Self-Supervision", "Chain-of-Thought"],
+      relatedPapers: ["Constitutional AI", "InstructGPT", "Chain-of-Thought Prompting", "GPT-3"]
+    },
+    {
+      title: "Speed Matters: How FlashAttention Made Transformers Practical",
+      slug: "flashattention-hardware-aware-ai",
+      description: "The hidden bottleneck that was killing Transformers at scale wasn't the math—it was the memory. How thinking about GPU architecture led to 3× speedups and enabled 64K context windows.",
+      readingTime: "27 min read",
+      tags: ["FlashAttention", "Hardware-Software Co-Design", "Performance", "GPU", "Memory Hierarchy"],
+      relatedPapers: ["FlashAttention", "Attention Is All You Need", "GPT-3", "BERT"]
     }
   ];
 

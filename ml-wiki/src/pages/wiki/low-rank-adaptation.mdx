@@ -1,0 +1,250 @@
+export const meta = {
+  title: "Low-Rank Adaptation (LoRA)",
+  description: "A parameter-efficient fine-tuning technique that freezes pre-trained model weights and injects trainable low-rank decomposition matrices",
+  category: "Training Techniques",
+  tags: ["fine-tuning", "efficiency", "transformers", "adaptation"],
+  citations: [
+    {
+      title: "LoRA: Low-Rank Adaptation of Large Language Models",
+      authors: "Hu et al.",
+      year: 2021,
+      slug: "lora",
+      pages: "1-4"
+    }
+  ]
+};
+
+# Low-Rank Adaptation (LoRA)
+
+**Low-Rank Adaptation (LoRA)** is a parameter-efficient fine-tuning technique that enables adaptation of large pre-trained models to downstream tasks by freezing the original weights and training small, low-rank decomposition matrices injected into the model architecture [Hu et al., 2021, p.1].
+
+## Core Concept
+
+LoRA is based on the hypothesis that the updates to weights during model adaptation have a low "intrinsic rank" - meaning the essential changes needed for a new task lie in a low-dimensional subspace [Hu et al., 2021, p.2].
+
+### Mathematical Formulation
+
+For a pre-trained weight matrix **W₀ ∈ ℝ^(d×k)**, LoRA represents the weight update as:
+
+```
+W = W₀ + ΔW = W₀ + BA
+```
+
+where:
+- **B ∈ ℝ^(d×r)** and **A ∈ ℝ^(r×k)** are trainable low-rank matrices
+- **r ≪ min(d, k)** is the rank (typically 1-8)
+- **W₀** remains frozen during training
+
+The forward pass becomes:
+```
+h = W₀x + ΔWx = W₀x + BAx
+```
+
+[Hu et al., 2021, p.4]
+
+### Initialization and Scaling
+
+- **B** is initialized to zero, so ΔW = 0 at the start of training
+- **A** is initialized with random Gaussian values
+- The update ΔWx is scaled by **α/r**, where α is a constant
+- This scaling helps reduce the need to retune hyperparameters when varying r
+
+[Hu et al., 2021, p.4]
+
+## Why It Works
+
+### Low Intrinsic Dimensionality
+
+Empirical evidence shows that even when the full weight matrix has rank 12,288, adaptation can be performed effectively with ranks as low as r=1 or r=2 [Hu et al., 2021, p.10].
+
+The paper demonstrates that:
+- The top singular directions of ΔW for different ranks (r=8 vs r=64) overlap significantly
+- This overlap suggests most of the "important" adaptation happens in a very low-dimensional subspace
+- Additional dimensions beyond r≈4-8 often contain noise rather than useful signal
+
+[Hu et al., 2021, p.11]
+
+### Feature Amplification
+
+LoRA amplifies features that exist in the pre-trained model but aren't emphasized. Analysis reveals:
+
+- ΔW has stronger correlation with W₀ compared to a random matrix
+- However, ΔW does **not** repeat the top singular directions of W₀
+- Instead, it amplifies directions orthogonal to or weakly represented in W₀
+- The amplification factor can be as large as **21.5×** for r=4
+
+This suggests LoRA strengthens "task-specific features that were learned but not emphasized in the general pre-training model" [Hu et al., 2021, p.12].
+
+## Practical Advantages
+
+### 1. Massive Parameter Reduction
+
+For GPT-3 175B with r=4:
+- Trainable parameters: **0.01%** of the full model
+- Checkpoint size: **35MB** instead of 350GB (~10,000× reduction)
+- Can store 100 task-specific models in 354GB vs. 35TB
+
+[Hu et al., 2021, p.5]
+
+### 2. No Inference Latency
+
+Unlike adapter layers that add sequential computation, LoRA matrices can be merged with frozen weights during deployment:
+
+```
+W_deployed = W₀ + BA
+```
+
+This means **zero additional latency** compared to the fully fine-tuned model [Hu et al., 2021, p.4].
+
+### 3. Efficient Task Switching
+
+To switch tasks:
+1. Subtract the current BA from W₀
+2. Add a different B'A' for the new task
+
+This is a fast operation with minimal memory overhead [Hu et al., 2021, p.5].
+
+### 4. Memory Efficiency During Training
+
+For large models trained with Adam:
+- No need to compute gradients for frozen parameters
+- No need to maintain optimizer states for frozen parameters
+- Results in **3× reduction in VRAM** usage for GPT-3 175B
+- 25% speedup in training throughput
+
+[Hu et al., 2021, p.5]
+
+## Application to Transformers
+
+In Transformer models, LoRA is typically applied to the self-attention weight matrices:
+- **Wq** (query projection)
+- **Wk** (key projection)
+- **Wv** (value projection)
+- **Wo** (output projection)
+
+The MLP modules are usually kept frozen for simplicity and parameter efficiency [Hu et al., 2021, p.5].
+
+### Optimal Weight Selection
+
+Empirical results show that:
+- Adapting both **Wq and Wv** gives the best performance overall
+- Adapting only Wq or Wk performs significantly worse
+- Adapting all four attention matrices provides marginal gains at increased parameter cost
+
+Even with r=4, adapting both Wq and Wv is more effective than adapting just Wq with r=8, suggesting it's better to adapt more weight types with lower rank than fewer types with higher rank [Hu et al., 2021, p.10].
+
+## Performance
+
+### Compared to Full Fine-Tuning
+
+LoRA achieves **better** performance than full fine-tuning on:
+- GPT-3 175B on WikiSQL: 74.0% vs. 73.8% accuracy
+- GPT-3 175B on MNLI: 91.7% vs. 89.5% accuracy
+- GPT-3 175B on SAMSum: Rouge-1 53.8 vs. 52.0
+
+[Hu et al., 2021, p.8]
+
+### Low-Data Regime
+
+LoRA shows particularly strong performance in low-data settings. On MNLI with only 100 training examples:
+- LoRA: **63.8%** accuracy
+- Full fine-tuning: 60.2%
+- Prefix-embedding: 37.6%
+- Prefix-layer: 48.3%
+
+[Hu et al., 2021, p.23]
+
+## Comparison with Other Methods
+
+### vs. Adapter Layers
+
+**Advantages over Adapters:**
+- No inference latency (adapters add sequential computation)
+- Better performance with comparable parameters
+- Simpler to implement and deploy
+
+**Adapter Latency:** Even with small bottleneck dimensions, adapters can add 20-30% latency in online inference scenarios with small batch sizes [Hu et al., 2021, p.3, 17].
+
+### vs. Prefix Tuning
+
+**Advantages over Prefix Methods:**
+- More stable and consistent performance
+- Better in low-data regimes
+- Doesn't reduce available sequence length
+- Easier to optimize
+
+Prefix-tuning performance "changes non-monotonically in trainable parameters" and can be difficult to optimize [Hu et al., 2021, p.3].
+
+## Creative Analogy: The Sculptor's Touch
+
+Imagine you have a massive block of marble (the pre-trained model) that already contains beautiful, general-purpose sculptures (learned representations). You want to create something specific - say, a portrait of a particular person.
+
+**Traditional fine-tuning** is like re-carving the entire block. It works, but it's expensive, takes forever, and you need a whole new massive block for each portrait.
+
+**LoRA** is like a sculptor who only adds small clay adjustments (the low-rank matrices) on top of the marble surface. These adjustments are:
+- **Tiny** (only r=1-8 dimensions)
+- **Strategic** (amplify features already present but subtle in the marble)
+- **Removable** (can swap different clay overlays for different portraits)
+- **Invisible** at distance (when merged, looks like the marble itself)
+
+The key insight: most of what you need is already in the marble (pre-trained model). You just need to emphasize certain contours and de-emphasize others - and that can be done with very small, strategic additions rather than re-carving everything.
+
+## Implementation Considerations
+
+### Choosing the Rank
+
+- **r=1-2**: Often sufficient for many tasks on large models like GPT-3
+- **r=4-8**: Sweet spot for most applications
+- **r&gt;16**: Usually provides diminishing returns
+
+The optimal rank depends on:
+- Task complexity
+- Amount of training data
+- Model size
+
+[Hu et al., 2021, p.10]
+
+### Scaling Factor α
+
+- Typically set α equal to the first r tried
+- Acts as a learning rate multiplier for the LoRA parameters
+- Helps avoid retuning hyperparameters when changing r
+
+[Hu et al., 2021, p.4]
+
+### Training Setup
+
+- Use the same learning rate as full fine-tuning (often works well)
+- AdamW optimizer commonly used
+- No special learning rate scheduling required
+- Can be combined with other techniques like gradient clipping
+
+## Limitations
+
+1. **Batch Processing:** Not straightforward to batch inputs for different tasks with different A and B matrices in a single forward pass (if not merging weights)
+2. **Heuristic Weight Selection:** Choosing which weights to apply LoRA to is largely heuristic
+3. **Task Dependent:** The optimal rank can vary by task
+4. **Not Universal:** Very different downstream tasks (e.g., different languages) may benefit from higher ranks or full fine-tuning
+
+[Hu et al., 2021, p.5, 13]
+
+## Extensions and Future Directions
+
+Potential research directions identified in the paper:
+1. Combining LoRA with other efficient adaptation methods
+2. Understanding the mechanisms of how pre-trained features transform for downstream tasks
+3. More principled methods for selecting which weights to adapt
+4. Investigating if W₀ itself could be rank-deficient
+
+[Hu et al., 2021, p.12]
+
+## Related Concepts
+
+- [Parameter-Efficient Fine-Tuning](/wiki/parameter-efficient-fine-tuning)
+- [Adapter Layers](/wiki/adapter-layers)
+- [Transfer Learning](/wiki/transfer-learning)
+- [Transformer Architecture](/wiki/transformer-architecture)
+
+## References
+
+- Hu, E., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., Wang, L., & Chen, W. (2021). LoRA: Low-Rank Adaptation of Large Language Models. arXiv preprint arXiv:2106.09685.

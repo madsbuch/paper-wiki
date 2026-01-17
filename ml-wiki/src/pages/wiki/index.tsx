@@ -250,6 +250,69 @@ export default function WikiIndex() {
       slug: "seq2seq",
       category: "Architecture",
       difficulty: "Intermediate"
+    },
+    {
+      title: "Low-Rank Adaptation (LoRA)",
+      description: "A parameter-efficient fine-tuning technique that freezes pre-trained model weights and injects trainable low-rank decomposition matrices into each layer of the Transformer architecture.",
+      slug: "low-rank-adaptation",
+      category: "Training Method",
+      difficulty: "Advanced"
+    },
+    {
+      title: "Parameter-Efficient Fine-Tuning (PEFT)",
+      description: "Techniques for adapting large pre-trained models to downstream tasks while training only a small fraction of parameters, including LoRA, adapters, and prefix tuning.",
+      slug: "parameter-efficient-fine-tuning",
+      category: "Training Method",
+      difficulty: "Advanced"
+    },
+    {
+      title: "Integro-Differential Equations for Transformers",
+      description: "A mathematical framework interpreting Transformers as discretizations of continuous integro-differential equations where attention emerges as non-local integral operators.",
+      slug: "integro-differential-equations-transformers",
+      category: "Mathematical Foundations",
+      difficulty: "Advanced"
+    },
+    {
+      title: "Operator Splitting Methods",
+      description: "Numerical techniques that decompose complex evolution equations into simpler substeps, enabling systematic design and interpretation of neural network architectures.",
+      slug: "operator-splitting",
+      category: "Mathematical Foundations",
+      difficulty: "Advanced"
+    },
+    {
+      title: "IO-Aware Algorithms",
+      description: "Algorithms that explicitly account for data movement between different levels of memory hierarchy, optimizing for memory access patterns rather than just computational complexity.",
+      slug: "io-aware-algorithms",
+      category: "Optimization & Efficiency",
+      difficulty: "Advanced"
+    },
+    {
+      title: "GPU Memory Hierarchy",
+      description: "The multi-level structure of memory in GPUs, from fast on-chip SRAM to slower high-bandwidth memory, with dramatic implications for algorithm performance.",
+      slug: "gpu-memory-hierarchy",
+      category: "Hardware & Systems",
+      difficulty: "Intermediate"
+    },
+    {
+      title: "Tiling Techniques",
+      description: "Algorithm optimization strategy that divides large computations into smaller blocks (tiles) that fit in fast memory, enabling efficient processing of problems larger than available cache.",
+      slug: "tiling-techniques",
+      category: "Optimization & Efficiency",
+      difficulty: "Advanced"
+    },
+    {
+      title: "Kernel Fusion",
+      description: "GPU optimization technique that combines multiple operations into a single kernel to eliminate intermediate memory writes and reads, dramatically improving performance for memory-bound operations.",
+      slug: "kernel-fusion",
+      category: "Optimization & Efficiency",
+      difficulty: "Advanced"
+    },
+    {
+      title: "Block-Sparse Attention",
+      description: "Attention mechanism that only computes a predefined sparse pattern of attention blocks, reducing computational and memory costs from O(N²) to O(Ns) where s is the sparsity fraction.",
+      slug: "block-sparse-attention",
+      category: "Mechanism",
+      difficulty: "Advanced"
     }
   ];
 
@@ -264,7 +327,7 @@ export default function WikiIndex() {
     );
   }, [searchQuery]);
 
-  const categories = ["Architecture", "Architecture Components", "Mechanism", "Training Method", "Technique", "Learning Paradigm", "Prompting Technique", "Phenomenon", "Task", "Capability", "Research Area", "Algorithm", "Fundamentals"];
+  const categories = ["Architecture", "Architecture Components", "Mechanism", "Training Method", "Technique", "Learning Paradigm", "Prompting Technique", "Phenomenon", "Task", "Capability", "Research Area", "Algorithm", "Fundamentals", "Mathematical Foundations", "Optimization & Efficiency", "Hardware & Systems"];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 pb-24">
@@ -431,6 +494,18 @@ export default function WikiIndex() {
                   <h4 className="text-sm sm:text-base font-bold text-slate-900">Training language models to follow instructions with human feedback</h4>
                   <p className="text-xs sm:text-sm text-slate-600">
                     Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C. L., Mishkin, P., et al. (2022)
+                  </p>
+                </div>
+                <div className="bg-white rounded-lg p-3 sm:p-4 border border-amber-200">
+                  <h4 className="text-sm sm:text-base font-bold text-slate-900">LoRA: Low-Rank Adaptation of Large Language Models</h4>
+                  <p className="text-xs sm:text-sm text-slate-600">
+                    Hu, E., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., Wang, L., & Chen, W. (2021)
+                  </p>
+                </div>
+                <div className="bg-white rounded-lg p-3 sm:p-4 border border-amber-200">
+                  <h4 className="text-sm sm:text-base font-bold text-slate-900">A Mathematical Explanation of Transformers for Large Language Models and GPTs</h4>
+                  <p className="text-xs sm:text-sm text-slate-600">
+                    Tai, X., Liu, H., Li, L., & Chan, R. H. (2025)
                   </p>
                 </div>
               </div>

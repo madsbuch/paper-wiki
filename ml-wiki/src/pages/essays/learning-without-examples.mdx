@@ -67,7 +67,7 @@ The GPT-3 paper distinguished three regimes of in-context learning, each progres
 
 **Zero-shot** is the hardest. You give the model only a task description in natural language: "Translate English to French:" followed by an English sentence. No examples. The model must infer what you want purely from the instruction.
 
-**One-shot** provides a single example: "Translate English to French: sea otter => loutre de mer, cheese =>". Now the model has a concrete demonstration of the input-output format.
+**One-shot** provides a single example: "Translate English to French: sea otter =&gt; loutre de mer, cheese =&gt;". Now the model has a concrete demonstration of the input-output format.
 
 **Few-shot** gives several examples, typically 10-100: multiple English-French translation pairs before the actual sentence to translate. As the paper notes: "For all tasks, GPT-3 is applied without any gradient updates or fine-tuning, with tasks and few-shot demonstrations specified purely via text interaction with the model" [Brown et al., 2020, p. 2].
 

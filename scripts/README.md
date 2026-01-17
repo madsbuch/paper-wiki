@@ -1,6 +1,71 @@
-# Audio Generation for Essays
+# Wiki Scripts
 
-This directory contains scripts for generating audio versions of essays using OpenAI's Text-to-Speech API.
+This directory contains utility scripts for the ML Wiki project.
+
+## MDX Validator (`validate-mdx.js`)
+
+Validates MDX files for common syntax errors that cause runtime issues. **Run this before committing any MDX changes!**
+
+### What It Checks
+
+1. **Unescaped Comparison Operators**: `<` and `>` in regular text must be escaped as `&lt;` and `&gt;`
+2. **Unescaped Curly Braces**: `{` and `}` in regular text must be escaped as `\{` and `\}` (unless they're JSX)
+3. **Incorrect Layout Component Props**: Must use spread syntax `<Layout {...meta}>` not `<Layout meta={meta}>`
+
+### Usage
+
+```bash
+# Validate all MDX files in the project
+node scripts/validate-mdx.js
+
+# Validate specific files
+node scripts/validate-mdx.js path/to/file.mdx path/to/another.mdx
+```
+
+### Exit Codes
+
+- `0`: All files valid (no errors)
+- `1`: Errors found (must be fixed)
+
+### Common Fixes
+
+**Problem**: `Unescaped '<' character found`
+```mdx
+<!-- WRONG -->
+Performance is < 50% on this task
+
+<!-- CORRECT -->
+Performance is &lt; 50% on this task
+
+<!-- ALSO CORRECT -->
+Performance is `< 50%` on this task
+```
+
+**Problem**: `Unescaped '>' character found`
+```mdx
+<!-- WRONG -->
+Values > 100 are outliers
+
+<!-- CORRECT -->
+Values &gt; 100 are outliers
+```
+
+**Problem**: `Unescaped '{' character found`
+```mdx
+<!-- WRONG -->
+The set {1, 2, 3} contains three elements
+
+<!-- CORRECT -->
+The set \{1, 2, 3\} contains three elements
+```
+
+**Why This Matters**: MDX errors like "K is not defined" or "Unexpected character" are caused by unescaped special characters. The validator catches these before they cause runtime failures.
+
+---
+
+## Audio Generation (`generate-audio.js`)
+
+Generates audio versions of essays using OpenAI's Text-to-Speech API.
 
 ## Prerequisites
 

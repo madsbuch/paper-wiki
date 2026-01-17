@@ -8,7 +8,7 @@ interface PaperLayoutProps {
   year: string;
   venue: string;
   arxivId: string;
-  pdfPath: string;
+  arxivUrl: string;
   abstract: string;
   keyContributions: string[];
   relatedConcepts: Array<{ name: string; slug: string }>;
@@ -22,7 +22,7 @@ export default function PaperLayout({
   year,
   venue,
   arxivId,
-  pdfPath,
+  arxivUrl,
   abstract,
   keyContributions,
   relatedConcepts,
@@ -118,7 +118,7 @@ export default function PaperLayout({
                   </div>
                 </div>
                 <a
-                  href={pdfPath}
+                  href={arxivUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-violet-600 text-white text-sm sm:text-base font-semibold rounded-lg hover:bg-violet-700 transition-colors shadow-md hover:shadow-lg"
@@ -133,10 +133,10 @@ export default function PaperLayout({
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                     />
                   </svg>
-                  View PDF
+                  View on arXiv
                 </a>
               </div>
             </div>

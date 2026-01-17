@@ -48,6 +48,16 @@ export default function PapersIndex() {
       tags: ["Architecture", "Attention", "Transformer", "NLP"]
     },
     {
+      title: "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+      authors: "Devlin, J., Chang, M.-W., Lee, K., & Toutanova, K.",
+      year: "2018",
+      venue: "NAACL 2019",
+      arxivId: "1810.04805v2",
+      slug: "bert",
+      abstract: "We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers. Unlike recent language representation models, BERT is designed to pretrain deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers.",
+      tags: ["BERT", "Pretraining", "Bidirectional", "Transfer Learning"]
+    },
+    {
       title: "Language Models are Few-Shot Learners",
       authors: "Brown, T. B., Mann, B., Ryder, N., Subbiah, M., Kaplan, J., Dhariwal, P., et al.",
       year: "2020",
@@ -58,14 +68,24 @@ export default function PapersIndex() {
       tags: ["GPT", "Few-Shot Learning", "In-Context Learning", "Scaling"]
     },
     {
-      title: "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
-      authors: "Devlin, J., Chang, M.-W., Lee, K., & Toutanova, K.",
-      year: "2018",
-      venue: "NAACL 2019",
-      arxivId: "1810.04805v2",
-      slug: "bert",
-      abstract: "We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers. Unlike recent language representation models, BERT is designed to pretrain deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers.",
-      tags: ["BERT", "Pretraining", "Bidirectional", "Transfer Learning"]
+      title: "LoRA: Low-Rank Adaptation of Large Language Models",
+      authors: "Hu, E., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., Wang, L., & Chen, W.",
+      year: "2021",
+      venue: "arXiv preprint",
+      arxivId: "2106.09685v2",
+      slug: "lora",
+      abstract: "An important paradigm of natural language processing consists of large-scale pre-training on general domain data and adaptation to particular tasks or domains. As we pre-train larger models, full fine-tuning, which retrains all model parameters, becomes less feasible. We propose Low-Rank Adaptation, or LoRA, which freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture, greatly reducing the number of trainable parameters for downstream tasks.",
+      tags: ["LoRA", "Fine-Tuning", "Parameter Efficiency", "Adaptation", "Transfer Learning"]
+    },
+    {
+      title: "Constitutional AI: Harmlessness from AI Feedback",
+      authors: "Bai, Y., et al.",
+      year: "2022",
+      venue: "arXiv preprint",
+      arxivId: "2212.08073v1",
+      slug: "constitutional-ai",
+      abstract: "As AI systems become more capable, we would like to enlist their help to supervise other AIs. We experiment with methods for training a harmless AI assistant through self-improvement, without any human labels identifying harmful outputs. The only human oversight is provided through a list of rules or principles, and so we refer to the method as 'Constitutional AI'.",
+      tags: ["AI Safety", "RLAIF", "Alignment", "Constitutional AI", "Self-Improvement"]
     },
     {
       title: "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
@@ -78,6 +98,16 @@ export default function PapersIndex() {
       tags: ["Prompting", "Reasoning", "Emergent Abilities", "Few-Shot"]
     },
     {
+      title: "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+      authors: "Dao, T., Fu, D. Y., Ermon, S., Rudra, A., & Ré, C.",
+      year: "2022",
+      venue: "NeurIPS 2022",
+      arxivId: "2205.14135v2",
+      slug: "flash-attention",
+      abstract: "Transformers are slow and memory-hungry on long sequences, since the time and memory complexity of self-attention are quadratic in sequence length. We propose FlashAttention, an IO-aware exact attention algorithm that uses tiling to reduce the number of memory reads/writes between GPU high bandwidth memory (HBM) and GPU on-chip SRAM.",
+      tags: ["Attention", "Optimization", "GPU", "Memory Efficiency", "Performance"]
+    },
+    {
       title: "Training language models to follow instructions with human feedback",
       authors: "Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C. L., Mishkin, P., et al.",
       year: "2022",
@@ -86,6 +116,16 @@ export default function PapersIndex() {
       slug: "instructgpt",
       abstract: "Making language models bigger does not inherently make them better at following a user's intent. In this paper, we show an avenue for aligning language models with user intent on a wide range of tasks by fine-tuning with human feedback. We call the resulting models InstructGPT.",
       tags: ["RLHF", "Alignment", "InstructGPT", "Human Feedback"]
+    },
+    {
+      title: "A Mathematical Explanation of Transformers for Large Language Models and GPTs",
+      authors: "Tai, X.-C., Liu, H., Li, L., & Chan, R. H.",
+      year: "2025",
+      venue: "arXiv preprint",
+      arxivId: "2510.03989v1",
+      slug: "mathematical-transformers",
+      abstract: "The Transformer architecture has revolutionized the field of sequence modeling and underpins the recent breakthroughs in large language models (LLMs). In this work, we propose a novel continuous framework that rigorously interprets the Transformer as a discretization of a structured integro-differential equation. Within this formulation, the self-attention mechanism emerges naturally as a non-local integral operator, and layer normalization is characterized as a projection to a time-dependent constraint.",
+      tags: ["Transformer", "Mathematics", "Theory", "Differential Equations", "Interpretability"]
     }
   ];
 

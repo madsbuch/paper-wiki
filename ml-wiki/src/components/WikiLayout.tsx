@@ -25,6 +25,10 @@ const getPaperSlug = (paperTitle: string): string | null => {
       "chain-of-thought-prompting",
     "Training language models to follow instructions with human feedback":
       "instructgpt",
+    "LoRA: Low-Rank Adaptation of Large Language Models":
+      "lora",
+    "A Mathematical Explanation of Transformers for Large Language Models and GPTs":
+      "mathematical-transformers",
   };
 
   return slugMap[paperTitle] || null;

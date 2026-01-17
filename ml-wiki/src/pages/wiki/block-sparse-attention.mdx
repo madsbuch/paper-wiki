@@ -1,0 +1,430 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "Block-Sparse Attention",
+  description: "Attention mechanism that only computes a predefined sparse pattern of attention blocks, reducing computational and memory costs from O(N²) to O(Ns) where s is the sparsity fraction",
+  category: "Model Architecture",
+  tags: ["attention", "sparsity", "efficiency", "transformers"],
+  citations: [
+    {
+      paper: "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+      authors: "Dao, T., Fu, D. Y., Ermon, S., Rudra, A., & Ré, C.",
+      year: "2022",
+      pages: "6"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+**Block-Sparse Attention** is a variant of the attention mechanism that only computes attention for a predefined sparse pattern of blocks, rather than the full dense N×N attention matrix. By restricting attention to specific block patterns, block-sparse attention reduces computational complexity from O(N²) to O(Ns), where s is the sparsity fraction (proportion of blocks computed) [Dao et al., 2022, p.6].
+
+## The Quadratic Cost Problem
+
+### Standard Dense Attention
+
+**Computation:**
+```
+S = QK^T     # O(N²d) operations
+P = softmax(S)  # O(N²) operations
+O = PV       # O(N²d) operations
+```
+
+**Complexity:**
+- **Time:** O(N²d) operations
+- **Memory:** O(N²) storage for attention matrix
+- **Problem:** Quadratic scaling prevents long sequences (N &gt; 4K difficult, N &gt; 16K infeasible)
+
+**Example:** For N=16K, d=64:
+- Attention matrix: 16K × 16K × 2 bytes = 512MB per head
+- With 16 heads: 8GB just for attention matrices!
+
+## The Sparse Attention Idea
+
+### Key Insight
+
+**Observation:** Not all positions need to attend to all other positions [Dao et al., 2022, p.6].
+
+**Intuition:**
+- Nearby tokens are usually most relevant (local attention)
+- Some global context is useful (global tokens)
+- Many distant token pairs have minimal interaction
+
+**Proposal:** Compute attention only for important pairs, set others to zero.
+
+### Block-Sparse Structure
+
+Instead of element-wise sparsity, use **block-level sparsity** [Dao et al., 2022, p.6]:
+
+**Why blocks?**
+1. Hardware efficiency: GPUs process blocks efficiently
+2. Regular patterns: Easier to implement and optimize
+3. IO-aware: Aligns with tiling strategies
+
+**Block mask:** Binary matrix M indicating which blocks to compute:
+- M[i,j] = 1: Compute attention block between Q_i and K_j
+- M[i,j] = 0: Skip this block (treat as zero attention)
+
+## Common Sparse Patterns
+
+### 1. Local (Banded) Attention
+
+**Pattern:** Each position attends to w neighbors on each side.
+
+**Block structure:**
+- Diagonal band of width w
+- All other blocks are zero
+
+**Sparsity:** s = w/N (for w &lt;&lt; N)
+
+**Use case:** Text modeling where nearby context is most important.
+
+**Example:** With w=256, N=4096: s = 256/4096 = 6.25% (16× reduction)
+
+### 2. Strided (Dilated) Attention
+
+**Pattern:** Each position attends to every k-th position.
+
+**Block structure:**
+- Sparse diagonal stripes at stride k
+
+**Sparsity:** s = 1/k
+
+**Use case:** Capturing different levels of granularity.
+
+### 3. Local + Global Attention
+
+**Pattern:** Local window + a few global tokens.
+
+**Block structure:**
+- Diagonal band (local)
+- First/last few rows/columns (global tokens)
+
+**Sparsity:** s = (w + g)/N, where g is number of global tokens
+
+**Use case:** Document processing with summary tokens.
+
+**Example (Longformer pattern):**
+- Local window: w=512
+- Global tokens: g=64
+- For N=4096: s = (512 + 64)/4096 = 14% (7× reduction)
+
+### 4. Fixed Random Pattern
+
+**Pattern:** Random subset of blocks.
+
+**Block structure:**
+- Randomly selected blocks (fixed per layer)
+
+**Sparsity:** s = fraction of selected blocks
+
+**Use case:** When no obvious attention pattern known.
+
+### 5. Block-Local + Block-Global
+
+**Pattern:** Divide sequence into blocks, attend within block + to all block representatives.
+
+**Block structure:**
+- Block diagonal
+- Additional rows/columns for representatives
+
+**Sparsity:** s = (b + r)/N, where b is block size, r is representatives
+
+**Use case:** Hierarchical sequence processing.
+
+## Block-Sparse FlashAttention
+
+### Extending FlashAttention
+
+FlashAttention naturally extends to block-sparse patterns [Dao et al., 2022, p.6]:
+
+**Key idea:** Only load and compute blocks where mask M[i,j] = 1.
+
+**Algorithm modification:**
+```
+For each K_j, V_j block:
+    For each Q_i block:
+        If M[i,j] == 1:  # Check mask
+            Load Q_i, K_j, V_j to SRAM
+            Compute attention for this block
+            Update output O_i
+        Else:
+            Skip (treat as zero attention)
+```
+
+**Benefits:**
+- Same tiling and fusion techniques apply
+- Skip blocks efficiently (no computation or memory for zero blocks)
+- Exact attention on non-zero blocks (no approximation)
+
+### IO Complexity Analysis
+
+**Dense FlashAttention:** Θ(N²d²M⁻¹) HBM accesses [Dao et al., 2022, p.3]
+
+**Block-Sparse FlashAttention:** Θ(Nd + N²d²M⁻¹s) HBM accesses [Dao et al., 2022, p.6]
+
+where s = sparsity fraction (proportion of blocks computed).
+
+**Example:** With s=10% (90% sparse):
+- Reduce HBM accesses by ~10×
+- Reduce computation by ~10×
+- **Result:** ~10× speedup
+
+**Comparison to other sparse methods:**
+- Approximate sparse attention (e.g., LSH, linformer): Faster but less accurate
+- Block-sparse FlashAttention: Faster AND exact (on non-zero blocks)
+
+### Performance Results
+
+From the FlashAttention paper [Dao et al., 2022, p.11]:
+
+**Task:** Long Range Arena (LRA) benchmarks
+
+**Configuration:**
+- Local attention window: 256
+- Sequence lengths: 1K-4K
+
+**Results:**
+- 2-4× speedup over dense attention
+- Faster than approximate sparse methods (e.g., Performer, Linear Attention)
+- Better accuracy than approximate methods
+
+**Key insight:** IO-aware block-sparse is faster than approximate methods while being exact!
+
+## Sparse Pattern Design Considerations
+
+### 1. Information Flow
+
+**Question:** Can information flow between all positions?
+
+**Challenge:** With local-only attention, distant positions can't communicate directly.
+
+**Solution:** Stack multiple layers, each allowing some long-range connections.
+
+**Example:** With local window w=256 and 12 layers:
+- Effective receptive field: 256 × 12 = 3,072 positions
+- Sufficient for most sequences
+
+### 2. Task-Specific Patterns
+
+**Different tasks benefit from different patterns:**
+
+**Language modeling:** Causal (lower-triangular) with local bias
+
+**Document classification:** Local + global tokens
+
+**Protein sequences:** Residue contact patterns
+
+**Images (as sequences):** 2D local patterns
+
+**Strategy:** Design pattern based on inductive bias of the task.
+
+### 3. Learnable vs. Fixed Patterns
+
+**Fixed patterns:**
+- Defined by algorithm (local, strided, etc.)
+- Efficient, predictable
+- May not be optimal for data
+
+**Learnable patterns:**
+- Learned from data (e.g., sparse routing)
+- Potentially better performance
+- Irregular, harder to optimize
+
+**Hybrid:** Fixed structure with learnable parameters (e.g., learned window sizes)
+
+### 4. Gradient Flow
+
+**Challenge:** Sparse attention can create gradient bottlenecks.
+
+**Mitigation:**
+- Ensure all positions reachable within few layers
+- Use residual connections
+- Careful pattern design
+
+## Memory and Computational Savings
+
+### Memory Savings
+
+**Dense attention:**
+- Store S, P: 2 × N² × precision
+- Example: N=16K, FP16: 2 × 16K² × 2 bytes = 1GB
+
+**Block-sparse attention:**
+- Store only non-zero blocks: 2 × N² × s × precision
+- Example: N=16K, s=10%, FP16: 2 × 16K² × 0.1 × 2 bytes = 100MB
+
+**Savings:** 10× reduction in memory
+
+### Computational Savings
+
+**Dense attention:**
+- Matmul operations: 2 × N²d
+- Softmax operations: O(N²)
+
+**Block-sparse attention:**
+- Matmul operations: 2 × N²ds (only for non-zero blocks)
+- Softmax operations: O(N²s)
+
+**Savings:** s⁻¹ reduction (10× for s=10%)
+
+### Practical Speedup
+
+**Factors affecting speedup:**
+1. Sparsity fraction s
+2. Hardware efficiency (GPU utilization)
+3. Pattern regularity (irregular patterns have overhead)
+4. Sequence length (longer sequences benefit more)
+
+**Typical speedups:** 2-5× for s=10-20% [Dao et al., 2022, p.11]
+
+## Implementation Strategies
+
+### Mask Representation
+
+**Option 1: Dense binary mask**
+```python
+mask = torch.zeros(N, N, dtype=torch.bool)
+mask[pattern_indices] = True
+```
+- Simple
+- Memory cost: O(N²) (can be large)
+
+**Option 2: Block indices**
+```python
+block_indices = [(i, j) for i, j in non_zero_blocks]
+```
+- Memory efficient: O(Ns) (only store non-zero blocks)
+- FlashAttention approach [Dao et al., 2022, p.6]
+
+**Option 3: Implicit pattern**
+```python
+def is_in_pattern(i, j, window_size):
+    return abs(i - j) <= window_size
+```
+- Zero storage
+- Computed on-the-fly
+
+### CUDA Kernel Optimization
+
+**Challenge:** Irregular memory access for sparse patterns.
+
+**Techniques:**
+1. **Block sorting:** Process blocks in memory-friendly order
+2. **Coalescing:** Align block accesses with memory granularity
+3. **Load balancing:** Distribute blocks evenly across SMs
+
+**Result:** Block-sparse kernels can achieve 80%+ of dense kernel efficiency [Dao et al., 2022, p.6].
+
+## Applications and Use Cases
+
+### Long Sequences
+
+**Problem:** Dense attention infeasible for N &gt; 16K.
+
+**Solution:** Block-sparse attention enables sequences up to 64K+ [Dao et al., 2022, p.12].
+
+**Applications:**
+- Long documents (books, legal contracts)
+- DNA sequences
+- Long videos
+- Long-context language modeling
+
+### Efficiency-Focused Models
+
+**Goal:** Reduce cost while maintaining quality.
+
+**Approach:** Use sparse attention with carefully designed patterns.
+
+**Examples:**
+- Longformer (document understanding)
+- BigBird (long sequences)
+- Sparse Transformers (generative modeling)
+
+### Multi-Resolution Modeling
+
+**Idea:** Attend densely to local context, sparsely to distant context.
+
+**Pattern:** Local + strided or local + global.
+
+**Benefit:** Captures both fine-grained and coarse-grained structure.
+
+## Trade-offs and Limitations
+
+### Accuracy vs. Efficiency
+
+**Trade-off:** Sparse attention may miss important long-range dependencies.
+
+**Mitigation:**
+- Careful pattern design
+- Stack more layers
+- Include global tokens for critical information flow
+
+**Empirical finding:** Well-designed sparse patterns often match dense attention accuracy [Dao et al., 2022, p.11].
+
+### Pattern Generalizability
+
+**Challenge:** Optimal pattern may vary by task.
+
+**Solutions:**
+- Use flexible patterns (local + global)
+- Meta-learn patterns
+- Adaptive sparsity
+
+### Implementation Complexity
+
+**Dense attention:** Simple, standard implementations available.
+
+**Sparse attention:** Requires custom kernels, more complex code.
+
+**Pragmatic approach:** Use libraries like FlashAttention with sparse support.
+
+## Creative Analogy: The Party Conversation
+
+Imagine a party with N=1000 people.
+
+### Dense Attention (Full Party)
+
+**Scenario:** Everyone must hear everyone else's conversation.
+
+**Process:**
+- Person 1 talks, all 999 others listen
+- Person 2 talks, all 999 others listen
+- ...continue for all 1000 people
+
+**Cost:** 1000 × 999 ≈ 1,000,000 conversation pairs
+**Time:** Days!
+**Problem:** Infeasible, exhausting, most conversations irrelevant
+
+### Block-Sparse Attention (Smart Networking)
+
+**Scenario:** People use efficient conversation patterns.
+
+**Pattern (Local + Global):**
+- Talk to nearby people (local attention window w=10)
+- Listen to keynote speakers (global tokens g=5)
+
+**Cost:** 1000 × (10 + 5) = 15,000 conversation pairs
+**Savings:** 1M → 15K = 67× reduction!
+**Result:** Feasible in a few hours, most important info captured
+
+**Key insight:** Most useful information comes from nearby people and key speakers—no need for everyone to talk to everyone.
+
+## Related Concepts
+
+- [Attention Mechanism](/wiki/attention-mechanism)
+- [IO-Aware Algorithms](/wiki/io-aware-algorithms)
+- [Tiling Techniques](/wiki/tiling-techniques)
+- [Kernel Fusion](/wiki/kernel-fusion)
+- [Transformer Architecture](/wiki/transformer-architecture)
+
+## References
+
+- Dao, T., Fu, D. Y., Ermon, S., Rudra, A., & Ré, C. (2022). FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness. In Advances in Neural Information Processing Systems (NeurIPS 2022).
+- Child, R., Gray, S., Radford, A., & Sutskever, I. (2019). Generating Long Sequences with Sparse Transformers. arXiv preprint arXiv:1904.10509.
+- Beltagy, I., Peters, M. E., & Cohan, A. (2020). Longformer: The Long-Document Transformer. arXiv preprint arXiv:2004.05150.
+- Zaheer, M., et al. (2020). Big Bird: Transformers for Longer Sequences. In NeurIPS 2020.
+
+</WikiLayout>

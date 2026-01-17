@@ -9,7 +9,6 @@ interface EssayLayoutProps {
   description: string;
   readingTime: string;
   audioPath?: string; // Path to audio file, e.g., "/audio/evolution-of-attention.mp3"
-  relatedPapers?: Array<{ title: string; slug: string }>;
   relatedConcepts?: Array<{ name: string; slug: string }>;
   citations?: Array<{
     paper: string;
@@ -19,30 +18,12 @@ interface EssayLayoutProps {
   }>;
 }
 
-// Map paper titles to their slugs for linking
-const getPaperSlug = (paperTitle: string): string | null => {
-  const slugMap: Record<string, string> = {
-    "Attention Is All You Need": "attention-is-all-you-need",
-    "Language Models are Few-Shot Learners": "gpt3-few-shot-learners",
-    "Language Models are Few-Shot Learners (GPT-3)": "gpt3-few-shot-learners",
-    "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding":
-      "bert",
-    "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models":
-      "chain-of-thought-prompting",
-    "Training language models to follow instructions with human feedback":
-      "instructgpt",
-  };
-
-  return slugMap[paperTitle] || null;
-};
-
 export default function EssayLayout({
   children,
   title,
   description,
   readingTime,
   audioPath,
-  relatedPapers,
   relatedConcepts,
   citations,
 }: EssayLayoutProps) {
@@ -209,43 +190,6 @@ export default function EssayLayout({
             {children}
           </div>
 
-          {/* Related Papers */}
-          {relatedPapers && relatedPapers.length > 0 && (
-            <div className="mt-6 sm:mt-8 bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8">
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3 sm:mb-4 flex items-center gap-2">
-                <span className="text-2xl sm:text-3xl">📄</span>
-                Papers Referenced
-              </h2>
-              <div className="grid gap-2 sm:gap-3">
-                {relatedPapers.map((paper, index) => (
-                  <Link
-                    key={index}
-                    to={`/papers/${paper.slug}`}
-                    className="group flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-slate-50 rounded-lg hover:bg-violet-50 transition-colors border border-slate-200 hover:border-violet-300"
-                  >
-                    <span className="text-xl sm:text-2xl">📖</span>
-                    <span className="text-sm sm:text-base text-slate-700 group-hover:text-violet-700 font-medium">
-                      {paper.title}
-                    </span>
-                    <svg
-                      className="w-4 h-4 sm:w-5 sm:h-5 ml-auto text-slate-400 group-hover:text-violet-600 transition-colors"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Related Concepts */}
           {relatedConcepts && relatedConcepts.length > 0 && (
             <div className="mt-6 sm:mt-8 bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8">
@@ -291,23 +235,12 @@ export default function EssayLayout({
               </h2>
               <div className="space-y-2 sm:space-y-3">
                 {citations.map((citation, index) => {
-                  const paperSlug = getPaperSlug(citation.paper);
-
                   return (
                     <div key={index} className="text-sm sm:text-base text-slate-700 leading-relaxed">
                       <span className="font-semibold text-amber-900">
                         [{index + 1}]
                       </span>{" "}
-                      {paperSlug ? (
-                        <Link
-                          to={`/papers/${paperSlug}`}
-                          className="text-violet-600 hover:text-violet-800 hover:underline font-medium"
-                        >
-                          {citation.paper}
-                        </Link>
-                      ) : (
-                        <span className="font-medium">{citation.paper}</span>
-                      )}
+                      <span className="font-medium">{citation.paper}</span>
                       . {citation.authors} ({citation.year})
                       {citation.pages && `, pp. ${citation.pages}`}
                     </div>
@@ -325,7 +258,7 @@ export default function EssayLayout({
           <p className="text-sm">
             All content derived from academic papers. Citations required for
             accuracy.
-          </p>
+          -          </p>
         </div>
       </footer>
     </div>

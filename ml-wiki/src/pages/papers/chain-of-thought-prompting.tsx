@@ -8,7 +8,7 @@ export default function ChainOfThoughtPrompting() {
       year="2022"
       venue="36th Conference on Neural Information Processing Systems (NeurIPS 2022)"
       arxivId="2201.11903v6"
-      pdfPath="/papers/2201.11903v6.pdf"
+      arxivUrl="https://arxiv.org/abs/2201.11903"
       abstract="We explore how generating a chain of thought—a series of intermediate reasoning steps—significantly improves the ability of large language models to perform complex reasoning. In particular, we show how such reasoning abilities emerge naturally in sufficiently large language models via a simple method called chain-of-thought prompting, where a few chain of thought demonstrations are provided as exemplars in prompting. Experiments on three large language models show that chain-of-thought prompting improves performance on a range of arithmetic, commonsense, and symbolic reasoning tasks."
       keyContributions={[
         "Introduced chain-of-thought prompting technique",

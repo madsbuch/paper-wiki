@@ -7,17 +7,25 @@ export type Path =
   | `/`
   | `/essays`
   | `/essays/alignment-challenge`
+  | `/essays/constitutional-ai-self-supervision`
   | `/essays/evolution-of-attention`
+  | `/essays/flashattention-hardware-aware-ai`
   | `/essays/learning-without-examples`
+  | `/essays/lora-democratizing-ai`
   | `/essays/skip-connection-revolution`
+  | `/essays/transformers-continuous-mathematics`
   | `/essays/unreasonable-effectiveness-of-scale`
   | `/papers`
   | `/papers/attention-is-all-you-need`
   | `/papers/bahdanau-attention`
   | `/papers/bert`
   | `/papers/chain-of-thought-prompting`
+  | `/papers/constitutional-ai`
+  | `/papers/flash-attention`
   | `/papers/gpt3-few-shot-learners`
   | `/papers/instructgpt`
+  | `/papers/lora`
+  | `/papers/mathematical-transformers`
   | `/papers/resnet`
   | `/projects`
   | `/projects/few-shot-learning`
@@ -30,6 +38,7 @@ export type Path =
   | `/wiki/autoregressive-language-model`
   | `/wiki/bidirectional-pretraining`
   | `/wiki/bidirectional-rnn`
+  | `/wiki/block-sparse-attention`
   | `/wiki/bottleneck-architecture`
   | `/wiki/chain-of-thought-prompting`
   | `/wiki/emergent-abilities`
@@ -37,14 +46,21 @@ export type Path =
   | `/wiki/few-shot-learning`
   | `/wiki/few-shot-prompting`
   | `/wiki/fine-tuning`
+  | `/wiki/gpu-memory-hierarchy`
   | `/wiki/identity-mapping`
   | `/wiki/in-context-learning`
   | `/wiki/instruction-following`
+  | `/wiki/integro-differential-equations-transformers`
+  | `/wiki/io-aware-algorithms`
+  | `/wiki/kernel-fusion`
   | `/wiki/layer-normalization`
+  | `/wiki/low-rank-adaptation`
   | `/wiki/masked-language-model`
   | `/wiki/meta-learning`
   | `/wiki/multi-head-attention`
   | `/wiki/next-sentence-prediction`
+  | `/wiki/operator-splitting`
+  | `/wiki/parameter-efficient-fine-tuning`
   | `/wiki/positional-encoding`
   | `/wiki/ppo`
   | `/wiki/reasoning-steps`
@@ -55,6 +71,7 @@ export type Path =
   | `/wiki/self-attention`
   | `/wiki/seq2seq`
   | `/wiki/soft-alignment`
+  | `/wiki/tiling-techniques`
   | `/wiki/tokenization`
   | `/wiki/transfer-learning`
   | `/wiki/transformer-architecture`

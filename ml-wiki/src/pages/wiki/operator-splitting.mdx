@@ -1,0 +1,355 @@
+import WikiLayout from "../../components/WikiLayout";
+
+export const meta = {
+  title: "Operator Splitting Methods",
+  description: "Numerical techniques that decompose complex evolution equations into simpler substeps, enabling systematic design and interpretation of neural network architectures",
+  category: "Mathematical Foundations",
+  tags: ["numerical-methods", "differential-equations", "neural-architecture", "discretization"],
+  citations: [
+    {
+      paper: "A Mathematical Explanation of Transformers for Large Language Models and GPTs",
+      authors: "Tai, X., Liu, H., Li, L., & Chan, R. H.",
+      year: "2025",
+      pages: "7, 18-19"
+    }
+  ]
+};
+
+<WikiLayout title={meta.title} citations={meta.citations}>
+
+## Overview
+
+**Operator Splitting Methods** are numerical techniques that decompose complicated time-evolution problems into several simpler substeps, where each substep can be solved efficiently. In the context of neural networks, operator splitting provides a systematic framework for designing architectures by viewing each layer as a substep in solving a continuous evolution equation [Tai et al., 2025, p.7].
+
+## Core Concept
+
+### The General Evolution Problem
+
+Consider an evolution equation of the form [Tai et al., 2025, p.18]:
+
+```
+u_t + Σ_(k=1)^K A_k(t; u) = 0  for (x,t) ∈ Ω × (0,T]
+u(0) = u_0
+```
+
+where `A_k(t; u)` are operators applied to `u` (e.g., differential operators, integral operators, projections).
+
+**Challenge:** Solving this equation directly may be difficult when operators `A_k` have different properties (e.g., one is nonlinear, another is non-local, another enforces constraints).
+
+**Solution:** Decompose the problem into K simpler subproblems, each involving only one operator `A_k`, then compose the solutions.
+
+## Three Main Splitting Strategies
+
+### 1. Sequential (Lie) Splitting
+
+**Most common for neural networks.** Decomposes computation into K sequential substeps [Tai et al., 2025, p.19].
+
+Given u<sup>n</sup>, compute u<sup>n+1</sup> by solving for k = 1,...,K:
+
+```
+u_t + A_k(t; u) = 0  in Ω × (t_n, t_(n+1)]
+u(t_n) = u<sup>n+(k-1)/K</sup>
+```
+
+Set `u<sup>n+k/K</sup> = u(t_(n+1))`, and finally `u<sup>n+1</sup> = u<sup>n+K/K</sup>`.
+
+**Characteristics:**
+- **Order:** First-order accurate in time
+- **Sequential:** Must solve substeps in order
+- **Neural network interpretation:** Each substep = one layer type (attention, normalization, feedforward)
+
+**Example for Transformers:** With K=6 substeps [Tai et al., 2025, p.7-8]:
+1. Attention layer
+2. Layer normalization
+3. Feedforward layer 1
+4. Feedforward layer 2
+5. Skip connection
+6. Final layer normalization
+
+### 2. Parallel (Strang) Splitting
+
+Solves all K subproblems **in parallel** from the same initial condition [Tai et al., 2025, p.19].
+
+For k = 1,...,K, compute:
+
+```
+v_t + K·A_k(t; v) = 0  in Ω × (t_n, t_(n+1)]
+v(t_n) = u<sup>n</sup>
+```
+
+Set `v_k = v(t_(n+1))`, then combine:
+
+```
+u<sup>n+1</sup> = (1/K) Σ_(k=1)^K v_k
+```
+
+**Characteristics:**
+- **Order:** First-order accurate
+- **Parallelizable:** All substeps can run simultaneously
+- **Averaging:** Final solution is weighted average of parallel solutions
+
+### 3. Hybrid Splitting
+
+Combination of sequential and parallel splitting—decomposes into sequential substeps, where each substep may contain parallel substeps [Tai et al., 2025, p.19].
+
+**Use case:** Multi-scale or multi-stage architectures (e.g., UNet, multi-stage vision transformers)
+
+## Application to Neural Networks
+
+### Viewing Layers as Substeps
+
+**Key Insight:** Each layer in a neural network can be viewed as one substep in an operator-splitting scheme for a continuous evolution equation [Tai et al., 2025, p.2].
+
+**Workflow:**
+1. Define a continuous evolution equation capturing desired dynamics
+2. Identify operators `A_k` corresponding to different operations (convolution, nonlinearity, normalization, attention)
+3. Apply operator splitting to discretize in time
+4. Each substep becomes a layer in the neural network
+
+### Example: Transformer as Operator Splitting
+
+The Transformer solves [Tai et al., 2025, p.3]:
+
+```
+u_t = ⟨γ(x,·,t;u), V(·,y,t;u)⟩ + ∂I_(S1)(u) + Σ_j [⟨W_j(·,y,t), u(x,·,t)⟩ + b_j(x,t)] + ∂I_(S2)(u)
+```
+
+Using Lie splitting with M = 4 + J substeps decomposes this into:
+- **Substep 1:** Attention operator
+- **Substep 2:** Layer normalization (projection to S1)
+- **Substeps 3 to 2+J:** J feedforward layers with ReLU
+- **Substep 3+J:** Skip connection (averaging)
+- **Substep 4+J:** Final layer normalization
+
+After spatial discretization, this **exactly recovers** the Transformer architecture [Tai et al., 2025, p.12].
+
+## Mathematical Properties
+
+### Consistency
+
+An operator-splitting scheme is **consistent** if the discrete solution converges to the continuous solution as Δt → 0.
+
+**First-order consistency:** Error is O(Δt)
+**Second-order consistency:** Error is O(Δt²)
+
+Lie splitting is first-order consistent. Strang splitting (symmetrized Lie splitting) is second-order consistent.
+
+### Stability
+
+A splitting scheme is **stable** if small perturbations in initial conditions lead to bounded perturbations in the solution.
+
+**Implications for neural networks:**
+- Stability ensures gradients don't explode/vanish during backpropagation
+- Can analyze stability of architectures through stability of underlying evolution equation
+
+### Convergence
+
+**Lax Equivalence Theorem:** For linear problems, consistency + stability = convergence.
+
+For neural networks: If the continuous evolution equation is well-posed and the splitting scheme is consistent and stable, the neural network (discrete solution) will approximate the continuous dynamics accurately.
+
+## Solving Each Substep
+
+### Explicit vs. Implicit Schemes
+
+For substep `u_t + A_k(t; u) = 0`, discretize as:
+
+**Explicit:**
+```
+(u<sup>n+k/K</sup> - u<sup>n+(k-1)/K</sup>)/Δt + A_k(t<sup>n</sup>; u<sup>n+(k-1)/K</sup>) = 0
+```
+**Solution:** `u<sup>n+k/K</sup> = u<sup>n+(k-1)/K</sup> - Δt·A_k(t<sup>n</sup>; u<sup>n+(k-1)/K</sup>)`
+
+**Implicit:**
+```
+(u<sup>n+k/K</sup> - u<sup>n+(k-1)/K</sup>)/Δt + A_k(t<sup>n+1</sup>; u<sup>n+k/K</sup>) = 0
+```
+Must solve for `u<sup>n+k/K</sup>` (may require iterative solver).
+
+**In Transformers [Tai et al., 2025, p.7-9]:**
+- Attention substep: Explicit
+- Layer normalization substeps: Implicit (but has closed-form solution via projection theorem)
+- Feedforward substeps: Semi-implicit (linear part explicit, ReLU implicit with closed-form solution)
+
+## Advantages for Neural Architecture Design
+
+### 1. Systematic Framework
+
+Instead of designing architectures heuristically, operator splitting provides principled approach:
+1. Define continuous equation encoding desired properties
+2. Choose splitting strategy
+3. Discretize to obtain architecture
+
+**Example:** Want a network with:
+- Non-local interactions → Include integral operator
+- Stable representations → Include normalization constraints
+- Nonlinearity → Include ReLU via projection to S2 = `{u : u ≥ 0}`
+
+Result: Transformer-like architecture emerges automatically from operator splitting.
+
+### 2. Theoretical Guarantees
+
+Can leverage numerical analysis theory:
+- **Stability analysis:** Ensure network won't have exploding/vanishing gradients
+- **Convergence rates:** Know how accuracy improves as depth increases
+- **Error bounds:** Quantify approximation quality
+
+### 3. Flexibility
+
+Easy to modify by changing:
+- **Operators:** Different `A_k` → different layer types
+- **Splitting order:** Sequential vs. parallel → different connectivity patterns
+- **Time step:** Larger Δt → shallower network, smaller Δt → deeper network
+
+### 4. Interpretability
+
+Each layer has clear meaning as a substep solving a specific part of the evolution equation. Not a "black box"—each component has mathematical justification.
+
+## Choosing the Splitting Strategy
+
+### When to Use Sequential (Lie) Splitting
+
+**Best for:**
+- Operations that naturally occur in sequence
+- Enforcing constraints after transformations
+- Standard feedforward architectures
+
+**Examples:**
+- Transformers: Attention → Normalize → Feedforward → Normalize
+- ResNets: Convolution → Batch norm → ReLU
+- UNets: Encoder → Bottleneck → Decoder
+
+### When to Use Parallel Splitting
+
+**Best for:**
+- Combining multiple parallel pathways
+- Ensemble-like architectures
+- Multi-branch networks
+
+**Examples:**
+- Inception modules (parallel convolutions of different sizes)
+- Multi-path aggregation
+
+### When to Use Hybrid Splitting
+
+**Best for:**
+- Multi-scale architectures
+- Hierarchical processing
+- Different operations at different resolutions
+
+**Examples:**
+- UNet (sequential stages, each with parallel skip connections)
+- Multi-stage vision transformers
+- Encoder-decoder architectures
+
+## Time Step Size and Network Depth
+
+### Relationship
+
+Given final time T and time step Δt = T/N_t:
+- **Smaller Δt** → More time steps N_t → **Deeper network**
+- **Larger Δt** → Fewer time steps N_t → **Shallower network**
+
+### Choosing Δt
+
+**Considerations:**
+1. **Accuracy:** Smaller Δt = more accurate approximation of continuous dynamics
+2. **Stability:** Δt must satisfy CFL condition for explicit schemes
+3. **Computation:** Smaller Δt = more layers = more computation
+4. **Regularization:** Larger Δt can act as implicit regularization
+
+**Common choice:** Δt = 1 (convenient for changing network parameters) [Tai et al., 2025, p.7].
+
+## Creative Analogy: Cooking a Complex Dish
+
+Imagine cooking a sophisticated multi-course meal:
+
+**Direct Approach (No Splitting):** Try to do everything at once—chop vegetables while sautéing while the oven is preheating while plating. Chaotic and error-prone.
+
+**Sequential Splitting (Lie):** Follow a recipe step-by-step:
+1. Prep ingredients (attention extracts features)
+2. Season to taste (normalize to standard levels)
+3. Cook protein (first feedforward layer)
+4. Add sauce (second feedforward layer)
+5. Combine with sides (skip connection)
+6. Final seasoning (final normalization)
+
+Each step is simple and well-defined. The order matters—you can't plate before cooking!
+
+**Parallel Splitting (Strang):** Have multiple cooks working on different components simultaneously:
+- Cook 1: Makes appetizer
+- Cook 2: Makes main course
+- Cook 3: Makes dessert
+
+Then combine into a complete meal. Faster, but requires coordination.
+
+**Hybrid Splitting:** Restaurant kitchen with multiple stations (sequential) where each station has multiple cooks (parallel). Scales to complex service.
+
+The key insight: Breaking a complex process into manageable steps makes it tractable, reproducible, and analyzable—whether cooking or computing.
+
+## Practical Considerations
+
+### Implementation
+
+When implementing operator splitting for neural networks:
+
+1. **Define operators clearly:** What does each `A_k` represent?
+2. **Choose splitting order:** Based on physical/mathematical constraints
+3. **Solve each substep:** Use appropriate numerical method (explicit, implicit, closed-form)
+4. **Set time step:** Balance accuracy vs. efficiency
+5. **Verify consistency:** Check that discrete scheme approximates continuous equation
+
+### Debugging
+
+If network doesn't train well:
+1. **Check operator ordering:** Are constraints enforced in right order?
+2. **Verify stability:** Is Δt too large for explicit schemes?
+3. **Test each substep:** Does each layer work correctly in isolation?
+4. **Analyze continuous equation:** Is the continuous model well-posed?
+
+## Extensions and Variations
+
+### Adaptive Splitting
+
+Adjust Δt dynamically based on:
+- Local error estimates
+- Gradient magnitudes
+- Task difficulty
+
+Analogous to adaptive ODE solvers (e.g., Runge-Kutta-Fehlberg).
+
+### Higher-Order Splitting
+
+**Strang Splitting (Second-Order):**
+```
+For operators A_1, A_2:
+  Solve A_1 for Δt/2
+  Solve A_2 for Δt
+  Solve A_1 for Δt/2
+```
+
+More accurate but more expensive per time step.
+
+### Fractional Stepping
+
+Use different time steps for different operators:
+- Fast operators: Small Δt
+- Slow operators: Large Δt
+
+Improves efficiency for multi-scale problems.
+
+## Related Concepts
+
+- [Integro-Differential Equations for Transformers](/wiki/integro-differential-equations-transformers)
+- [Transformer Architecture](/wiki/transformer-architecture)
+- [Layer Normalization](/wiki/layer-normalization)
+- [Residual Connections](/wiki/residual-connections)
+- [Continuous Neural Networks](/wiki/continuous-neural-networks)
+
+## References
+
+- Tai, X., Liu, H., Li, L., & Chan, R. H. (2025). A Mathematical Explanation of Transformers for Large Language Models and GPTs. arXiv preprint arXiv:2510.03989.
+- Glowinski, R., Pan, T.-W., & Tai, X.-C. (2016). Some facts about operator-splitting and alternating direction methods. In Splitting Methods in Communication, Imaging, Science, and Engineering (pp. 19-94). Springer.
+- Glowinski, R., & Le Tallec, P. (1989). Augmented Lagrangian and operator-splitting methods in nonlinear mechanics (Vol. 9). Society for Industrial Mathematics.
+
+</WikiLayout>
