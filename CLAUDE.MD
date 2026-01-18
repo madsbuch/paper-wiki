@@ -108,21 +108,18 @@ wiki-tech/
 **Common Errors to Avoid:**
 
 1. **Comparison Operators (`<` and `>`)**:
-
    - MDX interprets `<` as the start of a JSX tag
    - **WRONG**: `performance < 50%` or `value > 100`
    - **CORRECT**: Use HTML entities: `performance &lt; 50%` or `value &gt; 100`
    - Alternative: Use code formatting: `` `performance < 50%` ``
 
 2. **Curly Braces (`{` and `}`)**:
-
    - MDX interprets `{` as the start of a JSX expression
    - **WRONG**: `The set {1, 2, 3}` in regular text
    - **CORRECT**: Escape with backslash: `The set \{1, 2, 3\}`
    - Alternative: Use code formatting: `` `{1, 2, 3}` ``
 
 3. **Layout Component Props**:
-
    - **WRONG**: `<WikiLayout meta={meta}>` (passing meta as prop)
    - **CORRECT**: `<WikiLayout {...meta}>` (spreading meta object)
    - All layout components (WikiLayout, EssayLayout, PaperLayout, ProjectLayout) expect individual props
@@ -153,11 +150,13 @@ wiki-tech/
 **Validation Script:**
 
 The project includes an automated MDX validator at `scripts/validate-mdx.js` that checks for:
+
 - Unescaped `<` and `>` characters (must use `&lt;` and `&gt;`)
 - Unescaped `{` and `}` characters in text (must use `\{` and `\}`)
 - Incorrect layout component usage (must use `{...meta}` spread)
 
 Run it before committing:
+
 ```bash
 node scripts/validate-mdx.js              # Validate all MDX files
 node scripts/validate-mdx.js path/to/file.mdx  # Validate specific file
@@ -242,13 +241,306 @@ When creating a paper page at `/ml-wiki/src/pages/papers/<slug>.tsx`, follow the
 
 ### Wiki Concept Workflow
 
+Wiki pages should provide understanding at multiple levels through three aspects:
+
+1. **Formal Definition and Explanation** - Technical, rigorous explanation with citations
+2. **Story / Analogy** - Narrative or analogy to contextualize and build intuition
+3. **Exercise** - Hands-on activity to internalize the concept
+
+**IMPORTANT**: These are aspects to include, NOT a rigid structure. The page should flow naturally.
+
+**Process:**
+
 1. Use MCP tools to query the paper for concepts
 2. Identify key concepts (e.g., "Attention Mechanism", "Transformer Architecture")
 3. Create MDX files for each concept in `/ml-wiki/src/pages/wiki/`
-4. Write technical documentation with citations
-5. Add creative explanations (stories, analogies)
+4. Write content that naturally incorporates the three aspects:
+   - **Formal Definition**: Can be in "Overview", "Definition", "How It Works", etc. - whatever feels natural
+   - **Story / Analogy**: Can be a dedicated "Story" section, or woven into explanations with "Think of it like..." or "Imagine..." - use judgment
+   - **Exercise**: Usually works best as a dedicated section at the end, but placement should feel natural
+5. Add whatever other sections make sense (Architecture, Implementation, Examples, etc.)
 6. Cross-link related concepts
 7. Verify all citations are accurate
+
+**Content Guidelines:**
+
+The three aspects MUST be present somewhere, but the structure should feel natural and appropriate for the concept:
+
+```tsx
+// Example 1: Natural flow with sections that make sense
+export default function TransformerArchitecture() {
+  return (
+    <WikiLayout {...meta}>
+      <section>
+        <h2>Overview</h2>
+        [Brief introduction with formal definition woven in naturally]
+      </section>
+
+      <section>
+        <h2>Key Innovation</h2>
+        [What makes this important, with analogies if helpful]
+      </section>
+
+      <section>
+        <h2>Architecture Components</h2>
+        [Technical details, formulas, implementation]
+      </section>
+
+      <section>
+        <h2>The Assembly Line Story</h2>
+        [Story/analogy section - can be anywhere that flows well]
+      </section>
+
+      <section>
+        <h2>Exercise</h2>
+        [Interactive exercise with show/hide answer]
+      </section>
+    </WikiLayout>
+  );
+}
+
+// Example 2: Analogies woven throughout
+export default function Tokenization() {
+  return (
+    <WikiLayout {...meta}>
+      <section>
+        <h2>What is Tokenization?</h2>
+        <p>[Formal definition]</p>
+        <p>Think of tokenization like breaking speech into words... [analogy inline]</p>
+      </section>
+
+      <section>
+        <h2>Why It Matters</h2>
+        [Technical explanation]
+      </section>
+
+      <section>
+        <h2>Strategies</h2>
+        [Different approaches with examples]
+      </section>
+
+      <section>
+        <h2>The Analogy: Digital Audio</h2>
+        [Deeper analogy if needed]
+      </section>
+
+      <section>
+        <h2>Try It Yourself</h2>
+        [Interactive exercise]
+      </section>
+    </WikiLayout>
+  );
+}
+```
+
+**Guidelines:**
+
+- **Formal Definition**: Should be sufficient for someone with the prerequisites to implement or use the concept. Can be in any section that makes sense ("Overview", "Definition", "How It Works", etc.)
+- **Story/Analogy**: Should make the concept memorable and provide context for why it matters. Can be:
+  - A dedicated section (like "The Assembly Line Story")
+  - Woven inline ("Think of it like...", "Imagine...")
+  - Multiple analogies throughout if that helps
+- **Exercise**: Should be completable in 5-15 minutes and reinforce key insights. Usually best as a dedicated section, but use judgment.
+- All three aspects must be present somewhere in the page
+- All content must be citation-backed and accurate
+- The page should read naturally - don't force structure
+- Look at transformer-architecture.tsx as a good example of natural flow
+- **Section naming**: Use whatever section names make sense for the content:
+  - "Overview", "Definition", "How It Works" for formal explanations
+  - "Key Innovation", "Why It Matters", "Applications" for context
+  - "The [X] Analogy", "Story", or just weave analogies inline
+  - "Exercise", "Try It Yourself", "Practice" for hands-on work
+  - Add any other sections that help (Examples, Implementation Details, History, etc.)
+- **Cross-linking**: Wiki pages MUST link to related content:
+  - Link to papers that introduce or use the concept (in citations and body text)
+  - Link to related wiki concepts (use markdown links: `[Concept Name](/wiki/concept-slug)`)
+  - Link to relevant projects or essays that apply the concept
+  - Include `relatedConcepts` in metadata with proper slugs
+  - Use inline links within the text to connect ideas naturally
+
+**Interactive Exercise Patterns:**
+
+Exercises MUST be interactive - users should actively engage, not just read. Be creative! Here are some patterns:
+
+**Pattern 1: Input & Validation**
+```tsx
+import { useState } from 'react';
+
+export default function ConceptName() {
+  const [userAnswer, setUserAnswer] = useState('');
+  const [feedback, setFeedback] = useState('');
+
+  const checkAnswer = () => {
+    const answer = parseInt(userAnswer);
+    if (answer === 9) {
+      setFeedback('✓ Correct! RNN needs 9 sequential operations.');
+    } else {
+      setFeedback(`Not quite. Think about how many layers information must pass through...`);
+    }
+  };
+
+  return (
+    <section>
+      <h2>Exercise: Calculate Path Length</h2>
+      <p>For an RNN with sequence length 10, how many sequential operations
+         are needed for information to flow from position 1 to position 10?</p>
+
+      <div className="flex gap-2 my-4">
+        <input
+          type="number"
+          value={userAnswer}
+          onChange={(e) => setUserAnswer(e.target.value)}
+          className="border rounded px-3 py-2"
+          placeholder="Your answer..."
+        />
+        <button onClick={checkAnswer} className="bg-blue-500 text-white px-4 py-2 rounded">
+          Check Answer
+        </button>
+      </div>
+      {feedback && <div className="mt-2 p-3 bg-green-50 rounded">{feedback}</div>}
+    </section>
+  );
+}
+```
+
+**Pattern 2: Multi-Step Calculator**
+```tsx
+export default function TokenizationExercise() {
+  const [step, setStep] = useState(0);
+  const [tokens, setTokens] = useState([]);
+
+  const tokenize = (text) => {
+    // Interactive tokenization logic
+    return text.split(' ');
+  };
+
+  return (
+    <section>
+      <h2>Try It: Tokenize a Sentence</h2>
+      {step === 0 && (
+        <div>
+          <p>Enter a sentence to tokenize:</p>
+          <input onChange={(e) => setTokens(tokenize(e.target.value))} />
+        </div>
+      )}
+      {tokens.length > 0 && (
+        <div>
+          <p>Tokens: {tokens.map((t, i) => <span key={i} className="token">{t}</span>)}</p>
+          <p>Total: {tokens.length} tokens</p>
+        </div>
+      )}
+    </section>
+  );
+}
+```
+
+**Pattern 3: Slider/Interactive Visualization**
+```tsx
+export default function ComplexityExercise() {
+  const [seqLength, setSeqLength] = useState(100);
+
+  const calcComplexity = (n) => ({
+    rnn: n * 512 * 512,
+    attention: n * n * 512
+  });
+
+  const complexity = calcComplexity(seqLength);
+
+  return (
+    <section>
+      <h2>Explore: Computational Complexity</h2>
+      <label>Sequence Length: {seqLength}</label>
+      <input
+        type="range"
+        min="10"
+        max="10000"
+        value={seqLength}
+        onChange={(e) => setSeqLength(e.target.value)}
+      />
+      <div>
+        <p>RNN Operations: {complexity.rnn.toLocaleString()}</p>
+        <p>Self-Attention Operations: {complexity.attention.toLocaleString()}</p>
+        <p>Winner: {complexity.rnn < complexity.attention ? 'RNN' : 'Self-Attention'}</p>
+      </div>
+    </section>
+  );
+}
+```
+
+**Pattern 4: Multiple Choice with Immediate Feedback**
+```tsx
+export default function QuizExercise() {
+  const [selected, setSelected] = useState(null);
+
+  const options = [
+    { id: 'a', text: 'O(1)', correct: true },
+    { id: 'b', text: 'O(n)', correct: false },
+    { id: 'c', text: 'O(n²)', correct: false },
+  ];
+
+  return (
+    <section>
+      <h2>Quick Check</h2>
+      <p>What is the path length for self-attention?</p>
+      {options.map(opt => (
+        <button
+          key={opt.id}
+          onClick={() => setSelected(opt.id)}
+          className={`block my-2 p-2 rounded ${
+            selected === opt.id
+              ? opt.correct ? 'bg-green-100' : 'bg-red-100'
+              : 'bg-gray-100'
+          }`}
+        >
+          {opt.text}
+          {selected === opt.id && (opt.correct ? ' ✓' : ' ✗')}
+        </button>
+      ))}
+    </section>
+  );
+}
+```
+
+**Pattern 5: Step-by-Step Guided Calculation**
+```tsx
+export default function StepByStepExercise() {
+  const [answers, setAnswers] = useState({});
+
+  return (
+    <section>
+      <h2>Work Through: Attention Calculation</h2>
+      <div className="space-y-4">
+        <div>
+          <p>Step 1: Calculate attention scores</p>
+          <input
+            type="text"
+            onChange={(e) => setAnswers({...answers, step1: e.target.value})}
+            placeholder="e₁₁ = ?"
+          />
+        </div>
+        {answers.step1 && (
+          <div>
+            <p>Step 2: Apply softmax</p>
+            <input placeholder="α₁₁ = ?" />
+          </div>
+        )}
+        {/* More steps as needed */}
+      </div>
+    </section>
+  );
+}
+```
+
+**Guidelines:**
+
+- **Make it interactive**: Users should type, click, drag, or manipulate something
+- **Provide immediate feedback**: Don't make users wait to know if they're right
+- **Be creative**: Sliders, calculators, visualizations, quizzes, fill-in-the-blank, etc.
+- **Match the concept**: Math concepts → calculators, Algorithms → step-through, Comparisons → sliders
+- **Keep it simple**: 5-15 minutes max, focus on one key insight
+- **Use appropriate input types**: numbers for calculations, text for code, radio/checkboxes for choices
+
+The `animate-fadeIn` class is defined in `/ml-wiki/src/index.css` for smooth transitions.
 
 ### Essay Creation Workflow
 
@@ -447,17 +739,18 @@ Projects are hands-on learning experiences that range from quick exercises to mu
 // Exercise Example
 export const meta = {
   title: "Calculate Multi-Head Attention by Hand",
-  description: "Work through the mathematics of attention with concrete examples...",
+  description:
+    "Work through the mathematics of attention with concrete examples...",
   category: "Exercise",
   difficulty: "Beginner",
   estimatedTime: "15-20 min",
   relatedPapers: [
-    { title: "Attention Is All You Need", slug: "attention-is-all-you-need" }
+    { title: "Attention Is All You Need", slug: "attention-is-all-you-need" },
   ],
   relatedConcepts: [
-    { name: "Multi-Head Attention", slug: "multi-head-attention" }
+    { name: "Multi-Head Attention", slug: "multi-head-attention" },
   ],
-  prerequisites: ["Linear algebra basics"]
+  prerequisites: ["Linear algebra basics"],
 };
 
 // Weekend Project Example
@@ -468,12 +761,12 @@ export const meta = {
   difficulty: "Intermediate",
   estimatedTime: "1-2 days",
   relatedPapers: [
-    { title: "Attention Is All You Need", slug: "attention-is-all-you-need" }
+    { title: "Attention Is All You Need", slug: "attention-is-all-you-need" },
   ],
   relatedConcepts: [
-    { name: "Transformer Architecture", slug: "transformer-architecture" }
+    { name: "Transformer Architecture", slug: "transformer-architecture" },
   ],
-  prerequisites: ["Neural networks basics", "PyTorch or TensorFlow"]
+  prerequisites: ["Neural networks basics", "PyTorch or TensorFlow"],
 };
 
 // Large Project Example
@@ -483,41 +776,45 @@ export const meta = {
   category: "Large Project",
   difficulty: "Advanced",
   estimatedTime: "2-3 weeks",
-  novel: "Custom positional encoding scheme designed for morphologically-rich languages with flexible word order",
+  novel:
+    "Custom positional encoding scheme designed for morphologically-rich languages with flexible word order",
   relatedPapers: [
-    { title: "Attention Is All You Need", slug: "attention-is-all-you-need" }
+    { title: "Attention Is All You Need", slug: "attention-is-all-you-need" },
   ],
   relatedConcepts: [
-    { name: "Transformer Architecture", slug: "transformer-architecture" }
+    { name: "Transformer Architecture", slug: "transformer-architecture" },
   ],
-  prerequisites: ["Deep learning fundamentals", "Attention mechanisms"]
+  prerequisites: ["Deep learning fundamentals", "Attention mechanisms"],
 };
 ```
 
 **Key Differences Between Categories:**
 
-| Aspect | Exercise | Weekend Project | Large Project |
-|--------|----------|----------------|---------------|
-| Time | 10-30 min | 1-2 days | Multiple weeks |
-| Deliverable | Answer/Understanding | Working implementation | Novel system |
-| Code | None or minimal | Substantial | Complete system |
-| Novel Aspect | Not required | Not required | **Required** |
-| Prerequisites | Minimal | Moderate | Significant |
+| Aspect        | Exercise             | Weekend Project        | Large Project   |
+| ------------- | -------------------- | ---------------------- | --------------- |
+| Time          | 10-30 min            | 1-2 days               | Multiple weeks  |
+| Deliverable   | Answer/Understanding | Working implementation | Novel system    |
+| Code          | None or minimal      | Substantial            | Complete system |
+| Novel Aspect  | Not required         | Not required           | **Required**    |
+| Prerequisites | Minimal              | Moderate               | Significant     |
 
 **Examples by Category:**
 
 **Exercises:**
+
 - "Calculate Multi-Head Attention by Hand"
 - "Derive the Gradient of Cross-Entropy Loss"
 - "Prove Transformer Universal Approximation"
 
 **Weekend Projects:**
+
 - "Build a Mini-GPT from Scratch"
 - "Fine-Tune BERT for Sentiment Analysis"
 - "Implementing Few-Shot Learning with Prompt Engineering"
 - "Apply LoRA to Fine-Tune a Large Model"
 
 **Large Projects:**
+
 - "Building a Small Transformer for Translation" (novel: custom positional encodings)
 - "Constitutional AI for Domain-Specific Alignment" (novel: domain-specific principles and metrics)
 

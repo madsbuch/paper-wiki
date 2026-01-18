@@ -62,17 +62,25 @@ export default function Home() {
               ML Wiki
             </h1>
           </div>
-          <p className="text-lg sm:text-xl md:text-2xl text-slate-700 mb-8 leading-relaxed px-4">
+          <p className="text-lg sm:text-xl md:text-2xl text-slate-700 mb-6 leading-relaxed px-4">
             Making machine learning papers accessible through
             <br />
             <span className="font-semibold text-violet-600">
               wiki entries
             </span>,{" "}
-            <span className="font-semibold text-purple-600">stories</span>, and{" "}
+            <span className="font-semibold text-purple-600">essays</span>, and{" "}
             <span className="font-semibold text-pink-600">
-              creative explanations
+              hands-on projects
             </span>
           </p>
+
+          {/* AI-Generated Notice */}
+          <div className="max-w-2xl mx-auto mb-8 bg-blue-50 border-l-4 border-blue-500 px-4 sm:px-6 py-3 sm:py-4 rounded-r-lg">
+            <p className="text-slate-700 text-sm sm:text-base md:text-lg">
+              <strong className="text-blue-900">🤖 Experimental Project:</strong> This is an experiment in AI-assisted knowledge synthesis. All content is AI-generated from academic papers, combining technical accuracy with creative explanations.
+            </p>
+          </div>
+
           <div className="inline-block bg-amber-100 border-l-4 border-amber-500 px-4 sm:px-6 py-3 sm:py-4 rounded-r-lg max-w-full">
             <p className="text-slate-700 text-sm sm:text-base md:text-lg">
               <strong className="text-amber-900">🔬 Evidence-Based:</strong> All
@@ -82,71 +90,110 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Featured Concepts Grid */}
+      {/* Content Navigation Grid */}
       <main className="container mx-auto px-4 pb-12 sm:pb-20">
-        <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-8 sm:mb-12 text-center">
-          Featured Concepts
+        <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4 sm:mb-6 text-center">
+          Explore the Knowledge Base
         </h2>
+        <p className="text-center text-slate-600 text-base sm:text-lg mb-8 sm:mb-12 max-w-3xl mx-auto">
+          Navigate through academic papers and discover concepts through multiple formats: technical documentation, narrative essays, and hands-on projects.
+        </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto">
-          {featuredConcepts.map((concept) => (
-            <Link
-              key={concept.slug}
-              to={`/wiki/${concept.slug}`}
-              className={`group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 sm:p-8 border-t-4 border-${concept.color}-500 hover:-translate-y-1`}
-            >
-              <h3
-                className={`text-xl sm:text-2xl font-bold text-${concept.color}-600 mb-2 sm:mb-3 group-hover:text-${concept.color}-700`}
-              >
-                {concept.title}
-              </h3>
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                {concept.description}
-              </p>
-              <div className="mt-3 sm:mt-4 text-violet-600 font-semibold group-hover:translate-x-2 transition-transform inline-block text-sm sm:text-base">
-                Read more →
-              </div>
-            </Link>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-6xl mx-auto mb-12 sm:mb-16">
+          {/* Papers Card */}
+          <Link
+            to="/papers"
+            className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 sm:p-8 border-t-4 border-violet-500 hover:-translate-y-1"
+          >
+            <div className="text-4xl mb-3 sm:mb-4">📄</div>
+            <h3 className="text-2xl sm:text-3xl font-bold text-violet-600 mb-2 sm:mb-3 group-hover:text-violet-700">
+              Papers
+            </h3>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-3 sm:mb-4">
+              Individual pages for each academic paper with full metadata, abstracts, key contributions, and links to related concepts. The source material for everything else.
+            </p>
+            <div className="text-violet-600 font-semibold group-hover:translate-x-2 transition-transform inline-block text-sm sm:text-base">
+              Browse Papers →
+            </div>
+          </Link>
+
+          {/* Wiki Card */}
+          <Link
+            to="/wiki"
+            className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 sm:p-8 border-t-4 border-blue-500 hover:-translate-y-1"
+          >
+            <div className="text-4xl mb-3 sm:mb-4">📚</div>
+            <h3 className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2 sm:mb-3 group-hover:text-blue-700">
+              Wiki Concepts
+            </h3>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-3 sm:mb-4">
+              Structured documentation for specific concepts, methods, and ideas extracted from papers. Technical explanations paired with creative analogies for understanding.
+            </p>
+            <div className="text-blue-600 font-semibold group-hover:translate-x-2 transition-transform inline-block text-sm sm:text-base">
+              Explore Concepts →
+            </div>
+          </Link>
+
+          {/* Essays Card */}
+          <Link
+            to="/essays"
+            className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 sm:p-8 border-t-4 border-purple-500 hover:-translate-y-1"
+          >
+            <div className="text-4xl mb-3 sm:mb-4">✍️</div>
+            <h3 className="text-2xl sm:text-3xl font-bold text-purple-600 mb-2 sm:mb-3 group-hover:text-purple-700">
+              Essays
+            </h3>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-3 sm:mb-4">
+              Longer-form pieces (20-30 minutes) that synthesize knowledge from multiple papers into engaging narratives. Perfect for listening during walks or commutes.
+            </p>
+            <div className="text-purple-600 font-semibold group-hover:translate-x-2 transition-transform inline-block text-sm sm:text-base">
+              Read Essays →
+            </div>
+          </Link>
+
+          {/* Projects Card */}
+          <Link
+            to="/projects"
+            className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 sm:p-8 border-t-4 border-pink-500 hover:-translate-y-1"
+          >
+            <div className="text-4xl mb-3 sm:mb-4">🛠️</div>
+            <h3 className="text-2xl sm:text-3xl font-bold text-pink-600 mb-2 sm:mb-3 group-hover:text-pink-700">
+              Projects
+            </h3>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-3 sm:mb-4">
+              Language-agnostic implementation guides ranging from quick exercises to multi-week projects. Learn by building systems based on concepts from papers.
+            </p>
+            <div className="text-pink-600 font-semibold group-hover:translate-x-2 transition-transform inline-block text-sm sm:text-base">
+              Start Building →
+            </div>
+          </Link>
         </div>
 
-        {/* Papers Section */}
-        <div className="mt-12 sm:mt-20 max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6 sm:p-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-4 sm:mb-6">
-            📄 Available Papers
+        {/* Featured Concepts Section */}
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-6 sm:mb-8 text-center">
+            Featured Concepts
           </h2>
-          <div className="space-y-3 sm:space-y-4">
-            <div className="bg-gradient-to-r from-violet-50 to-purple-50 rounded-lg p-4 sm:p-6 border border-violet-200">
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
-                Attention Is All You Need
-              </h3>
-              <p className="text-sm sm:text-base text-slate-600 mb-2">Vaswani et al. (2017)</p>
-              <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-                The groundbreaking paper that introduced the Transformer
-                architecture, revolutionizing natural language processing and
-                becoming the foundation for models like GPT, BERT, and countless
-                others.
-              </p>
-            </div>
-            <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg p-4 sm:p-6 border border-emerald-200">
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
-                Language Models are Few-Shot Learners
-              </h3>
-              <p className="text-sm sm:text-base text-slate-600 mb-2">Brown et al. (2020)</p>
-              <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-                The GPT-3 paper that demonstrated powerful in-context learning
-                at scale, showing that 175 billion parameter models can perform
-                tasks from just a few examples without fine-tuning.
-              </p>
-            </div>
-          </div>
-          <div className="mt-4 sm:mt-6 text-center">
-            <Link
-              to="/papers"
-              className="inline-block bg-violet-600 hover:bg-violet-700 text-white px-5 py-2.5 sm:px-6 sm:py-3 rounded-lg font-semibold transition-colors text-sm sm:text-base"
-            >
-              View All Papers →
-            </Link>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {featuredConcepts.map((concept) => (
+              <Link
+                key={concept.slug}
+                to={`/wiki/${concept.slug}`}
+                className={`group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 sm:p-8 border-t-4 border-${concept.color}-500 hover:-translate-y-1`}
+              >
+                <h3
+                  className={`text-xl sm:text-2xl font-bold text-${concept.color}-600 mb-2 sm:mb-3 group-hover:text-${concept.color}-700`}
+                >
+                  {concept.title}
+                </h3>
+                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                  {concept.description}
+                </p>
+                <div className="mt-3 sm:mt-4 text-violet-600 font-semibold group-hover:translate-x-2 transition-transform inline-block text-sm sm:text-base">
+                  Read more →
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </main>

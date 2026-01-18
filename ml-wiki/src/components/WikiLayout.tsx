@@ -11,6 +11,12 @@ interface WikiLayoutProps {
     year: string;
     pages?: string;
   }>;
+  // Optional metadata fields (not directly used in layout, but part of meta)
+  description?: string;
+  category?: string;
+  difficulty?: string;
+  relatedConcepts?: string[];
+  tags?: string[];
 }
 
 // Map paper titles to their slugs for linking

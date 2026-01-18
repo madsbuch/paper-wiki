@@ -73,3 +73,19 @@
 .mdx-content hr + h2 {
   @apply text-3xl font-bold text-purple-700 mt-12 mb-6 pb-3 border-b-2 border-purple-300;
 }
+
+/* Animation for interactive elements */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}

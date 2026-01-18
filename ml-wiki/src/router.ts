@@ -28,8 +28,15 @@ export type Path =
   | `/papers/mathematical-transformers`
   | `/papers/resnet`
   | `/projects`
+  | `/projects/attention-by-hand`
+  | `/projects/bert-sentiment`
+  | `/projects/constitutional-ai-domain`
+  | `/projects/cross-entropy-gradient`
   | `/projects/few-shot-learning`
+  | `/projects/lora-finetuning`
+  | `/projects/mini-gpt`
   | `/projects/transformer-translation`
+  | `/projects/transformer-universal-approximation`
   | `/test`
   | `/wiki`
   | `/wiki/ai-alignment`
