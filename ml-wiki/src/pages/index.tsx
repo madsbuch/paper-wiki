@@ -59,11 +59,11 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center mb-6 gap-3 sm:gap-4">
             <Logo className="w-16 h-16 sm:w-20 sm:h-20" />
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-purple-600">
-              ML Wiki
+              Paper Wiki
             </h1>
           </div>
           <p className="text-lg sm:text-xl md:text-2xl text-slate-700 mb-6 leading-relaxed px-4">
-            Making machine learning papers accessible through
+            Making academic papers accessible through
             <br />
             <span className="font-semibold text-violet-600">
               wiki entries

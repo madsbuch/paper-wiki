@@ -1,6 +1,6 @@
 # Wiki Scripts
 
-This directory contains utility scripts for the ML Wiki project.
+This directory contains utility scripts for the Paper Wiki project.
 
 ## MDX Validator (`validate-mdx.js`)
 

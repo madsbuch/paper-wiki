@@ -172,32 +172,89 @@ All claims should reference papers like:
 
 ## Paper Ingestion Workflow
 
-### Step 1: Add Paper to Storage
+The project uses a local PDF ingestion pipeline to extract, chunk, and embed academic papers into a searchable SQLite database.
 
-1. Add paper PDF to your local papers repository (outside the web project)
-2. Keep original filename or rename descriptively
+### Step 1: Add Paper to Papers Directory
 
-### Step 2: Upload to LlamaCloud
+1. Add paper PDF to the `/papers/` directory in the project root
+2. Use arXiv filename format if possible (e.g., `1706.03762v7.pdf`)
+3. Or use descriptive filename (e.g., `attention-is-all-you-need.pdf`)
 
-1. Go to https://cloud.llamaindex.ai
-2. Access or create the "papers" index
-3. Manually upload the PDF through the web interface
-4. Wait for processing to complete
+### Step 2: Ingest Paper into Database
 
-### Step 3: Process with Claude via MCP
+Run the ingestion script to process the PDF:
 
-Once uploaded, Claude can access the paper through the LlamaCloud MCP server to:
+```bash
+# Ingest a single paper
+python scripts/pdf-ingestion/ingest.py papers/1706.03762v7.pdf
 
-- Query specific sections and concepts
-- Extract definitions and terminology
-- Pull citations and references
-- Identify key ideas for wiki entries
+# Ingest all papers in directory
+python scripts/pdf-ingestion/ingest.py papers/
+```
 
-**Why Manual Upload?**
+The script will:
+- Extract text with page tracking
+- Parse metadata (title, authors, year, arXiv ID)
+- Chunk text into ~1000 character segments with overlap
+- Generate OpenAI embeddings (text-embedding-3-small)
+- Store everything in SQLite database at `scripts/pdf-ingestion/papers.db`
 
-- Security: Control what gets processed externally
-- Trust: Verify the platform before automated uploads
-- Review: Confirm paper is appropriate for indexing
+### Step 3: Query Papers for Content Extraction
+
+Use the search functionality to find relevant content:
+
+```bash
+# Search for specific concepts
+python scripts/pdf-ingestion/ingest.py --search "attention mechanisms"
+
+# Get more results
+python scripts/pdf-ingestion/ingest.py --search "transformer architecture" --limit 10
+```
+
+Search returns:
+- Most relevant text chunks with similarity scores
+- Page numbers for citation
+- Paper metadata (title, authors, year)
+- Full chunk content for analysis
+
+### Step 4: Extract Content for Wiki
+
+Use search results to:
+- Identify key concepts for wiki entries
+- Extract definitions and explanations
+- Find relevant citations with page numbers
+- Pull technical details for implementation
+
+**Direct Database Access:**
+
+For more complex queries, access the SQLite database directly:
+
+```python
+import sqlite3
+
+conn = sqlite3.connect("scripts/pdf-ingestion/papers.db")
+cursor = conn.cursor()
+
+# Get all papers
+cursor.execute("SELECT id, title, authors, year FROM papers")
+
+# Get chunks from specific paper
+cursor.execute("""
+    SELECT content, page_numbers
+    FROM chunks
+    WHERE paper_id = ?
+    ORDER BY chunk_index
+""", (paper_id,))
+```
+
+**Cost:**
+- ~$0.001 per paper for embeddings (OpenAI text-embedding-3-small)
+- ~100 papers costs ~$0.10
+
+**Requirements:**
+- Python packages: `pdfplumber`, `openai`, `langchain-text-splitters`, `tiktoken`, `numpy`
+- OpenAI API key (stored in `.env` file)
+- See `scripts/pdf-ingestion/README.md` for full documentation
 
 ## Content Creation Workflows
 
@@ -251,16 +308,20 @@ Wiki pages should provide understanding at multiple levels through three aspects
 
 **Process:**
 
-1. Use MCP tools to query the paper for concepts
-2. Identify key concepts (e.g., "Attention Mechanism", "Transformer Architecture")
-3. Create MDX files for each concept in `/ml-wiki/src/pages/wiki/`
-4. Write content that naturally incorporates the three aspects:
+1. Search the ingested papers database for relevant content:
+   ```bash
+   python scripts/pdf-ingestion/ingest.py --search "attention mechanism" --limit 10
+   ```
+2. Review search results to identify key concepts (e.g., "Attention Mechanism", "Transformer Architecture")
+3. Query database for specific details about each concept
+4. Create MDX files for each concept in `/ml-wiki/src/pages/wiki/`
+5. Write content that naturally incorporates the three aspects:
    - **Formal Definition**: Can be in "Overview", "Definition", "How It Works", etc. - whatever feels natural
    - **Story / Analogy**: Can be a dedicated "Story" section, or woven into explanations with "Think of it like..." or "Imagine..." - use judgment
    - **Exercise**: Usually works best as a dedicated section at the end, but placement should feel natural
-5. Add whatever other sections make sense (Architecture, Implementation, Examples, etc.)
-6. Cross-link related concepts
-7. Verify all citations are accurate
+6. Add whatever other sections make sense (Architecture, Implementation, Examples, etc.)
+7. Cross-link related concepts
+8. Verify all citations are accurate with page numbers from search results
 
 **Content Guidelines:**
 

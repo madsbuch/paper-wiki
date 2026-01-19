@@ -313,6 +313,83 @@ export default function WikiIndex() {
       slug: "block-sparse-attention",
       category: "Mechanism",
       difficulty: "Advanced"
+    },
+    {
+      title: "Retrieval-Augmented Generation (RAG)",
+      description: "An approach that enables LLMs to answer questions over external knowledge sources by retrieving relevant information and incorporating it into the generation process.",
+      slug: "retrieval-augmented-generation",
+      category: "Architecture",
+      difficulty: "Intermediate"
+    },
+    {
+      title: "Knowledge Graph",
+      description: "A structured representation where nodes correspond to entities and edges represent relationships, automatically extracted from text using LLMs for enhanced document understanding.",
+      slug: "knowledge-graph",
+      category: "Technique",
+      difficulty: "Intermediate"
+    },
+    {
+      title: "Community Detection",
+      description: "The process of identifying groups of nodes in a graph that are more densely connected to each other than to nodes outside the group, enabling hierarchical organization of information.",
+      slug: "community-detection",
+      category: "Algorithm",
+      difficulty: "Advanced"
+    },
+    {
+      title: "Query-Focused Summarization",
+      description: "Generating summaries tailored to specific queries, bridging the gap between retrieval and sensemaking for global questions over entire text corpora.",
+      slug: "query-focused-summarization",
+      category: "Task",
+      difficulty: "Advanced"
+    },
+    {
+      title: "Entity Extraction",
+      description: "The process of identifying and extracting instances of entities (people, organizations, locations, concepts) from text with their names, types, and descriptions.",
+      slug: "entity-extraction",
+      category: "Technique",
+      difficulty: "Intermediate"
+    },
+    {
+      title: "Map-Reduce",
+      description: "A programming model for parallel processing of large datasets by dividing work into independent map operations and aggregating reduce operations.",
+      slug: "map-reduce",
+      category: "Algorithm",
+      difficulty: "Intermediate"
+    },
+    {
+      title: "Global Sensemaking",
+      description: "Understanding themes, trends, and patterns across an entire corpus by reasoning over connections and synthesizing information at a global level.",
+      slug: "global-sensemaking",
+      category: "Task",
+      difficulty: "Advanced"
+    },
+    {
+      title: "Multicategories",
+      description: "Multi-ary generalizations of categories where morphisms can have multiple inputs and one output, providing natural models for type theories with multiple variables in context.",
+      slug: "multicategories",
+      category: "Category Theory",
+      difficulty: "Advanced"
+    },
+    {
+      title: "Abstract Clones",
+      description: "Multi-sorted algebraic structures that model cartesian type theories with structural rules of weakening, contraction, and permutation.",
+      slug: "abstract-clones",
+      category: "Category Theory",
+      difficulty: "Advanced"
+    },
+    {
+      title: "Combinatory Logic",
+      description: "A model of computation based on combinators (higher-order functions) S and K that eliminates the need for variable binding, providing an alternative foundation to lambda calculus.",
+      slug: "combinatory-logic",
+      category: "Type Theory",
+      difficulty: "Advanced"
+    },
+    {
+      title: "Closed Categories",
+      description: "Categories equipped with an internal hom-functor that internalizes the notion of morphisms between objects, providing categorical models for function types without requiring products.",
+      slug: "closed-categories",
+      category: "Category Theory",
+      difficulty: "Advanced"
     }
   ];
 
@@ -327,7 +404,7 @@ export default function WikiIndex() {
     );
   }, [searchQuery]);
 
-  const categories = ["Architecture", "Architecture Components", "Mechanism", "Training Method", "Technique", "Learning Paradigm", "Prompting Technique", "Phenomenon", "Task", "Capability", "Research Area", "Algorithm", "Fundamentals", "Mathematical Foundations", "Optimization & Efficiency", "Hardware & Systems"];
+  const categories = ["Architecture", "Architecture Components", "Mechanism", "Training Method", "Technique", "Learning Paradigm", "Prompting Technique", "Phenomenon", "Task", "Capability", "Research Area", "Algorithm", "Fundamentals", "Mathematical Foundations", "Optimization & Efficiency", "Hardware & Systems", "Category Theory", "Type Theory"];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 pb-24">

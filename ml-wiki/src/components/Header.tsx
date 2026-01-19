@@ -36,7 +36,7 @@ export default function Header() {
           <Link to="/" className="flex items-center gap-2 sm:gap-3 group">
             <Logo className="w-7 h-7 sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
             <span className="text-lg sm:text-2xl font-bold text-slate-900 group-hover:text-violet-600 transition-colors">
-              ML Wiki
+              Paper Wiki
             </span>
           </Link>
 

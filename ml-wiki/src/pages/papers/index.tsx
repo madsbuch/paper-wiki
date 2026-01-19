@@ -126,6 +126,26 @@ export default function PapersIndex() {
       slug: "mathematical-transformers",
       abstract: "The Transformer architecture has revolutionized the field of sequence modeling and underpins the recent breakthroughs in large language models (LLMs). In this work, we propose a novel continuous framework that rigorously interprets the Transformer as a discretization of a structured integro-differential equation. Within this formulation, the self-attention mechanism emerges naturally as a non-local integral operator, and layer normalization is characterized as a projection to a time-dependent constraint.",
       tags: ["Transformer", "Mathematics", "Theory", "Differential Equations", "Interpretability"]
+    },
+    {
+      title: "From Local to Global: A GraphRAG Approach to Query-Focused Summarization",
+      authors: "Edge, D., Trinh, H., Cheng, N., Bradley, J., Chao, A., Mody, A., Truitt, S., Metropolitansky, D., Ness, R. O., & Larson, J.",
+      year: "2024",
+      venue: "arXiv preprint",
+      arxivId: "2404.16130v2",
+      slug: "graphrag",
+      abstract: "The use of retrieval-augmented generation (RAG) to retrieve relevant information from an external knowledge source enables large language models (LLMs) to answer questions over private and/or previously unseen document collections. However, RAG fails on global questions directed at an entire text corpus, such as 'What are the main themes in the dataset?', since this is inherently a query-focused summarization (QFS) task, rather than an explicit retrieval task. We propose GraphRAG, a graph-based approach to question answering over private text corpora that scales with both the generality of user questions and the quantity of source text.",
+      tags: ["RAG", "Knowledge Graph", "Summarization", "LLM", "Graph", "Sensemaking"]
+    },
+    {
+      title: "Clones, closed categories, and combinatory logic",
+      authors: "Saville, P.",
+      year: "2024",
+      venue: "arXiv preprint",
+      arxivId: "2405.01675v1",
+      slug: "clones-closed-categories-combinatory-logic",
+      abstract: "We give an exposition of the semantics of the simply-typed λ-calculus, and its linear and ordered variants, using multi-ary structures. We define universal properties for multicategories, and use these to derive familiar rules for products, tensors, and exponentials. We introduce extensional SK-clones and show these are sound and complete for both combinatory logic with extensional weak equality and the simply-typed λ-calculus without products. We then show such SK-clones are equivalent to a variant of closed categories called SK-categories, so the simply-typed λ-calculus without products is the internal language of SK-categories.",
+      tags: ["Category Theory", "Lambda Calculus", "Combinatory Logic", "Type Theory", "Semantics", "Clones"]
     }
   ];
 

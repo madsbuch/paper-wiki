@@ -20,9 +20,11 @@ export type Path =
   | `/papers/bahdanau-attention`
   | `/papers/bert`
   | `/papers/chain-of-thought-prompting`
+  | `/papers/clones-closed-categories-combinatory-logic`
   | `/papers/constitutional-ai`
   | `/papers/flash-attention`
   | `/papers/gpt3-few-shot-learners`
+  | `/papers/graphrag`
   | `/papers/instructgpt`
   | `/papers/lora`
   | `/papers/mathematical-transformers`
@@ -39,6 +41,7 @@ export type Path =
   | `/projects/transformer-universal-approximation`
   | `/test`
   | `/wiki`
+  | `/wiki/abstract-clones`
   | `/wiki/ai-alignment`
   | `/wiki/arithmetic-reasoning`
   | `/wiki/attention-mechanism`
@@ -48,11 +51,16 @@ export type Path =
   | `/wiki/block-sparse-attention`
   | `/wiki/bottleneck-architecture`
   | `/wiki/chain-of-thought-prompting`
+  | `/wiki/closed-categories`
+  | `/wiki/combinatory-logic`
+  | `/wiki/community-detection`
   | `/wiki/emergent-abilities`
   | `/wiki/encoder-decoder`
+  | `/wiki/entity-extraction`
   | `/wiki/few-shot-learning`
   | `/wiki/few-shot-prompting`
   | `/wiki/fine-tuning`
+  | `/wiki/global-sensemaking`
   | `/wiki/gpu-memory-hierarchy`
   | `/wiki/identity-mapping`
   | `/wiki/in-context-learning`
@@ -60,18 +68,23 @@ export type Path =
   | `/wiki/integro-differential-equations-transformers`
   | `/wiki/io-aware-algorithms`
   | `/wiki/kernel-fusion`
+  | `/wiki/knowledge-graph`
   | `/wiki/layer-normalization`
   | `/wiki/low-rank-adaptation`
+  | `/wiki/map-reduce`
   | `/wiki/masked-language-model`
   | `/wiki/meta-learning`
   | `/wiki/multi-head-attention`
+  | `/wiki/multicategories`
   | `/wiki/next-sentence-prediction`
   | `/wiki/operator-splitting`
   | `/wiki/parameter-efficient-fine-tuning`
   | `/wiki/positional-encoding`
   | `/wiki/ppo`
+  | `/wiki/query-focused-summarization`
   | `/wiki/reasoning-steps`
   | `/wiki/residual-connections`
+  | `/wiki/retrieval-augmented-generation`
   | `/wiki/reward-modeling`
   | `/wiki/rlhf`
   | `/wiki/scaled-dot-product-attention`
