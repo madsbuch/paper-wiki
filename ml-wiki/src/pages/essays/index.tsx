@@ -1,103 +1,81 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router";
 import Header from "../../components/Header";
-
-interface Essay {
-  title: string;
-  slug: string;
-  description: string;
-  readingTime: string;
-  tags: string[];
-  relatedPapers: string[];
-}
+import { useEssaysIndex, type Essay, parseTags, parseRelatedPapers } from "../../hooks/useDatabase";
 
 export default function EssaysIndex() {
   const [searchQuery, setSearchQuery] = useState("");
+  
+  // Load data from SQLite database
+  const { data: essays, loading, error } = useEssaysIndex();
 
-  const essays: Essay[] = [
-    {
-      title: "Transformers as Continuous Mathematics: A Journey from Discrete Layers to Differential Equations",
-      slug: "transformers-continuous-mathematics",
-      description: "An exploration of how Transformers can be rigorously understood as discretizations of continuous integro-differential equations, revealing the deep mathematical structure underlying modern AI.",
-      readingTime: "25 min read",
-      tags: ["Mathematics", "Transformers", "Differential Equations", "Theory", "Architecture"],
-      relatedPapers: ["A Mathematical Explanation of Transformers for Large Language Models and GPTs", "Attention Is All You Need"]
-    },
-    {
-      title: "The Evolution of Attention: How Transformers Changed Everything",
-      slug: "evolution-of-attention",
-      description: "A journey through the history of attention mechanisms in neural networks, from the early days of RNNs to the revolutionary Transformer architecture that powers modern AI.",
-      readingTime: "25 min read",
-      tags: ["Attention", "Transformers", "History", "Architecture"],
-      relatedPapers: ["Attention Is All You Need", "BERT", "Language Models are Few-Shot Learners"]
-    },
-    {
-      title: "Learning Without Examples: The Emergence of In-Context Learning",
-      slug: "learning-without-examples",
-      description: "How large language models learned to adapt to new tasks from just a few examples, and what this reveals about the nature of intelligence in neural networks.",
-      readingTime: "22 min read",
-      tags: ["In-Context Learning", "Few-Shot Learning", "Meta-Learning", "Reasoning", "Alignment"],
-      relatedPapers: ["Language Models are Few-Shot Learners", "Chain-of-Thought Prompting", "InstructGPT"]
-    },
-    {
-      title: "The Alignment Challenge: Teaching AI What We Actually Want",
-      slug: "alignment-challenge",
-      description: "The journey from raw language models that predict text to aligned assistants that help humans. How RLHF and chain-of-thought reasoning transformed AI from capable to controllable.",
-      readingTime: "24 min read",
-      tags: ["Alignment", "RLHF", "Reasoning", "Chain-of-Thought", "InstructGPT"],
-      relatedPapers: ["InstructGPT", "Chain-of-Thought Prompting"]
-    },
-    {
-      title: "The Unreasonable Effectiveness of Scale: When Bigger Actually Became Better",
-      slug: "unreasonable-effectiveness-of-scale",
-      description: "How the AI field discovered that making models larger unlocked capabilities no one predicted—from few-shot learning to chain-of-thought reasoning. The story of scale as the great equalizer.",
-      readingTime: "28 min read",
-      tags: ["Scaling", "Emergent Abilities", "Few-Shot Learning", "Chain-of-Thought", "GPT-3", "BERT"],
-      relatedPapers: ["BERT", "Language Models are Few-Shot Learners", "Chain-of-Thought Prompting"]
-    },
-    {
-      title: "From Broken Gradients to Billion-Parameter Models: The Skip Connection Story",
-      slug: "skip-connection-revolution",
-      description: "How a simple architectural trick from computer vision—the residual connection—solved the degradation problem and unlocked the deep networks that power modern AI, from 152-layer image classifiers to GPT-3.",
-      readingTime: "26 min read",
-      tags: ["Architecture", "ResNet", "Transformers", "Deep Learning", "Training", "Residual Connections"],
-      relatedPapers: ["ResNet", "Attention Is All You Need", "BERT", "Language Models are Few-Shot Learners"]
-    },
-    {
-      title: "The LoRA Revolution: How a Mathematical Trick Made AI Accessible",
-      slug: "lora-democratizing-ai",
-      description: "From needing massive compute budgets to fine-tune models, to training on a laptop. The story of how low-rank matrix decomposition made it possible for anyone to customize billion-parameter models.",
-      readingTime: "28 min read",
-      tags: ["LoRA", "Parameter Efficiency", "Fine-Tuning", "Democratization", "Linear Algebra"],
-      relatedPapers: ["LoRA", "BERT", "GPT-3", "InstructGPT"]
-    },
-    {
-      title: "Teaching AI to Teach Itself: The Constitutional AI Story",
-      slug: "constitutional-ai-self-supervision",
-      description: "What happens when AI becomes its own supervisor? The journey from thousands of human labels to a handful of principles—and what it means for the future of AI alignment.",
-      readingTime: "26 min read",
-      tags: ["Constitutional AI", "RLAIF", "Alignment", "Self-Supervision", "Chain-of-Thought"],
-      relatedPapers: ["Constitutional AI", "InstructGPT", "Chain-of-Thought Prompting", "GPT-3"]
-    },
-    {
-      title: "Speed Matters: How FlashAttention Made Transformers Practical",
-      slug: "flashattention-hardware-aware-ai",
-      description: "The hidden bottleneck that was killing Transformers at scale wasn't the math—it was the memory. How thinking about GPU architecture led to 3× speedups and enabled 64K context windows.",
-      readingTime: "27 min read",
-      tags: ["FlashAttention", "Hardware-Software Co-Design", "Performance", "GPU", "Memory Hierarchy"],
-      relatedPapers: ["FlashAttention", "Attention Is All You Need", "GPT-3", "BERT"]
-    }
-  ];
+  // Filter essays based on search query
+  const filteredEssays = useMemo(() => {
+    if (!essays) return [];
+    if (!searchQuery.trim()) return essays;
 
-  const filteredEssays = essays.filter(essay => {
     const query = searchQuery.toLowerCase();
+    return essays.filter(essay => {
+      const tags = parseTags(essay.tags);
+      const relatedPapers = parseRelatedPapers(essay.related_papers);
+      return (
+        essay.title.toLowerCase().includes(query) ||
+        (essay.description?.toLowerCase().includes(query)) ||
+        tags.some(tag => tag.toLowerCase().includes(query)) ||
+        relatedPapers.some(paper => paper.title.toLowerCase().includes(query))
+      );
+    });
+  }, [essays, searchQuery]);
+
+  // Loading state
+  if (loading) {
     return (
-      essay.title.toLowerCase().includes(query) ||
-      essay.description.toLowerCase().includes(query) ||
-      essay.tags.some(tag => tag.toLowerCase().includes(query)) ||
-      essay.relatedPapers.some(paper => paper.toLowerCase().includes(query))
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 pb-24">
+        <Header />
+        <main className="container mx-auto px-4 py-8 sm:py-12">
+          <div className="max-w-6xl mx-auto">
+            <div className="animate-pulse">
+              <div className="h-12 bg-slate-200 rounded w-1/4 mb-4"></div>
+              <div className="h-6 bg-slate-200 rounded w-2/3 mb-8"></div>
+              <div className="grid gap-6">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="bg-white rounded-xl p-6 md:p-8">
+                    <div className="h-8 bg-slate-200 rounded w-3/4 mb-3"></div>
+                    <div className="h-4 bg-slate-200 rounded w-full mb-2"></div>
+                    <div className="h-4 bg-slate-200 rounded w-2/3 mb-4"></div>
+                    <div className="flex gap-2">
+                      <div className="h-6 bg-slate-200 rounded w-20"></div>
+                      <div className="h-6 bg-slate-200 rounded w-24"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
     );
-  });
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 pb-24">
+        <Header />
+        <main className="container mx-auto px-4 py-8 sm:py-12">
+          <div className="max-w-6xl mx-auto">
+            <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg">
+              <h2 className="text-xl font-bold text-red-900 mb-2">Error Loading Essays</h2>
+              <p className="text-red-700">{error.message}</p>
+              <p className="text-sm text-red-600 mt-2">
+                Make sure the database has been synced: <code className="bg-red-100 px-2 py-1 rounded">bun run db:sync</code>
+              </p>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 pb-24">
@@ -141,81 +119,16 @@ export default function EssaysIndex() {
 
             {/* Results count */}
             <p className="mt-3 sm:mt-4 text-sm sm:text-base text-slate-600">
-              {filteredEssays.length === essays.length
+              {essays && (filteredEssays.length === essays.length
                 ? `${essays.length} ${essays.length === 1 ? 'essay' : 'essays'} available`
-                : `Found ${filteredEssays.length} of ${essays.length} essays`}
+                : `Found ${filteredEssays.length} of ${essays.length} essays`)}
             </p>
           </div>
 
           {/* Essays Grid */}
           <div className="grid gap-4 sm:gap-6">
             {filteredEssays.map((essay) => (
-              <Link
-                key={essay.slug}
-                to={`/essays/${essay.slug}`}
-                className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-200 overflow-hidden border-l-4 border-emerald-500 hover:border-emerald-600"
-              >
-                <div className="p-4 sm:p-6 md:p-8">
-                  {/* Essay Header */}
-                  <div className="flex items-start justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
-                    <div className="flex-1">
-                      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors mb-2 sm:mb-3">
-                        {essay.title}
-                      </h2>
-                      <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-3 sm:mb-4">
-                        {essay.description}
-                      </p>
-                    </div>
-                    <svg
-                      className="w-5 h-5 sm:w-6 sm:h-6 text-slate-400 group-hover:text-emerald-600 transition-colors shrink-0 mt-1 sm:mt-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </div>
-
-                  {/* Metadata */}
-                  <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-slate-500 mb-3 sm:mb-4">
-                    <span className="flex items-center gap-1">
-                      <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      {essay.readingTime}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                      </svg>
-                      Audio-friendly
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                      {essay.relatedPapers.length} papers
-                    </span>
-                  </div>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                    {essay.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm bg-emerald-100 text-emerald-700 rounded-full"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </Link>
+              <EssayCard key={essay.slug} essay={essay} />
             ))}
           </div>
 
@@ -251,5 +164,91 @@ export default function EssaysIndex() {
         </div>
       </footer>
     </div>
+  );
+}
+
+/**
+ * Essay card component
+ */
+function EssayCard({ essay }: { essay: Essay }) {
+  const tags = parseTags(essay.tags);
+  const relatedPapers = parseRelatedPapers(essay.related_papers);
+  
+  return (
+    <Link
+      to={`/essays/${essay.slug}`}
+      className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-200 overflow-hidden border-l-4 border-emerald-500 hover:border-emerald-600"
+    >
+      <div className="p-4 sm:p-6 md:p-8">
+        {/* Essay Header */}
+        <div className="flex items-start justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
+          <div className="flex-1">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors mb-2 sm:mb-3">
+              {essay.title}
+            </h2>
+            {essay.description && (
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-3 sm:mb-4">
+                {essay.description}
+              </p>
+            )}
+          </div>
+          <svg
+            className="w-5 h-5 sm:w-6 sm:h-6 text-slate-400 group-hover:text-emerald-600 transition-colors shrink-0 mt-1 sm:mt-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </div>
+
+        {/* Metadata */}
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-slate-500 mb-3 sm:mb-4">
+          {essay.reading_time && (
+            <span className="flex items-center gap-1">
+              <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {essay.reading_time}
+            </span>
+          )}
+          {essay.audio_path && (
+            <span className="flex items-center gap-1">
+              <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+              </svg>
+              Audio available
+            </span>
+          )}
+          {relatedPapers.length > 0 && (
+            <span className="flex items-center gap-1">
+              <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              {relatedPapers.length} papers
+            </span>
+          )}
+        </div>
+
+        {/* Tags */}
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
+            {tags.map((tag, index) => (
+              <span
+                key={index}
+                className="px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm bg-emerald-100 text-emerald-700 rounded-full"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </Link>
   );
 }

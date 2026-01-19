@@ -2,6 +2,116 @@
 
 This directory contains utility scripts for the Paper Wiki project.
 
+## Database Scripts
+
+The project uses two SQLite databases:
+
+### 1. Frontend Database (`collections.db`)
+
+Located at: `ml-wiki/public/collections.db`
+
+Purpose: Powers the frontend search and index pages via sql.js (WebAssembly SQLite).
+
+**Sync Script**: `sync-collections.ts` (Bun)
+
+```bash
+# Sync content to collections.db
+bun run scripts/sync-collections.ts
+
+# Reset and rebuild from scratch
+bun run scripts/sync-collections.ts --reset
+```
+
+Or use npm scripts from ml-wiki:
+```bash
+cd ml-wiki
+bun run db:sync    # Sync database
+bun run db:reset   # Reset and rebuild
+```
+
+**What it syncs**:
+- Papers metadata from `pages/papers/*.tsx`
+- Wiki concepts from `pages/wiki/*.tsx` and `pages/wiki/*.mdx`
+- Essays from `pages/essays/*.mdx`
+- Projects from `pages/projects/*.mdx`
+- All relationships between content types
+
+**Schema**: `scripts/collections-schema.sql`
+
+### 2. LLM Processing Database (`papers.db`)
+
+Located at: `scripts/pdf-ingestion/papers.db`
+
+Purpose: Semantic search over paper content and generated wiki/essay/project content for LLMs.
+
+**Ingest Papers**:
+```bash
+python scripts/pdf-ingestion/ingest.py papers/your-paper.pdf
+python scripts/pdf-ingestion/ingest.py --search "attention mechanism"
+```
+
+**Sync Generated Content**:
+```bash
+# Sync content without embeddings (fast)
+python scripts/sync-content.py --no-embed
+
+# Sync with embeddings (requires OpenAI API key)
+python scripts/sync-content.py
+
+# Reset and rebuild
+python scripts/sync-content.py --reset
+```
+
+**What it stores**:
+- Paper text chunks with embeddings (from PDFs)
+- Wiki/essay/project full text with embeddings
+- Citation graph (what content cites what papers)
+
+**Schema Extension**: `scripts/pdf-ingestion/content-schema.sql`
+
+### Using the Frontend Database
+
+In React components, use the database hooks:
+
+```tsx
+import { 
+  DatabaseProvider, 
+  usePapersIndex, 
+  useWikiIndex,
+  useSearch 
+} from '@/hooks/useDatabase';
+
+// Wrap app with provider
+function App() {
+  return (
+    <DatabaseProvider>
+      <YourComponent />
+    </DatabaseProvider>
+  );
+}
+
+// Use in components
+function PapersList() {
+  const { data: papers, loading, error } = usePapersIndex();
+  
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  
+  return papers?.map(paper => (
+    <div key={paper.slug}>{paper.title}</div>
+  ));
+}
+
+// Search across all content
+function SearchBox() {
+  const [query, setQuery] = useState('');
+  const { data: results } = useSearch(query);
+  // ...
+}
+```
+
+---
+
 ## MDX Validator (`validate-mdx.js`)
 
 Validates MDX files for common syntax errors that cause runtime issues. **Run this before committing any MDX changes!**
