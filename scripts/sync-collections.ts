@@ -123,12 +123,13 @@ function extractTsxMeta(content: string): Record<string, unknown> | null {
     }
   }
 
-  // Try to find const meta = { ... } (non-exported, inside component)
-  const constMetaMatch = content.match(/const\s+meta\s*=\s*({[\s\S]*?});\s*\n/);
+  // Try to find const meta = { ... } or const meta: WikiMeta = { ... } (non-exported, inside or outside component)
+  const constMetaMatch = content.match(/const\s+meta(?:\s*:\s*WikiMeta)?\s*=\s*({[\s\S]*?});\s*$/m);
   if (constMetaMatch) {
     try {
       return eval(`(${constMetaMatch[1]})`);
-    } catch {
+    } catch (e) {
+      console.error('Failed to parse meta:', e);
       // Fall through
     }
   }

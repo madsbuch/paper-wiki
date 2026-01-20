@@ -1,5 +1,23 @@
 import { useState } from 'react';
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
+
+const meta: WikiMeta = {
+  title: "Map-Reduce",
+  description: "A programming model for processing large datasets in parallel by dividing work into map (transform) and reduce (aggregate) phases.",
+  category: "Algorithms",
+  difficulty: "Intermediate",
+  tags: ["distributed-computing", "parallel-processing", "algorithms"],
+  relatedConcepts: ["query-focused-summarization", "global-sensemaking"],
+  citations: [
+    {
+      paper: "From Local to Global: A GraphRAG Approach to Query-Focused Summarization",
+      authors: "Edge, D., Trinh, H., et al.",
+      year: "2024",
+      pages: "2, 6"
+    }
+  ]
+};
 
 export default function MapReduce() {
   const [showVisualization, setShowVisualization] = useState(false);
@@ -11,18 +29,6 @@ export default function MapReduce() {
     { title: "Intermediate Results", description: "Collect partial answers from all chunks" },
     { title: "Reduce Phase", description: "Combine partial answers into final result" }
   ];
-
-  const meta = {
-    title: "Map-Reduce",
-    citations: [
-      {
-        paper: "From Local to Global: A GraphRAG Approach to Query-Focused Summarization",
-        authors: "Edge, D., Trinh, H., et al.",
-        year: "2024",
-        pages: "2, 6"
-      }
-    ]
-  };
 
   return (
     <WikiLayout {...meta}>

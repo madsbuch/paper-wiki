@@ -1,5 +1,23 @@
 import { useState } from 'react';
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
+
+const meta: WikiMeta = {
+  title: "Knowledge Graph",
+  description: "A structured representation where nodes correspond to entities and edges represent relationships, enabling both local retrieval and global sensemaking.",
+  category: "Data Structures",
+  difficulty: "Intermediate",
+  tags: ["knowledge-representation", "graph-theory", "information-retrieval"],
+  relatedConcepts: ["entity-extraction", "community-detection", "retrieval-augmented-generation"],
+  citations: [
+    {
+      paper: "From Local to Global: A GraphRAG Approach to Query-Focused Summarization",
+      authors: "Edge, D., Trinh, H., et al.",
+      year: "2024",
+      pages: "3-5"
+    }
+  ]
+};
 
 export default function KnowledgeGraph() {
   const [step, setStep] = useState(0);
@@ -14,18 +32,6 @@ export default function KnowledgeGraph() {
     } else if (step === 1) {
       setStep(2);
     }
-  };
-
-  const meta = {
-    title: "Knowledge Graph",
-    citations: [
-      {
-        paper: "From Local to Global: A GraphRAG Approach to Query-Focused Summarization",
-        authors: "Edge, D., Trinh, H., et al.",
-        year: "2024",
-        pages: "3-5"
-      }
-    ]
   };
 
   return (

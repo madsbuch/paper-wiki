@@ -1,20 +1,14 @@
 import { useEffect } from 'react';
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
 
-export default function TilingTechniques() {
-  useEffect(() => {
-    if (window.MathJax) {
-      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
-        console.error('MathJax typesetting failed:', err)
-      );
-    }
-  }, []);
-
-  const meta = {
+const meta: WikiMeta = {
   title: "Tiling Techniques",
   description: "Algorithm optimization strategy that divides large computations into smaller blocks (tiles) that fit in fast memory, enabling efficient processing of problems larger than available cache",
   category: "Optimization & Efficiency",
+  difficulty: "Advanced",
   tags: ["algorithm-optimization", "memory", "blocking", "cache-optimization"],
+  relatedConcepts: ["gpu-memory-hierarchy", "io-aware-algorithms", "kernel-fusion"],
   citations: [
     {
       paper: "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
@@ -24,6 +18,15 @@ export default function TilingTechniques() {
     }
   ]
 };
+
+export default function TilingTechniques() {
+  useEffect(() => {
+    if (window.MathJax) {
+      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
+        console.error('MathJax typesetting failed:', err)
+      );
+    }
+  }, []);
 
   return (
     <WikiLayout {...meta}>

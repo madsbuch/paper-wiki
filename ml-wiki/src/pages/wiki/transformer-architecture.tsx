@@ -1,17 +1,14 @@
 import { useEffect } from 'react';
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
 
-export default function TransformerArchitecture() {
-  useEffect(() => {
-    if (window.MathJax) {
-      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
-        console.error('MathJax typesetting failed:', err)
-      );
-    }
-  }, []);
-
-  const meta = {
+const meta: WikiMeta = {
   title: "Transformer Architecture",
+  description: "A neural network architecture that relies entirely on attention mechanisms to draw global dependencies between input and output, enabling parallel processing.",
+  category: "Architecture",
+  difficulty: "Intermediate",
+  tags: ["architecture", "attention", "parallel-processing"],
+  relatedConcepts: ["self-attention", "multi-head-attention", "encoder-decoder", "positional-encoding"],
   citations: [
     {
       paper: "Attention Is All You Need",
@@ -21,6 +18,15 @@ export default function TransformerArchitecture() {
     }
   ]
 };
+
+export default function TransformerArchitecture() {
+  useEffect(() => {
+    if (window.MathJax) {
+      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
+        console.error('MathJax typesetting failed:', err)
+      );
+    }
+  }, []);
 
   return (
     <WikiLayout {...meta}>

@@ -257,7 +257,12 @@ interface Project {
 </PaperLayout>
 ```
 
-3. Run `bun run db:sync` to update the database
+3. **Create or update wiki concept pages** for concepts introduced or used in the paper:
+   - Create new wiki pages for novel concepts introduced in the paper
+   - Update existing wiki pages to cite the new paper in their citations
+   - Ensure bidirectional linking: paper → concepts and concepts → paper
+
+4. Run `bun run db:sync` to update the database
 
 ### Adding a Wiki Concept
 
@@ -265,11 +270,16 @@ interface Project {
 2. Include metadata and use `WikiLayout`:
 
 ```tsx
-const meta = {
+import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
+
+const meta: WikiMeta = {
   title: "Transformer Architecture",
-  description: "...",
+  description: "A neural network architecture that relies entirely on attention mechanisms",
   category: "Architecture",
   difficulty: "Intermediate",
+  tags: ["attention", "neural-networks"],
+  relatedConcepts: ["self-attention", "multi-head-attention"],
   citations: [
     { paper: "Attention Is All You Need", authors: "Vaswani et al.", year: "2017", pages: "2-5" }
   ]
@@ -284,6 +294,11 @@ export default function TransformerArchitecture() {
   );
 }
 ```
+
+**Required fields**: `title`, `description`, `citations`
+**Optional fields**: `category`, `difficulty`, `tags`, `relatedConcepts`, `prerequisites`
+
+**Note**: The `meta` object should be defined as a const OUTSIDE the component function, not inside it.
 
 Wiki pages should include:
 - **Formal Definition** - Technical explanation with citations

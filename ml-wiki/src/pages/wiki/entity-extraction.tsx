@@ -1,5 +1,23 @@
 import { useState } from 'react';
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
+
+const meta: WikiMeta = {
+  title: "Entity Extraction",
+  description: "The process of identifying and extracting instances of entities (people, organizations, locations, concepts) from text with their types and attributes.",
+  category: "NLP Tasks",
+  difficulty: "Intermediate",
+  tags: ["nlp", "named-entity-recognition", "information-extraction"],
+  relatedConcepts: ["knowledge-graph", "retrieval-augmented-generation"],
+  citations: [
+    {
+      paper: "From Local to Global: A GraphRAG Approach to Query-Focused Summarization",
+      authors: "Edge, D., Trinh, H., et al.",
+      year: "2024",
+      pages: "4-5"
+    }
+  ]
+};
 
 export default function EntityExtraction() {
   const [userInput, setUserInput] = useState("");
@@ -18,18 +36,6 @@ export default function EntityExtraction() {
         { name: "Example Entity", type: "ORGANIZATION", description: "This is a demonstration" }
       ]);
     }
-  };
-
-  const meta = {
-    title: "Entity Extraction",
-    citations: [
-      {
-        paper: "From Local to Global: A GraphRAG Approach to Query-Focused Summarization",
-        authors: "Edge, D., Trinh, H., et al.",
-        year: "2024",
-        pages: "4-5"
-      }
-    ]
   };
 
   return (

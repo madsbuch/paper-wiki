@@ -1,5 +1,23 @@
 import { useEffect } from 'react';
 import WikiLayout from '../../components/WikiLayout';
+import type { WikiMeta } from "../../types/wiki";
+
+const meta: WikiMeta = {
+  title: "Scaled Dot-Product Attention",
+  description: "The specific attention mechanism used in the Transformer that computes attention weights using dot products of queries and keys, scaled by the square root of the key dimension.",
+  category: "Architecture Components",
+  difficulty: "Intermediate",
+  tags: ["attention", "transformer", "neural-networks"],
+  relatedConcepts: ["multi-head-attention", "self-attention", "attention-mechanism"],
+  citations: [
+    {
+      paper: "Attention Is All You Need",
+      authors: "Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I.",
+      year: "2017",
+      pages: "3-4"
+    }
+  ]
+};
 
 export default function ScaledDotProductAttention() {
   useEffect(() => {
@@ -11,17 +29,7 @@ export default function ScaledDotProductAttention() {
   }, []);
 
   return (
-    <WikiLayout
-      title="Scaled Dot-Product Attention"
-      citations={[
-        {
-          paper: "Attention Is All You Need",
-          authors: "Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I.",
-          year: "2017",
-          pages: "3-4"
-        }
-      ]}
-    >
+    <WikiLayout {...meta}>
       <div className="space-y-6">
         <section>
           <h2 className="text-2xl font-bold text-slate-900 mb-4">Overview</h2>

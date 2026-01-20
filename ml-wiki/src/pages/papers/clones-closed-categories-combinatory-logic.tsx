@@ -1,35 +1,15 @@
 import PaperLayout from "../../components/PaperLayout";
 
-export interface PaperMeta {
-  title: string;
-  authors: string;
-  year: string;
-  venue: string;
-  arxivId: string;
-  abstract: string;
-  tags: string[];
-}
-
-export const paperMeta: PaperMeta = {
-  title: "Clones, closed categories, and combinatory logic",
-  authors: "Saville, P.",
-  year: "2024",
-  venue: "arXiv preprint",
-  arxivId: "2405.01675v1",
-  abstract: "We give an exposition of the semantics of the simply-typed λ-calculus, and its linear and ordered variants, using multi-ary structures. We define universal properties for multicategories, and use these to derive familiar rules for products, tensors, and exponentials. We introduce extensional SK-clones and show these are sound and complete for both combinatory logic with extensional weak equality and the simply-typed λ-calculus without products. We then show such SK-clones are equivalent to a variant of closed categories called SK-categories, so the simply-typed λ-calculus without products is the internal language of SK-categories.",
-  tags: ["Category Theory", "Lambda Calculus", "Combinatory Logic", "Type Theory", "Semantics", "Clones"]
-};
-
 export default function ClonesClosedCategoriesCombinatoryLogicPaper() {
   return (
     <PaperLayout
-      title={paperMeta.title}
+      title="Clones, closed categories, and combinatory logic"
       authors="Philip Saville"
-      year={paperMeta.year}
+      year="2024"
       venue="arXiv Preprint"
-      arxivId={paperMeta.arxivId}
+      arxivId="2405.01675v1"
       arxivUrl="https://arxiv.org/abs/2405.01675"
-      abstract={paperMeta.abstract}
+      abstract="We give an exposition of the semantics of the simply-typed λ-calculus, and its linear and ordered variants, using multi-ary structures. We define universal properties for multicategories, and use these to derive familiar rules for products, tensors, and exponentials. We introduce extensional SK-clones and show these are sound and complete for both combinatory logic with extensional weak equality and the simply-typed λ-calculus without products. We then show such SK-clones are equivalent to a variant of closed categories called SK-categories, so the simply-typed λ-calculus without products is the internal language of SK-categories."
       keyContributions={[
         "Exposition of multi-ary structures (multicategories, clones) for semantics of typed λ-calculi",
         "Definition of universal properties for multicategories to derive type-theoretic rules",

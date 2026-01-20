@@ -1,22 +1,13 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router";
 import Header from "./Header";
+import type { WikiMeta } from "../types/wiki";
 
-interface WikiLayoutProps {
+interface WikiLayoutProps extends Omit<WikiMeta, "citations"> {
   children: ReactNode;
-  title: string;
-  citations?: Array<{
-    paper: string;
-    authors: string;
-    year: string;
-    pages?: string;
-  }>;
+  citations?: WikiMeta["citations"];
   // Optional metadata fields (not directly used in layout, but part of meta)
-  description?: string;
-  category?: string;
-  difficulty?: string;
-  relatedConcepts?: string[];
-  tags?: string[];
+  prerequisites?: string[];
 }
 
 // Map paper titles to their slugs for linking

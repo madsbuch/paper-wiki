@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
 
 function TranslationStepThrough() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -305,6 +306,24 @@ function TranslationStepThrough() {
   );
 }
 
+const meta: WikiMeta = {
+  title: "Encoder-Decoder Architecture",
+  description: "A neural network architecture that maps an input sequence to a continuous representation (encoder) and generates an output sequence from that representation (decoder).",
+  category: "Architecture",
+  difficulty: "Intermediate",
+  tags: ["architecture", "sequence-to-sequence", "neural-networks"],
+  relatedConcepts: ["seq2seq", "attention-mechanism", "transformer-architecture"],
+  citations: [
+    {
+      paper: "Attention Is All You Need",
+      authors:
+        "Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I.",
+      year: "2017",
+      pages: "2-3",
+    },
+  ]
+};
+
 export default function EncoderDecoder() {
   useEffect(() => {
     if (window.MathJax) {
@@ -315,18 +334,7 @@ export default function EncoderDecoder() {
   }, []);
 
   return (
-    <WikiLayout
-      title="Encoder-Decoder Architecture"
-      citations={[
-        {
-          paper: "Attention Is All You Need",
-          authors:
-            "Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I.",
-          year: "2017",
-          pages: "2-3",
-        },
-      ]}
-    >
+    <WikiLayout {...meta}>
       <div className="space-y-6">
         <section>
           <h2 className="text-2xl font-bold text-slate-900 mb-4">Overview</h2>

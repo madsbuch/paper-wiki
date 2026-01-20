@@ -1,17 +1,14 @@
 import { useEffect } from 'react';
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
 
-export default function InContextLearning() {
-  useEffect(() => {
-    if (window.MathJax) {
-      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
-        console.error('MathJax typesetting failed:', err)
-      );
-    }
-  }, []);
-
-  const meta = {
+const meta: WikiMeta = {
   title: "In-Context Learning",
+  description: "The ability of large language models to perform tasks by conditioning on a few demonstrations provided at inference time as context, without any gradient updates or fine-tuning.",
+  category: "Learning Paradigms",
+  difficulty: "Intermediate",
+  tags: ["learning-paradigm", "few-shot-learning", "prompting"],
+  relatedConcepts: ["few-shot-learning", "meta-learning", "prompt-engineering"],
   citations: [
     {
       paper: "Language Models are Few-Shot Learners (GPT-3)",
@@ -21,6 +18,15 @@ export default function InContextLearning() {
     }
   ]
 };
+
+export default function InContextLearning() {
+  useEffect(() => {
+    if (window.MathJax) {
+      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
+        console.error('MathJax typesetting failed:', err)
+      );
+    }
+  }, []);
 
   return (
     <WikiLayout {...meta}>

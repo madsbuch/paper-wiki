@@ -1,5 +1,23 @@
 import { useState } from 'react';
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
+
+const meta: WikiMeta = {
+  title: "Global Sensemaking",
+  description: "Understanding themes, trends, and patterns across an entire corpus rather than within localized passages, requiring reasoning over connections and relationships.",
+  category: "Information Retrieval",
+  difficulty: "Intermediate",
+  tags: ["sensemaking", "query-focused-summarization", "information-retrieval"],
+  relatedConcepts: ["query-focused-summarization", "knowledge-graph", "retrieval-augmented-generation"],
+  citations: [
+    {
+      paper: "From Local to Global: A GraphRAG Approach to Query-Focused Summarization",
+      authors: "Edge, D., Trinh, H., et al.",
+      year: "2024",
+      pages: "1-2"
+    }
+  ]
+};
 
 export default function GlobalSensemaking() {
   const [selectedQuestion, setSelectedQuestion] = useState("");
@@ -10,18 +28,6 @@ export default function GlobalSensemaking() {
     { type: "local", text: "Who won the 2020 US presidential election?", reason: "Specific factual retrieval" },
     { type: "global", text: "How has AI safety research evolved over the past 5 years?", reason: "Needs synthesis of trends across many papers" },
   ];
-
-  const meta = {
-    title: "Global Sensemaking",
-    citations: [
-      {
-        paper: "From Local to Global: A GraphRAG Approach to Query-Focused Summarization",
-        authors: "Edge, D., Trinh, H., et al.",
-        year: "2024",
-        pages: "1-2"
-      }
-    ]
-  };
 
   return (
     <WikiLayout {...meta}>

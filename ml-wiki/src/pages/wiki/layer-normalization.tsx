@@ -1,5 +1,29 @@
 import { useEffect, useState } from 'react';
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
+
+const meta: WikiMeta = {
+  title: "Layer Normalization",
+  description: "A normalization technique that standardizes activations across features within each layer, stabilizing training and enabling deeper networks.",
+  category: "Architecture Components",
+  difficulty: "Intermediate",
+  tags: ["normalization", "training-stability", "deep-learning"],
+  relatedConcepts: ["residual-connections", "transformer-architecture", "batch-normalization", "training-stability"],
+  citations: [
+    {
+      paper: "Attention Is All You Need",
+      authors: "Vaswani et al.",
+      year: "2017",
+      pages: "3-4"
+    },
+    {
+      paper: "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+      authors: "Devlin et al.",
+      year: "2019",
+      pages: "4"
+    }
+  ]
+};
 
 export default function LayerNormalization() {
   const [inputValues, setInputValues] = useState([2.5, -1.0, 3.5]);
@@ -35,27 +59,6 @@ export default function LayerNormalization() {
   };
 
   const { mean, variance, std, normalized, output } = computeLayerNorm();
-
-  const meta = {
-    title: "Layer Normalization",
-    category: "Architecture Components",
-    description: "A normalization technique that standardizes activations across features within each layer, stabilizing training and enabling deeper networks.",
-    relatedConcepts: ["residual-connections", "transformer-architecture", "batch-normalization", "training-stability"],
-    citations: [
-      {
-        paper: "Attention Is All You Need",
-        authors: "Vaswani et al.",
-        year: "2017",
-        pages: "3-4"
-      },
-      {
-        paper: "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
-        authors: "Devlin et al.",
-        year: "2019",
-        pages: "4"
-      }
-    ]
-  };
 
   return (
     <WikiLayout {...meta}>

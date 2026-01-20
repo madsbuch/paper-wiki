@@ -1,26 +1,32 @@
 import { useState } from 'react';
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
+
+const meta: WikiMeta = {
+  title: "Community Detection",
+  description: "The process of identifying groups of nodes in a graph that are more densely connected to each other than to nodes outside the group.",
+  category: "Graph Algorithms",
+  difficulty: "Intermediate",
+  tags: ["graph-theory", "clustering", "modularity"],
+  relatedConcepts: ["knowledge-graph", "global-sensemaking"],
+  citations: [
+    {
+      paper: "From Local to Global: A GraphRAG Approach to Query-Focused Summarization",
+      authors: "Edge, D., Trinh, H., et al.",
+      year: "2024",
+      pages: "3, 5-6"
+    },
+    {
+      paper: "From Louvain to Leiden: guaranteeing well-connected communities",
+      authors: "Traag, V. A., Waltman, L., & Van Eck, N. J.",
+      year: "2019",
+      pages: "1-2"
+    }
+  ]
+};
 
 export default function CommunityDetection() {
   const [showVisualization, setShowVisualization] = useState(false);
-
-  const meta = {
-    title: "Community Detection",
-    citations: [
-      {
-        paper: "From Local to Global: A GraphRAG Approach to Query-Focused Summarization",
-        authors: "Edge, D., Trinh, H., et al.",
-        year: "2024",
-        pages: "3, 5-6"
-      },
-      {
-        paper: "From Louvain to Leiden: guaranteeing well-connected communities",
-        authors: "Traag, V. A., Waltman, L., & Van Eck, N. J.",
-        year: "2019",
-        pages: "1-2"
-      }
-    ]
-  };
 
   return (
     <WikiLayout {...meta}>

@@ -1,17 +1,14 @@
 import { useEffect } from 'react';
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
 
-export default function MetaLearning() {
-  useEffect(() => {
-    if (window.MathJax) {
-      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
-        console.error('MathJax typesetting failed:', err)
-      );
-    }
-  }, []);
-
-  const meta = {
+const meta: WikiMeta = {
   title: "Meta-Learning",
+  description: "The ability of models to learn how to learn - developing capabilities during pre-training that enable rapid adaptation to new tasks at inference time without weight updates.",
+  category: "Learning Paradigms",
+  difficulty: "Advanced",
+  tags: ["learning-paradigm", "meta-learning", "adaptation"],
+  relatedConcepts: ["in-context-learning", "few-shot-learning", "transfer-learning"],
   citations: [
     {
       paper: "Language Models are Few-Shot Learners (GPT-3)",
@@ -21,6 +18,15 @@ export default function MetaLearning() {
     }
   ]
 };
+
+export default function MetaLearning() {
+  useEffect(() => {
+    if (window.MathJax) {
+      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
+        console.error('MathJax typesetting failed:', err)
+      );
+    }
+  }, []);
 
   return (
     <WikiLayout {...meta}>

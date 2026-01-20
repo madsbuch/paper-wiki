@@ -1,26 +1,32 @@
 import { useState } from 'react';
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
+
+const meta: WikiMeta = {
+  title: "Retrieval-Augmented Generation (RAG)",
+  description: "An approach that enables LLMs to answer questions over external knowledge sources by retrieving relevant information and incorporating it into the generation process.",
+  category: "Techniques",
+  difficulty: "Intermediate",
+  tags: ["retrieval", "generation", "knowledge-bases"],
+  relatedConcepts: ["query-focused-summarization", "knowledge-graph", "entity-extraction"],
+  citations: [
+    {
+      paper: "From Local to Global: A GraphRAG Approach to Query-Focused Summarization",
+      authors: "Edge, D., Trinh, H., et al.",
+      year: "2024",
+      pages: "1-2"
+    },
+    {
+      paper: "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      authors: "Lewis, P., Perez, E., et al.",
+      year: "2020",
+      pages: "1-3"
+    }
+  ]
+};
 
 export default function RetrievalAugmentedGeneration() {
   const [showAnswer, setShowAnswer] = useState(false);
-
-  const meta = {
-    title: "Retrieval-Augmented Generation (RAG)",
-    citations: [
-      {
-        paper: "From Local to Global: A GraphRAG Approach to Query-Focused Summarization",
-        authors: "Edge, D., Trinh, H., et al.",
-        year: "2024",
-        pages: "1-2"
-      },
-      {
-        paper: "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
-        authors: "Lewis, P., Perez, E., et al.",
-        year: "2020",
-        pages: "1-3"
-      }
-    ]
-  };
 
   return (
     <WikiLayout {...meta}>

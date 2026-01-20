@@ -22,6 +22,12 @@ export default function ParameterEfficientFineTuningPEFT() {
         authors: "Hu et al.",
         year: "2021",
         pages: "3, 6, 9"
+      },
+      {
+        paper: "The Power of Scale for Parameter-Efficient Prompt Tuning",
+        authors: "Lester et al.",
+        year: "2021",
+        pages: "1-4"
       }
     ]
   };
@@ -111,6 +117,16 @@ export default function ParameterEfficientFineTuningPEFT() {
           <p className="text-slate-700 mb-2"><strong>Variants:</strong></p>
           <div className="space-y-4 mb-4">
             <div>
+              <p className="text-slate-700 font-semibold mb-1">Prompt Tuning (Lester et al., 2021):</p>
+              <ul className="list-disc list-inside space-y-1 ml-4 text-slate-700 text-sm">
+                <li>Prepends learnable continuous "soft prompt" embeddings to the input</li>
+                <li>Only these prompt embeddings are trainable (~20k params for 11B model)</li>
+                <li>Performance scales with model size: matches full fine-tuning for models &gt;10B params</li>
+                <li>Simpler than prefix tuning, only modifies input rather than every layer</li>
+              </ul>
+              <p className="text-slate-700 text-sm italic mt-1">[Lester et al., 2021, p.1-2]</p>
+            </div>
+            <div>
               <p className="text-slate-700 font-semibold mb-1">Prefix-Embedding Tuning:</p>
               <ul className="list-disc list-inside space-y-1 ml-4 text-slate-700 text-sm">
                 <li>Inserts special trainable tokens at the input level</li>
@@ -133,19 +149,25 @@ export default function ParameterEfficientFineTuningPEFT() {
                 <li>No architectural changes to the model</li>
                 <li>Relatively simple to implement</li>
                 <li>No additional parameters in the base model</li>
+                <li><strong>Prompt tuning</strong>: Scales excellently with model size [Lester et al., 2021]</li>
+                <li><strong>Prompt tuning</strong>: Better domain transfer robustness than full fine-tuning</li>
               </ul>
             </div>
             <div className="bg-red-50 rounded-lg p-4">
               <h4 className="font-semibold text-red-900 mb-2">Disadvantages:</h4>
               <ul className="list-disc list-inside space-y-1 text-slate-700 text-sm">
                 <li>Reduces available sequence length for actual task tokens</li>
-                <li>Performance can be unstable and "changes non-monotonically"</li>
-                <li>Difficult to optimize, especially on small datasets</li>
-                <li>Poor performance in low-data regimes (e.g., 37.6% on MNLI-100 vs 63.8% for LoRA)</li>
+                <li><strong>Prefix methods</strong>: Performance can be unstable and "changes non-monotonically"</li>
+                <li><strong>Prefix methods</strong>: Difficult to optimize, especially on small datasets</li>
+                <li><strong>Prefix methods</strong>: Poor performance in low-data regimes (e.g., 37.6% on MNLI-100 vs 63.8% for LoRA)</li>
+                <li><strong>Prompt tuning</strong>: Gap with full fine-tuning larger for models &lt;10B params</li>
               </ul>
             </div>
           </div>
-          <p className="text-slate-700 text-sm italic">[Hu et al., 2021, p.3, 6, 23]</p>
+          <p className="text-slate-700 mb-4">
+            <strong>Details:</strong> See <a href="/wiki/prompt-engineering" className="text-blue-600 hover:text-blue-800 underline">Prompt Engineering</a>
+          </p>
+          <p className="text-slate-700 text-sm italic">[Hu et al., 2021, p.3, 6, 23; Lester et al., 2021, p.1-7]</p>
 
           <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">3. Low-Rank Adaptation (LoRA)</h3>
           <p className="text-slate-700 mb-4">
@@ -202,7 +224,34 @@ export default function ParameterEfficientFineTuningPEFT() {
         <section>
           <h2 className="text-2xl font-bold text-slate-900 mb-4">Comparison of PEFT Methods</h2>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">Performance (GPT-3 175B on WikiSQL)</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3">Performance Comparison</h3>
+          <p className="text-slate-700 mb-2"><strong>T5-XXL (11B params) on SuperGLUE:</strong></p>
+          <div className="overflow-x-auto mb-4">
+            <table className="min-w-full bg-slate-50 rounded-lg">
+              <thead>
+                <tr className="border-b border-slate-200">
+                  <th className="px-4 py-2 text-left text-slate-900 font-semibold">Method</th>
+                  <th className="px-4 py-2 text-left text-slate-900 font-semibold">Trainable Params</th>
+                  <th className="px-4 py-2 text-left text-slate-900 font-semibold">Score</th>
+                </tr>
+              </thead>
+              <tbody className="text-slate-700">
+                <tr className="border-b border-slate-200">
+                  <td className="px-4 py-2">Full Fine-Tuning</td>
+                  <td className="px-4 py-2">11B</td>
+                  <td className="px-4 py-2">89.3</td>
+                </tr>
+                <tr className="bg-green-50">
+                  <td className="px-4 py-2 font-semibold">Prompt Tuning</td>
+                  <td className="px-4 py-2 font-semibold">~20K (0.01%)</td>
+                  <td className="px-4 py-2 font-semibold">88.5</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="text-slate-700 text-sm italic mb-4">[Lester et al., 2021, p.3]</p>
+
+          <p className="text-slate-700 mb-2 mt-6"><strong>GPT-3 175B on WikiSQL:</strong></p>
           <div className="overflow-x-auto mb-4">
             <table className="min-w-full bg-slate-50 rounded-lg">
               <thead>
@@ -269,18 +318,29 @@ export default function ParameterEfficientFineTuningPEFT() {
                 <li>❌ Poor low-data performance</li>
               </ul>
             </div>
+            <div className="bg-green-50 rounded-lg p-4">
+              <h4 className="font-semibold text-green-900 mb-2">Prompt Tuning:</h4>
+              <ul className="space-y-1 text-slate-700 text-sm">
+                <li>✅ Extreme parameter efficiency (0.01%)</li>
+                <li>✅ Scales excellently with model size</li>
+                <li>✅ Better domain transfer robustness</li>
+                <li>✅ No architectural changes</li>
+                <li>❌ Requires very large models (&gt;10B) for best results</li>
+                <li>❌ Reduces sequence length slightly</li>
+              </ul>
+            </div>
             <div className="bg-blue-50 rounded-lg p-4">
               <h4 className="font-semibold text-blue-900 mb-2">LoRA:</h4>
               <ul className="space-y-1 text-slate-700 text-sm">
                 <li>✅ No inference latency</li>
-                <li>✅ Highest parameter efficiency</li>
-                <li>✅ Best performance across methods</li>
+                <li>✅ Highest parameter efficiency among weight-based methods</li>
+                <li>✅ Best performance across model sizes</li>
                 <li>✅ Easy task switching</li>
                 <li>❌ Cannot easily batch different tasks in single forward pass</li>
               </ul>
             </div>
           </div>
-          <p className="text-slate-700 text-sm italic mt-4">[Hu et al., 2021, p.3-5]</p>
+          <p className="text-slate-700 text-sm italic mt-4">[Hu et al., 2021, p.3-5; Lester et al., 2021, p.1-7]</p>
         </section>
 
         <section>

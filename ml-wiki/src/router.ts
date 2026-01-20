@@ -10,6 +10,7 @@ export type Path =
   | `/essays/constitutional-ai-self-supervision`
   | `/essays/evolution-of-attention`
   | `/essays/flashattention-hardware-aware-ai`
+  | `/essays/geometry-of-logic-categories-calculus`
   | `/essays/learning-without-examples`
   | `/essays/lora-democratizing-ai`
   | `/essays/skip-connection-revolution`
@@ -28,6 +29,7 @@ export type Path =
   | `/papers/instructgpt`
   | `/papers/lora`
   | `/papers/mathematical-transformers`
+  | `/papers/prompt-tuning`
   | `/papers/resnet`
   | `/projects`
   | `/projects/attention-by-hand`
@@ -81,6 +83,7 @@ export type Path =
   | `/wiki/parameter-efficient-fine-tuning`
   | `/wiki/positional-encoding`
   | `/wiki/ppo`
+  | `/wiki/prompt-engineering`
   | `/wiki/query-focused-summarization`
   | `/wiki/reasoning-steps`
   | `/wiki/residual-connections`

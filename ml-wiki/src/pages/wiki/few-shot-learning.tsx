@@ -1,5 +1,29 @@
 import { useEffect, useState } from 'react';
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
+
+const meta: WikiMeta = {
+  title: "Few-Shot Learning",
+  description: "A learning approach where models adapt to new tasks using just a few examples at inference time, without weight updates.",
+  category: "Learning Paradigms",
+  difficulty: "Intermediate",
+  tags: ["learning-paradigm", "in-context-learning", "prompting"],
+  relatedConcepts: ["zero-shot-learning", "meta-learning", "in-context-learning", "few-shot-prompting"],
+  citations: [
+    {
+      paper: "Language Models are Few-Shot Learners (GPT-3)",
+      authors: "Brown, T. B., Mann, B., Ryder, N., Subbiah, M., et al.",
+      year: "2020",
+      pages: "5-7"
+    },
+    {
+      paper: "The Power of Scale for Parameter-Efficient Prompt Tuning",
+      authors: "Lester et al.",
+      year: "2021",
+      pages: "1-2"
+    }
+  ]
+};
 
 export default function FewShotLearning() {
   const [examples, setExamples] = useState([
@@ -38,20 +62,7 @@ export default function FewShotLearning() {
   };
 
   return (
-    <WikiLayout
-      title="Few-Shot Learning"
-      category="Learning Paradigms"
-      description="A learning approach where models adapt to new tasks using just a few examples at inference time, without weight updates."
-      relatedConcepts={["zero-shot-learning", "meta-learning", "in-context-learning", "few-shot-prompting"]}
-      citations={[
-        {
-          paper: "Language Models are Few-Shot Learners (GPT-3)",
-          authors: "Brown, T. B., Mann, B., Ryder, N., Subbiah, M., et al.",
-          year: "2020",
-          pages: "5-7"
-        }
-      ]}
-    >
+    <WikiLayout {...meta}>
       <div className="space-y-6">
         <section>
           <h2 className="text-2xl font-bold text-slate-900 mb-4">What is Few-Shot Learning?</h2>
@@ -202,11 +213,18 @@ cheese => ?`}</pre>
           <p className="text-slate-700 mb-4">
             The main challenges [Brown et al., 2020, p. 6]:
           </p>
-          <ul className="list-disc list-inside space-y-2 ml-4 text-slate-700">
+          <ul className="list-disc list-inside space-y-2 ml-4 text-slate-700 mb-4">
             <li><strong>Lower performance than fine-tuning</strong>: Results have historically been worse than state-of-the-art fine-tuned models (though GPT-3 narrows this gap)</li>
             <li><strong>Still requires some data</strong>: A small amount of task-specific data is still needed</li>
             <li><strong>Context window limitations</strong>: Number of examples is limited by model's context size</li>
           </ul>
+
+          <div className="bg-blue-50 rounded-lg p-4 mt-4">
+            <h4 className="font-semibold text-blue-900 mb-2">Beyond Discrete Prompts:</h4>
+            <p className="text-slate-700 text-sm">
+              While traditional few-shot learning uses discrete text examples, <a href="/wiki/prompt-engineering" className="text-blue-600 hover:text-blue-800 underline">soft prompt tuning</a> extends this idea by learning continuous prompt embeddings. This approach outperforms GPT-3's discrete few-shot learning by a large margin, while still keeping the model frozen [Lester et al., 2021, p.1].
+            </p>
+          </div>
         </section>
 
         <section>

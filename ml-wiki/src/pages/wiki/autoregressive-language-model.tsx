@@ -1,5 +1,23 @@
 import { useEffect } from 'react';
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
+
+const meta: WikiMeta = {
+  title: "Autoregressive Language Model",
+  description: "A language model that generates text by predicting each token based on all previous tokens in the sequence.",
+  category: "Model Architecture",
+  difficulty: "Intermediate",
+  tags: ["language-model", "autoregressive", "text-generation"],
+  relatedConcepts: ["transformer-architecture", "few-shot-learning", "in-context-learning"],
+  citations: [
+    {
+      paper: "Language Models are Few-Shot Learners (GPT-3)",
+      authors: "Brown, T. B., Mann, B., Ryder, N., Subbiah, M., et al.",
+      year: "2020",
+      pages: "5, 8"
+    }
+  ]
+};
 
 export default function AutoregressiveLanguageModel() {
   useEffect(() => {
@@ -11,17 +29,7 @@ export default function AutoregressiveLanguageModel() {
   }, []);
 
   return (
-    <WikiLayout
-      title="Autoregressive Language Model"
-      citations={[
-        {
-          paper: "Language Models are Few-Shot Learners (GPT-3)",
-          authors: "Brown, T. B., Mann, B., Ryder, N., Subbiah, M., et al.",
-          year: "2020",
-          pages: "5, 8"
-        }
-      ]}
-    >
+    <WikiLayout {...meta}>
       <div className="space-y-6">
         <section>
           <h2 className="text-2xl font-bold text-slate-900 mb-4">Overview</h2>

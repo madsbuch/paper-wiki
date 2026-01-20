@@ -1,19 +1,13 @@
 import { useEffect } from 'react';
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
 
-export default function Tokenization() {
-  useEffect(() => {
-    if (window.MathJax) {
-      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
-        console.error('MathJax typesetting failed:', err)
-      );
-    }
-  }, []);
-
-  const meta = {
+const meta: WikiMeta = {
   title: "Tokenization",
-  category: "Fundamentals",
   description: "The process of converting text into discrete units (tokens) that language models can process. Essential preprocessing step for all NLP systems.",
+  category: "Fundamentals",
+  difficulty: "Beginner",
+  tags: ["preprocessing", "nlp", "text-processing"],
   relatedConcepts: ["byte-pair-encoding", "subword-tokenization", "vocabulary", "embeddings"],
   citations: [
     {
@@ -30,6 +24,15 @@ export default function Tokenization() {
     }
   ]
 };
+
+export default function Tokenization() {
+  useEffect(() => {
+    if (window.MathJax) {
+      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
+        console.error('MathJax typesetting failed:', err)
+      );
+    }
+  }, []);
 
   return (
     <WikiLayout {...meta}>

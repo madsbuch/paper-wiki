@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import WikiLayout from "../../components/WikiLayout";
+import type { WikiMeta } from "../../types/wiki";
 
 function PromptComparison() {
   const [selectedMode, setSelectedMode] = useState<'standard' | 'cot'>('standard');
@@ -256,6 +257,23 @@ function PromptComparison() {
   );
 }
 
+const meta: WikiMeta = {
+  title: "Chain-of-Thought Prompting",
+  description: "A prompting technique that elicits reasoning in large language models by demonstrating intermediate reasoning steps in few-shot exemplars.",
+  category: "Prompting Technique",
+  difficulty: "Intermediate",
+  tags: ["prompting", "reasoning", "few-shot-learning"],
+  relatedConcepts: ["few-shot-prompting", "prompt-engineering", "arithmetic-reasoning"],
+  citations: [
+    {
+      paper: "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+      authors: "Wei, J., Wang, X., Schuurmans, D., Bosma, M., et al.",
+      year: "2022",
+      pages: "1-3"
+    }
+  ]
+};
+
 export default function ChainOfThoughtPrompting() {
   useEffect(() => {
     if (window.MathJax) {
@@ -266,20 +284,7 @@ export default function ChainOfThoughtPrompting() {
   }, []);
 
   return (
-    <WikiLayout
-      title="Chain-of-Thought Prompting"
-      description="A prompting technique that elicits reasoning in large language models by demonstrating intermediate reasoning steps in few-shot exemplars."
-      category="Prompting Technique"
-      difficulty="Intermediate"
-      citations={[
-        {
-          paper: "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
-          authors: "Wei, J., Wang, X., Schuurmans, D., Bosma, M., et al.",
-          year: "2022",
-          pages: "1-3"
-        }
-      ]}
-    >
+    <WikiLayout {...meta}>
       <div className="space-y-6">
         <section>
           <h2 className="text-2xl font-bold text-slate-900 mb-4">Overview</h2>
