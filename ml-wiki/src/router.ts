@@ -13,10 +13,12 @@ export type Path =
   | `/essays/geometry-of-logic-categories-calculus`
   | `/essays/learning-without-examples`
   | `/essays/lora-democratizing-ai`
+  | `/essays/measuring-what-matters`
   | `/essays/skip-connection-revolution`
   | `/essays/transformers-continuous-mathematics`
   | `/essays/unreasonable-effectiveness-of-scale`
   | `/papers`
+  | `/papers/absolute-evaluation-measures-ml-survey`
   | `/papers/attention-is-all-you-need`
   | `/papers/bahdanau-attention`
   | `/papers/bert`
@@ -29,6 +31,7 @@ export type Path =
   | `/papers/instructgpt`
   | `/papers/lora`
   | `/papers/mathematical-transformers`
+  | `/papers/practical-guide-llm-evaluation`
   | `/papers/prompt-tuning`
   | `/papers/resnet`
   | `/projects`
@@ -50,15 +53,19 @@ export type Path =
   | `/wiki/autoregressive-language-model`
   | `/wiki/bidirectional-pretraining`
   | `/wiki/bidirectional-rnn`
+  | `/wiki/bleu-score`
   | `/wiki/block-sparse-attention`
   | `/wiki/bottleneck-architecture`
   | `/wiki/chain-of-thought-prompting`
   | `/wiki/closed-categories`
+  | `/wiki/cohens-kappa`
   | `/wiki/combinatory-logic`
   | `/wiki/community-detection`
+  | `/wiki/confusion-matrix`
   | `/wiki/emergent-abilities`
   | `/wiki/encoder-decoder`
   | `/wiki/entity-extraction`
+  | `/wiki/f-score`
   | `/wiki/few-shot-learning`
   | `/wiki/few-shot-prompting`
   | `/wiki/fine-tuning`
@@ -72,17 +79,21 @@ export type Path =
   | `/wiki/kernel-fusion`
   | `/wiki/knowledge-graph`
   | `/wiki/layer-normalization`
+  | `/wiki/llm-hallucination`
   | `/wiki/low-rank-adaptation`
   | `/wiki/map-reduce`
   | `/wiki/masked-language-model`
+  | `/wiki/matthews-correlation-coefficient`
   | `/wiki/meta-learning`
   | `/wiki/multi-head-attention`
   | `/wiki/multicategories`
+  | `/wiki/natural-language-inference`
   | `/wiki/next-sentence-prediction`
   | `/wiki/operator-splitting`
   | `/wiki/parameter-efficient-fine-tuning`
   | `/wiki/positional-encoding`
   | `/wiki/ppo`
+  | `/wiki/precision-recall`
   | `/wiki/prompt-engineering`
   | `/wiki/query-focused-summarization`
   | `/wiki/reasoning-steps`
@@ -90,6 +101,8 @@ export type Path =
   | `/wiki/retrieval-augmented-generation`
   | `/wiki/reward-modeling`
   | `/wiki/rlhf`
+  | `/wiki/roc-curve`
+  | `/wiki/rouge-metrics`
   | `/wiki/scaled-dot-product-attention`
   | `/wiki/self-attention`
   | `/wiki/seq2seq`

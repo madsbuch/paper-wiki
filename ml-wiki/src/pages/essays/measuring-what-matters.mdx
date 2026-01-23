@@ -1,0 +1,472 @@
+import EssayLayout from "../../components/EssayLayout";
+
+export const meta = {
+  title: "Measuring What Matters: The Art and Science of Machine Learning Evaluation",
+  description: "From classical metrics to LLM evaluation, this essay explores how we measure success in machine learning—and why getting evaluation right is harder than it looks.",
+  readingTime: "28 min read",
+  audioPath: "/audio/measuring-what-matters.mp3",
+  relatedPapers: [
+    { title: "Absolute Evaluation Measures for Machine Learning: A Survey", slug: "absolute-evaluation-measures-ml-survey" },
+    { title: "A Practical Guide for Evaluating LLMs and LLM-Reliant Systems", slug: "practical-guide-llm-evaluation" }
+  ],
+  relatedConcepts: [
+    { name: "Confusion Matrix", slug: "confusion-matrix" },
+    { name: "Precision and Recall", slug: "precision-recall" },
+    { name: "F-Score", slug: "f-score" },
+    { name: "ROC Curve", slug: "roc-curve" },
+    { name: "Matthews Correlation Coefficient", slug: "matthews-correlation-coefficient" },
+    { name: "Cohen's Kappa", slug: "cohens-kappa" },
+    { name: "BLEU Score", slug: "bleu-score" },
+    { name: "ROUGE Metrics", slug: "rouge-metrics" },
+    { name: "LLM Hallucination", slug: "llm-hallucination" },
+    { name: "Natural Language Inference", slug: "natural-language-inference" },
+    { name: "Retrieval-Augmented Generation", slug: "retrieval-augmented-generation" }
+  ],
+  citations: [
+    {
+      paper: "Absolute Evaluation Measures for Machine Learning: A Survey",
+      authors: "Beddar-Wiesing, S., Moallemy-Oureh, A., Kempkes, M., & Thomas, J. M.",
+      year: "2025",
+      pages: "1-15"
+    },
+    {
+      paper: "A Practical Guide for Evaluating LLMs and LLM-Reliant Systems",
+      authors: "Rudd, E. M., Andrews, C., & Tully, P.",
+      year: "2025",
+      pages: "1-20"
+    }
+  ]
+};
+
+<EssayLayout {...meta}>
+
+## The Paradox of Progress
+
+Imagine you've built a revolutionary spam filter that achieves 99% accuracy. Your investors are thrilled. Your users are furious. What went wrong?
+
+The answer reveals a fundamental truth about machine learning: **how you measure success determines whether you actually achieve it.**
+
+In this case, the problem might be that 99% of emails aren't spam—so a model that marks everything as "not spam" gets 99% accuracy while being completely useless. Accuracy, the most intuitive metric we have, led you astray.
+
+This isn't a hypothetical scenario. As machine learning has exploded across domains—from medical diagnosis to content generation—the challenge of evaluation has become increasingly critical. Two recent surveys, one examining classical ML evaluation and another focusing on modern LLM systems, reveal just how complex measuring success has become.
+
+The story of ML evaluation is a story of growing sophistication: from simple accuracy metrics to nuanced measures that account for data imbalance, from fixed benchmarks to dynamic real-world datasets, from deterministic systems to probabilistic language models. Understanding this evolution isn't just academic—it's essential for building systems that actually work.
+
+## The Foundation: What Makes a Good Metric?
+
+Before diving into specific metrics, we need to understand what makes evaluation "absolute" versus "relative."
+
+Most early ML metrics were relative—they depended on comparing your model to a baseline or required knowledge of data distributions. But as Beddar-Wiesing et al. explain, the field needed something more: "Absolute evaluation measures offer a practical solution by assessing a model's performance on a fixed scale, independent of reference models and data ranges, enabling explicit comparisons."
+
+Think of it like measuring temperature. Relative measures are like saying "it's warmer today than yesterday." Absolute measures are like saying "it's 72°F." The latter lets you compare across contexts, make decisions, and set thresholds.
+
+For ML metrics to be truly absolute, they need to:
+- Operate on a fixed scale (usually 0 to 1)
+- Be independent of specific datasets
+- Allow comparison across different problems
+- Be interpretable without extensive context
+
+This sounds straightforward, but the devil is in the details.
+
+## The Classification Conundrum
+
+Classification—predicting which category something belongs to—is the most studied ML task. Yet even here, metric selection is surprisingly nuanced.
+
+### The Confusion Matrix: The Foundation of Everything
+
+Every classification metric starts with the confusion matrix, a simple 2×2 table for binary classification:
+
+```
+                 Predicted Positive    Predicted Negative
+Actual Positive       TP                    FN
+Actual Negative       FP                    TN
+```
+
+Where:
+- **TP (True Positives)**: Correctly identified positives
+- **TN (True Negatives)**: Correctly identified negatives
+- **FP (False Positives)**: Negatives incorrectly labeled positive (Type I error)
+- **FN (False Negatives)**: Positives incorrectly labeled negative (Type II error)
+
+From this simple table, dozens of metrics emerge. The question is: which one should you use?
+
+### The Accuracy Trap
+
+The most intuitive metric is accuracy:
+
+```
+Accuracy = (TP + TN) / (TP + TN + FP + FN)
+```
+
+It answers a simple question: what percentage did you get right?
+
+But consider medical diagnosis. If a disease affects 1% of the population, a model that always predicts "no disease" achieves 99% accuracy while being medically useless. This is the **imbalanced data problem**, and it plagues countless real-world applications.
+
+Beddar-Wiesing et al. emphasize this crucial point: for imbalanced datasets, accuracy becomes misleading because it's dominated by the majority class. You need metrics that account for this imbalance.
+
+### Precision vs. Recall: The Fundamental Tradeoff
+
+When accuracy fails, practitioners turn to precision and recall:
+
+**Precision** = TP / (TP + FP)
+*"Of all the cases I flagged as positive, how many were actually positive?"*
+
+**Recall** = TP / (TP + FN)
+*"Of all the actual positive cases, how many did I catch?"*
+
+These metrics capture a fundamental tradeoff in classification. Consider spam filtering:
+- High precision means few legitimate emails get marked as spam (low false positives)
+- High recall means most spam gets caught (low false negatives)
+
+You can trivially achieve perfect recall by marking everything as spam—but precision plummets. You can achieve perfect precision by only flagging the most obvious spam—but recall suffers.
+
+Different applications demand different balances:
+- **Spam filtering**: Favor precision (missing spam is annoying; losing important emails is catastrophic)
+- **Cancer screening**: Favor recall (missing a case is catastrophic; false alarms can be ruled out with additional tests)
+- **Fraud detection**: Context-dependent (financial services might favor recall to catch more fraud despite false alarms)
+
+### The F-Score: A Compromise
+
+The F-score (or F₁-score) combines precision and recall into a single metric:
+
+```
+F₁ = 2 × (Precision × Recall) / (Precision + Recall)
+```
+
+This is the harmonic mean of precision and recall, which heavily penalizes imbalanced performance. If either precision or recall is low, F₁ is low.
+
+The F₁-score has become ubiquitous in ML competitions and papers. But it assumes precision and recall are equally important—which often isn't true. The generalized F_β score lets you weight them differently:
+
+```
+F_β = (1 + β²) × (Precision × Recall) / (β² × Precision + Recall)
+```
+
+Where β &gt; 1 favors recall, and β &lt; 1 favors precision.
+
+### Beyond Binary: The Multi-Class Challenge
+
+Real-world problems rarely have just two classes. Medical diagnosis might distinguish between dozens of conditions. Image classification might recognize thousands of objects.
+
+For multi-class problems, metrics get more complex. You can:
+1. **Micro-average**: Pool all predictions together and compute one global metric
+2. **Macro-average**: Compute metrics per-class and average them
+3. **Weighted-average**: Weight per-class metrics by class frequency
+
+Each choice reflects different priorities. Micro-averaging gives more weight to common classes. Macro-averaging treats all classes equally, which better reveals performance on rare but important categories.
+
+### Chance-Corrected Measures: Accounting for Luck
+
+Here's a subtle problem: a random classifier can achieve decent accuracy on imbalanced data. If 80% of examples are positive, randomly guessing "positive" every time gives 80% accuracy.
+
+Chance-corrected measures adjust for this. **Cohen's Kappa** and the **Matthews Correlation Coefficient (MCC)** both measure agreement above what you'd expect by chance.
+
+Cohen's Kappa is defined as:
+
+```
+κ = (p_o - p_e) / (1 - p_e)
+```
+
+Where p_o is observed agreement and p_e is expected agreement by chance. A κ of 0 means no better than random; 1 means perfect agreement.
+
+MCC is similar but uses correlation:
+
+```
+MCC = (TP×TN - FP×FN) / √((TP+FP)(TP+FN)(TN+FP)(TN+FN))
+```
+
+Beddar-Wiesing et al. highlight that these metrics are especially valuable for imbalanced datasets, where they provide more realistic assessments than accuracy or even F₁-scores.
+
+### The ROC Curve: Visualizing Tradeoffs
+
+Some models don't just output a class label—they output a probability or confidence score. For these, you can adjust the decision threshold.
+
+The **Receiver Operating Characteristic (ROC) curve** plots true positive rate (recall) against false positive rate at various thresholds. The **Area Under the Curve (AUC)** summarizes this into a single number.
+
+An AUC of 1.0 is perfect; 0.5 is random guessing. AUC is particularly useful because it's threshold-independent and robust to class imbalance (though not immune to its effects).
+
+### Decision Trees for Metric Selection
+
+With so many metrics, how do you choose?
+
+Beddar-Wiesing et al. provide decision trees based on data characteristics:
+
+**For balanced binary classification:**
+- If Type I and Type II errors equally important → Accuracy or F₁
+- If Type I errors more critical → Precision
+- If Type II errors more critical → Recall
+
+**For imbalanced binary classification:**
+- Consider chance-corrected measures (MCC, Cohen's Kappa)
+- Use F₁ or F_β with appropriate β
+- Examine precision-recall curves, not just ROC curves
+
+**For multi-class problems:**
+- Macro-averaging if all classes equally important
+- Micro-averaging if focused on overall performance
+- Per-class metrics to diagnose specific issues
+
+The key insight: **there is no universal best metric.** Your choice must reflect your problem's specific characteristics and priorities.
+
+## The Text Generation Revolution
+
+Everything changes when we move from classification to generation.
+
+Consider a language model writing a summary. There's no single "correct" output—there are infinitely many valid summaries. How do you evaluate quality when the target is a distribution, not a discrete label?
+
+This is the challenge facing modern NLP, and as Rudd et al.'observe, it requires rethinking evaluation from the ground up.
+
+### BLEU and ROUGE: The N-gram Era
+
+Early neural machine translation systems were evaluated using metrics like **BLEU** (Bilingual Evaluation Understudy) and **ROUGE** (Recall-Oriented Understudy for Gisting Evaluation).
+
+These metrics work by comparing n-grams (sequences of n words) between generated and reference texts:
+
+**BLEU** focuses on precision—what fraction of the generated n-grams appear in references?
+**ROUGE** focuses on recall—what fraction of reference n-grams appear in the generation?
+
+For example, with bigrams (n=2):
+```
+Reference: "The cat sat on the mat"
+Generated: "The cat is on the mat"
+
+Bigrams in reference: \{the cat, cat sat, sat on, on the, the mat\}
+Bigrams in generated: \{the cat, cat is, is on, on the, the mat\}
+Overlap: \{the cat, on the, the mat\} = 3 out of 5
+```
+
+BLEU adds modifications like length penalties and geometric averaging across n-gram sizes. ROUGE has variants (ROUGE-N for n-grams, ROUGE-L for longest common subsequence).
+
+These metrics were revolutionary in the early 2000s, enabling automatic evaluation of translation systems. But they have serious limitations:
+
+1. **They're purely lexical**: "The car is red" and "The vehicle is crimson" have zero overlap despite meaning the same thing
+2. **They ignore semantics**: "The cat ate the mouse" and "The mouse ate the cat" have identical unigrams but opposite meanings
+3. **They require reference texts**: You need gold-standard outputs, which are expensive and sometimes don't exist
+
+As Rudd et al. note, these metrics are "term overlap" measures—they capture surface-level similarity but miss deeper semantic qualities.
+
+### Semantic Similarity: Beyond Word Matching
+
+Modern approaches use neural networks to measure semantic similarity. The idea: embed both generated and reference texts into vector spaces where semantically similar texts are close together, then measure distance.
+
+**Sentence embeddings** from models like Sentence-BERT can compute cosine similarity:
+
+```
+similarity = cos(θ) = (A · B) / (||A|| ||B||)
+```
+
+This captures meaning better than n-grams. "The car is red" and "The vehicle is crimson" now have high similarity despite lexical differences.
+
+But semantic similarity has its own issues:
+- Different embeddings give different results
+- High similarity doesn't guarantee factual accuracy
+- It still requires reference texts
+
+### Natural Language Inference: Checking Consistency
+
+A more sophisticated approach uses **Natural Language Inference (NLI)**—models trained to determine if one text entails, contradicts, or is neutral to another.
+
+For evaluating generated text:
+- **Entailment**: Generated text logically follows from source → Good
+- **Contradiction**: Generated text contradicts source → Likely hallucination
+- **Neutral**: Generated text neither follows nor contradicts → Uncertain
+
+This is particularly useful for tasks like summarization and question-answering, where you can check if generated text is supported by source material.
+
+Rudd et al. highlight NLI as part of their comprehensive evaluation framework, especially for detecting hallucinations—when models generate plausible-sounding but false information.
+
+### LLM-as-Judge: The Meta Evaluation
+
+Here's a wild idea: use a powerful LLM to evaluate other LLMs.
+
+"LLM autoraters" provide natural language judgments of generated text quality. You give a strong model (like GPT-4) a prompt asking it to rate outputs on dimensions like relevance, coherence, factuality, and helpfulness.
+
+Surprisingly, this works. Studies show LLM judgments correlate well with human ratings, especially when using carefully designed prompts and rubrics.
+
+But there are catches:
+- **Cost**: API calls for evaluation can be expensive at scale
+- **Bias**: LLMs may prefer outputs similar to their own style
+- **Inconsistency**: Temperature &gt; 0 makes ratings non-deterministic
+- **Lack of interpretability**: You get scores but not detailed diagnostics
+
+Rudd et al. include LLM autoraters in their taxonomy but emphasize they should complement, not replace, other metrics.
+
+### Perplexity: The Language Model Classic
+
+For language models specifically, **perplexity** measures how "surprised" a model is by text:
+
+```
+Perplexity = exp(-1/N Σ log P(w_i | context))
+```
+
+Lower perplexity means the model assigns higher probability to the actual text—it's less "confused."
+
+Perplexity is useful for:
+- Comparing language models on the same data
+- Monitoring training progress
+- Evaluating on different domains
+
+But it doesn't directly measure output quality for generation tasks. A model can have low perplexity yet generate incoherent or inappropriate text.
+
+## The Real-World Evaluation Framework
+
+Academic metrics are one thing. Real-world deployment is another.
+
+Rudd et al.'s practical guide addresses this gap with a comprehensive framework built on three pillars: **Datasets, Metrics, and Methodology.**
+
+### The 5 Ds of Dataset Curation
+
+Synthetic benchmarks like GLUE or SuperGLUE are useful for research but often fail to capture real-world complexity. The authors propose "The 5 Ds" for curating representative evaluation datasets:
+
+1. **Defined Scope**: Clear boundaries on what you're evaluating (domain, task, edge cases)
+2. **Demonstrative of Production Usage**: Reflects actual user inputs and use cases
+3. **Diverse**: Covers demographic groups, linguistic variations, edge cases
+4. **Decontaminated**: Verified not to be in training data (avoiding inflated scores)
+5. **Dynamic**: Regularly updated to reflect changing user needs and model capabilities
+
+The "decontaminated" principle is critical for LLMs trained on massive web corpora. Models may have memorized benchmark answers, leading to misleadingly high scores.
+
+Think of it like studying for an exam by memorizing the test questions. You'll ace that exam but haven't actually learned the material. Data contamination is the ML equivalent.
+
+### Methodology: Handling Non-Determinism
+
+Unlike traditional ML models that produce deterministic outputs, LLMs are inherently probabilistic. Set temperature &gt; 0, and the same prompt produces different outputs each time.
+
+This creates evaluation challenges:
+- **Which output do you evaluate?** The first? An average over many?
+- **How do you ensure reproducibility?** Same model, same prompt, different scores
+- **How do you compare models?** Variance might overlap even if means differ
+
+Rudd et al. recommend:
+- **Multiple samples**: Evaluate several outputs per prompt to estimate variance
+- **Statistical testing**: Use significance tests to determine if differences are real
+- **Seed control**: Fix random seeds when possible for reproducibility
+- **Temperature = 0**: Use greedy decoding for deterministic evaluation when appropriate
+
+### Component-Level Evaluation
+
+Modern LLM systems are rarely just a single model. They're pipelines with multiple components:
+- Retrieval (fetching relevant documents)
+- Ranking (ordering results)
+- Generation (producing output)
+- Post-processing (filtering, formatting)
+
+Each component can fail independently. End-to-end metrics might show poor performance without revealing which component is broken.
+
+The solution: **evaluate each component separately.**
+
+For a Retrieval-Augmented Generation (RAG) system:
+- **Retrieval**: Measure recall@k (did relevant documents appear in top k results?)
+- **Ranking**: Measure NDCG (are more relevant docs ranked higher?)
+- **Generation**: Measure faithfulness (is output grounded in retrieved docs?)
+- **Overall**: Measure end-task performance (answer correctness, user satisfaction)
+
+This diagnostic approach lets you identify and fix specific bottlenecks rather than blindly trying to improve the entire system.
+
+### Prompt Sensitivity and Calibration
+
+Small changes to prompts can dramatically affect LLM behavior. Consider:
+- "Summarize this text."
+- "Provide a concise summary."
+- "Write a brief summary of the key points."
+
+These mean roughly the same thing to humans but may elicit different LLM responses. This **prompt sensitivity** makes evaluation tricky—are you measuring model capabilities or prompt engineering skill?
+
+Rudd et al. recommend:
+- **Test multiple prompt variants**: Don't rely on a single phrasing
+- **Use prompt templates**: Systematically vary structure while keeping semantics constant
+- **Calibrate thresholds**: Adjust decision boundaries based on prompt-specific behavior
+
+### Measuring Hallucinations
+
+One of the most critical challenges for deployed LLMs is **hallucination**—generating fluent, confident-sounding text that's factually wrong.
+
+Evaluation approaches include:
+- **Attribution scores**: Does generated text have evidence in source documents?
+- **Consistency checks**: Does the model give the same answer to equivalent questions?
+- **Fact verification**: External fact-checking against knowledge bases
+- **Human evaluation**: Subject matter experts review outputs (expensive but gold standard)
+
+No single metric captures all types of hallucinations. A comprehensive evaluation uses multiple approaches to triangulate reliability.
+
+## Bringing It Together: A Unified Framework
+
+The evolution from classical ML metrics to LLM evaluation reveals several enduring principles:
+
+### 1. Match Metrics to Objectives
+
+There is no universal best metric. Your evaluation must reflect your actual goals:
+- Medical diagnosis prioritizes recall (don't miss cases)
+- Spam filtering prioritizes precision (don't lose important email)
+- Customer service chatbots balance coherence, helpfulness, and safety
+- Translation systems must be fluent, faithful, and culturally appropriate
+
+Start by defining success criteria, then choose metrics that measure those criteria.
+
+### 2. Account for Data Characteristics
+
+Evaluation must reflect your data:
+- **Imbalanced classes**: Use chance-corrected measures (MCC, Kappa) or weighted metrics
+- **Multi-class problems**: Consider per-class performance, not just overall accuracy
+- **High-dimensional outputs**: Use embedding-based similarity or NLI
+- **Non-deterministic generation**: Evaluate multiple samples and report variance
+
+### 3. Separate Components from Systems
+
+When evaluating complex pipelines:
+- Measure component-level performance to diagnose issues
+- Track error propagation through the pipeline
+- Use ablation studies to understand component contributions
+- Monitor all components in production, not just final output
+
+### 4. Evolve with Your System
+
+Evaluation isn't static:
+- **Training**: Use fast metrics for iteration (perplexity, BLEU)
+- **Development**: Use comprehensive metrics for comparison (multiple metrics, human eval)
+- **Production**: Use user-centric metrics (task success, satisfaction, business KPIs)
+
+As your system matures, evaluation should too.
+
+### 5. Don't Trust Single Numbers
+
+A single metric can mislead. Best practices:
+- **Report multiple metrics**: Precision AND recall, not just F₁
+- **Include confidence intervals**: Especially for small datasets or non-deterministic systems
+- **Show failure modes**: Examples where your system fails reveal more than aggregate scores
+- **Compare to baselines**: Absolute numbers lack context; comparisons provide it
+
+### 6. Bridge Metrics and User Experience
+
+Ultimately, ML systems serve users. The best metric is one that correlates with user satisfaction and task success.
+
+This might mean:
+- **User studies**: Have real users evaluate outputs
+- **A/B testing**: Deploy variants and measure user behavior
+- **Business metrics**: Track revenue, retention, engagement
+- **Incident reports**: Monitor error tickets and complaints
+
+Academic metrics (BLEU, F₁, MCC) are proxies. Don't lose sight of what they're proxying for.
+
+## The Path Forward
+
+Machine learning evaluation has come far from simple accuracy metrics. Today's practitioners must navigate:
+- Dozens of classification metrics for different data characteristics
+- Semantic similarity measures that capture meaning beyond words
+- LLM-specific challenges like non-determinism and hallucination
+- Real-world concerns like data contamination and prompt sensitivity
+
+The two surveys we've explored—one covering classical ML evaluation, one tackling modern LLM systems—provide complementary guidance. Beddar-Wiesing et al. give us systematic frameworks for choosing metrics based on problem structure. Rudd et al. give us practical strategies for evaluating complex, deployed systems.
+
+Together, they teach us that **evaluation is not a solved problem.** As ML systems grow more capable and complex, evaluation must evolve too.
+
+The fundamental insight remains: you can't improve what you can't measure. But measuring the right thing, in the right way, for the right reasons—that's the real challenge.
+
+When you build your next ML system, don't just ask "What's my accuracy?" Ask:
+- What am I actually trying to achieve?
+- What could go wrong, and how would I detect it?
+- Do my metrics reflect real-world performance?
+- Am I measuring what matters?
+
+Because in machine learning, as in life, measuring what matters is harder than it looks—but it's the only way to make progress that actually counts.
+
+</EssayLayout>

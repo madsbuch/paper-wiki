@@ -21,6 +21,12 @@ const meta: WikiMeta = {
       authors: "Lewis, P., Perez, E., et al.",
       year: "2020",
       pages: "1-3"
+    },
+    {
+      paper: "A Practical Guide for Evaluating LLMs and LLM-Reliant Systems",
+      authors: "Rudd, E. M., Andrews, C., & Tully, P.",
+      year: "2025",
+      pages: "9-10"
     }
   ]
 };
