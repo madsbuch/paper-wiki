@@ -1,15 +1,7 @@
-import { useEffect } from 'react';
+import { Link } from "react-router";
 import WikiLayout from "../../components/WikiLayout";
 
 export default function AiAlignment() {
-  useEffect(() => {
-    if (window.MathJax) {
-      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
-        console.error('MathJax typesetting failed:', err)
-      );
-    }
-  }, []);
-
   return (
     <WikiLayout
       title="AI Alignment"
@@ -113,7 +105,7 @@ export default function AiAlignment() {
         <hr className="my-8 border-slate-300" />
 
         <p className="text-slate-700">
-          <strong>Related Concepts:</strong> <a href="/wiki/rlhf" className="text-blue-600 hover:underline">RLHF</a> · <a href="/wiki/instruction-following" className="text-blue-600 hover:underline">Instruction Following</a> · <a href="/wiki/reward-modeling" className="text-blue-600 hover:underline">Reward Modeling</a>
+          <strong>Related Concepts:</strong> <Link to="/wiki/rlhf" className="text-blue-600 hover:underline">RLHF</Link> · <Link to="/wiki/instruction-following" className="text-blue-600 hover:underline">Instruction Following</Link> · <Link to="/wiki/reward-modeling" className="text-blue-600 hover:underline">Reward Modeling</Link>
         </p>
       </div>
     </WikiLayout>

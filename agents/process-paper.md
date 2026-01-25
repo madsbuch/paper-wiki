@@ -22,13 +22,13 @@ For each concept in `relatedConcepts`:
 
 - Check if wiki page exists
 - If exists: Add paper citation to the wiki page's citations array
-- If not exists: Create minimal wiki page with:
-  - Title and description
-  - One overview section citing the paper
-  - Citations array with the paper
-  - NO overly long analogies or exercises unless truly helpful
+- If not exists: **Follow the instructions in `agents/make-wiki-page.md`** to create a complete wiki page with:
+  - Formal definition with citations
+  - Analogy or story section (required)
+  - Interactive exercise (required)
+  - Related concepts
 
-**Keep wiki pages short and focused.** The goal is documentation, not textbooks.
+Wiki pages should be naturally readable, not dry encyclopedia entries. See `agents/make-wiki-page.md` for full guidelines.
 
 ## Guidelines
 

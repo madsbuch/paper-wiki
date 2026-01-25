@@ -1,15 +1,7 @@
-import { useEffect } from 'react';
+import { Link } from "react-router";
 import WikiLayout from "../../components/WikiLayout";
 
 export default function RLHF() {
-  useEffect(() => {
-    if (window.MathJax) {
-      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
-        console.error('MathJax typesetting failed:', err)
-      );
-    }
-  }, []);
-
   const meta = {
   title: "RLHF",
   description: "Reinforcement Learning from Human Feedback - using human preferences as a reward signal to align language models.",
@@ -86,7 +78,7 @@ export default function RLHF() {
           <h2 className="text-2xl font-bold text-slate-900 mb-4">Impact on Modern AI</h2>
           <p className="text-slate-700 mb-4">RLHF became the foundation for ChatGPT and modern instruction-following models, establishing the standard approach for making AI systems helpful, honest, and harmless [Ouyang et al., 2022, p. 1].</p>
           <hr className="my-6 border-slate-200" />
-          <p className="text-slate-700 mb-4"><strong>Related Concepts:</strong> <a href="/wiki/reward-modeling" className="text-blue-600 hover:text-blue-800 underline">Reward Modeling</a> · <a href="/wiki/ppo" className="text-blue-600 hover:text-blue-800 underline">PPO</a> · <a href="/wiki/instruction-following" className="text-blue-600 hover:text-blue-800 underline">Instruction Following</a> · <a href="/wiki/ai-alignment" className="text-blue-600 hover:text-blue-800 underline">AI Alignment</a></p>
+          <p className="text-slate-700 mb-4"><strong>Related Concepts:</strong> <Link to="/wiki/reward-modeling" className="text-blue-600 hover:text-blue-800 underline">Reward Modeling</Link> · <Link to="/wiki/ppo" className="text-blue-600 hover:text-blue-800 underline">PPO</Link> · <Link to="/wiki/instruction-following" className="text-blue-600 hover:text-blue-800 underline">Instruction Following</Link> · <Link to="/wiki/ai-alignment" className="text-blue-600 hover:text-blue-800 underline">AI Alignment</Link></p>
         </section>
       </div>
     </WikiLayout>

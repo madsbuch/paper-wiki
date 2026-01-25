@@ -1,15 +1,7 @@
-import { useEffect } from 'react';
+import { Link } from "react-router";
 import WikiLayout from "../../components/WikiLayout";
 
 export default function RewardModeling() {
-  useEffect(() => {
-    if (window.MathJax) {
-      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
-        console.error('MathJax typesetting failed:', err)
-      );
-    }
-  }, []);
-
   const meta = {
   title: "Reward Modeling",
   description: "Training a model to predict human preferences between different outputs, used as a reward signal in reinforcement learning.",
@@ -82,7 +74,7 @@ export default function RewardModeling() {
           <h2 className="text-2xl font-bold text-slate-900 mb-4">The Power of Preference Data</h2>
           <p className="text-slate-700 mb-4">Preference comparisons are easier for humans than writing demonstrations, making reward modeling a scalable approach to alignment [Ouyang et al., 2022, p. 6].</p>
           <hr className="my-6 border-slate-200" />
-          <p className="text-slate-700 mb-4"><strong>Related Concepts:</strong> <a href="/wiki/rlhf" className="text-blue-600 hover:text-blue-800 underline">RLHF</a> · <a href="/wiki/ppo" className="text-blue-600 hover:text-blue-800 underline">PPO</a> · <a href="/wiki/ai-alignment" className="text-blue-600 hover:text-blue-800 underline">AI Alignment</a> · <a href="/wiki/instruction-following" className="text-blue-600 hover:text-blue-800 underline">Instruction Following</a></p>
+          <p className="text-slate-700 mb-4"><strong>Related Concepts:</strong> <Link to="/wiki/rlhf" className="text-blue-600 hover:text-blue-800 underline">RLHF</Link> · <Link to="/wiki/ppo" className="text-blue-600 hover:text-blue-800 underline">PPO</Link> · <Link to="/wiki/ai-alignment" className="text-blue-600 hover:text-blue-800 underline">AI Alignment</Link> · <Link to="/wiki/instruction-following" className="text-blue-600 hover:text-blue-800 underline">Instruction Following</Link></p>
         </section>
       </div>
     </WikiLayout>

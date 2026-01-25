@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { Link } from "react-router";
 import WikiLayout from "../../components/WikiLayout";
 import type { WikiMeta } from "../../types/wiki";
 
@@ -275,14 +276,6 @@ const meta: WikiMeta = {
 };
 
 export default function ChainOfThoughtPrompting() {
-  useEffect(() => {
-    if (window.MathJax) {
-      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
-        console.error('MathJax typesetting failed:', err)
-      );
-    }
-  }, []);
-
   return (
     <WikiLayout {...meta}>
       <div className="space-y-6">
@@ -361,7 +354,7 @@ export default function ChainOfThoughtPrompting() {
         <hr className="my-8 border-slate-300" />
 
         <p className="text-slate-700">
-          <strong>Related Concepts:</strong> <a href="/wiki/few-shot-prompting" className="text-blue-600 hover:underline">Few-Shot Prompting</a> · <a href="/wiki/emergent-abilities" className="text-blue-600 hover:underline">Emergent Abilities</a> · <a href="/wiki/reasoning-steps" className="text-blue-600 hover:underline">Reasoning Steps</a>
+          <strong>Related Concepts:</strong> <Link to="/wiki/few-shot-prompting" className="text-blue-600 hover:underline">Few-Shot Prompting</Link> · <Link to="/wiki/emergent-abilities" className="text-blue-600 hover:underline">Emergent Abilities</Link> · <Link to="/wiki/reasoning-steps" className="text-blue-600 hover:underline">Reasoning Steps</Link>
         </p>
       </div>
     </WikiLayout>

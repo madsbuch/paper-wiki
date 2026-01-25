@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { Link } from "react-router";
 import WikiLayout from '../../components/WikiLayout';
 
 export default function SelfAttention() {
@@ -7,14 +8,6 @@ export default function SelfAttention() {
   const [generalAnswer, setGeneralAnswer] = useState('');
   const [feedback, setFeedback] = useState({ q1: '', q2: '', q3: '' });
   const [seqLength, setSeqLength] = useState(100);
-
-  useEffect(() => {
-    if (window.MathJax) {
-      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
-        console.error('MathJax typesetting failed:', err)
-      );
-    }
-  }, []);
 
   const checkRnnAnswer = () => {
     const answer = parseInt(rnnAnswer);
@@ -78,7 +71,7 @@ export default function SelfAttention() {
             Think of it like being at a cocktail party. Instead of listening to people one at a time in sequence (like an RNN), you can simultaneously hear everyone in the room and instantly recognize connections—when Person A mentions "attention," you immediately link it to Person F's discussion of "transformers," even though they're on opposite sides of the room.
           </p>
           <p className="text-slate-700 mb-4">
-            In a self-attention layer, all of the keys, values, and queries come from the same place—in the <a href="/wiki/transformer-architecture" className="text-blue-600 hover:text-blue-800 underline">Transformer</a>'s case, from the output of the previous layer in the encoder. This allows each position in the encoder to attend to all positions in the previous layer [Vaswani et al., 2017, p. 5].
+            In a self-attention layer, all of the keys, values, and queries come from the same place—in the <Link to="/wiki/transformer-architecture" className="text-blue-600 hover:text-blue-800 underline">Transformer</Link>'s case, from the output of the previous layer in the encoder. This allows each position in the encoder to attend to all positions in the previous layer [Vaswani et al., 2017, p. 5].
           </p>
         </section>
 
@@ -155,7 +148,7 @@ export default function SelfAttention() {
         <section>
           <h2 className="text-2xl font-bold text-slate-900 mb-4">How It's Used in Transformers</h2>
           <p className="text-slate-700 mb-4">
-            Self-attention is used in three different ways in the <a href="/wiki/transformer-architecture" className="text-blue-600 hover:text-blue-800 underline">Transformer</a> [Vaswani et al., 2017, p. 5]:
+            Self-attention is used in three different ways in the <Link to="/wiki/transformer-architecture" className="text-blue-600 hover:text-blue-800 underline">Transformer</Link> [Vaswani et al., 2017, p. 5]:
           </p>
           <ol className="list-decimal list-inside space-y-3 ml-4 text-slate-700 mb-4">
             <li><strong>Encoder Self-Attention</strong>: Each position in the encoder can attend to all positions in the previous encoder layer—allowing the model to build rich representations by considering the entire context</li>
@@ -167,7 +160,7 @@ export default function SelfAttention() {
         <section>
           <h2 className="text-2xl font-bold text-slate-900 mb-4">What Models Learn to Attend To</h2>
           <p className="text-slate-700 mb-4">
-            One of the side benefits of self-attention is that it yields more interpretable models. Individual <a href="/wiki/multi-head-attention" className="text-blue-600 hover:text-blue-800 underline">attention heads</a> clearly learn to perform different tasks, and many exhibit behavior related to the syntactic and semantic structure of sentences [Vaswani et al., 2017, p. 7].
+            One of the side benefits of self-attention is that it yields more interpretable models. Individual <Link to="/wiki/multi-head-attention" className="text-blue-600 hover:text-blue-800 underline">attention heads</Link> clearly learn to perform different tasks, and many exhibit behavior related to the syntactic and semantic structure of sentences [Vaswani et al., 2017, p. 7].
           </p>
           <p className="text-slate-700 mb-3">For example, when researchers visualize attention patterns, they find heads that:</p>
           <ul className="list-disc list-inside space-y-2 ml-4 text-slate-700 mb-4">
@@ -283,10 +276,10 @@ export default function SelfAttention() {
         <section>
           <h2 className="text-2xl font-bold text-slate-900 mb-4">Related Concepts</h2>
           <ul className="list-disc list-inside space-y-2 ml-4 text-slate-700">
-            <li><a href="/wiki/attention-mechanism" className="text-blue-600 hover:text-blue-800 underline">Attention Mechanism</a> - The general concept of attention in neural networks</li>
-            <li><a href="/wiki/multi-head-attention" className="text-blue-600 hover:text-blue-800 underline">Multi-Head Attention</a> - Running multiple self-attention operations in parallel</li>
-            <li><a href="/wiki/scaled-dot-product-attention" className="text-blue-600 hover:text-blue-800 underline">Scaled Dot-Product Attention</a> - The specific attention computation used in Transformers</li>
-            <li><a href="/wiki/transformer-architecture" className="text-blue-600 hover:text-blue-800 underline">Transformer Architecture</a> - The full architecture built on self-attention</li>
+            <li><Link to="/wiki/attention-mechanism" className="text-blue-600 hover:text-blue-800 underline">Attention Mechanism</Link> - The general concept of attention in neural networks</li>
+            <li><Link to="/wiki/multi-head-attention" className="text-blue-600 hover:text-blue-800 underline">Multi-Head Attention</Link> - Running multiple self-attention operations in parallel</li>
+            <li><Link to="/wiki/scaled-dot-product-attention" className="text-blue-600 hover:text-blue-800 underline">Scaled Dot-Product Attention</Link> - The specific attention computation used in Transformers</li>
+            <li><Link to="/wiki/transformer-architecture" className="text-blue-600 hover:text-blue-800 underline">Transformer Architecture</Link> - The full architecture built on self-attention</li>
           </ul>
         </section>
       </div>

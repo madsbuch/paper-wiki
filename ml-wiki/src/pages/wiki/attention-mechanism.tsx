@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { Link } from "react-router";
 import WikiLayout from "../../components/WikiLayout";
 
 export default function AttentionMechanism() {
@@ -15,14 +16,6 @@ export default function AttentionMechanism() {
     [0.05, 0.12, 0.83],  // "a" should focus on "étudiant"
     [0.02, 0.08, 0.90],  // "student" should focus on "étudiant"
   ];
-
-  useEffect(() => {
-    if (window.MathJax) {
-      window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
-        console.error('MathJax typesetting failed:', err)
-      );
-    }
-  }, []);
 
   const updateWeight = (index: number, value: number) => {
     const newWeights = [...sourceWeights];
@@ -315,9 +308,9 @@ Target: I  [0.89] [0.07]  [0.04]     ← Focuses on "Je"
               <h4 className="font-semibold text-purple-900 mb-2">Transformer Attention (2017):</h4>
               <ul className="list-disc list-inside space-y-1 text-slate-700 text-sm">
                 <li>Pure attention, no RNNs</li>
-                <li><a href="/wiki/scaled-dot-product-attention" className="text-blue-600 hover:text-blue-800 underline">Scaled dot-product attention</a></li>
+                <li><Link to="/wiki/scaled-dot-product-attention" className="text-blue-600 hover:text-blue-800 underline">Scaled dot-product attention</Link></li>
                 <li>Parallel processing</li>
-                <li><a href="/wiki/multi-head-attention" className="text-blue-600 hover:text-blue-800 underline">Multi-head attention</a></li>
+                <li><Link to="/wiki/multi-head-attention" className="text-blue-600 hover:text-blue-800 underline">Multi-head attention</Link></li>
               </ul>
             </div>
           </div>
@@ -325,18 +318,18 @@ Target: I  [0.89] [0.07]  [0.04]     ← Focuses on "Je"
             "The Transformer is the first transduction model relying entirely on self-attention to compute representations of its input and output without using sequence-aligned RNNs or convolution" [Vaswani et al., 2017, p. 1].
           </p>
           <p className="text-slate-700">
-            The <a href="/wiki/transformer-architecture" className="text-blue-600 hover:text-blue-800 underline">Transformer</a> took Bahdanau's insight—that attention is all you need—and built an entire architecture around it.
+            The <Link to="/wiki/transformer-architecture" className="text-blue-600 hover:text-blue-800 underline">Transformer</Link> took Bahdanau's insight—that attention is all you need—and built an entire architecture around it.
           </p>
         </section>
 
         <section>
           <h2 className="text-2xl font-bold text-slate-900 mb-4">Related Concepts</h2>
           <ul className="list-disc list-inside space-y-2 ml-4 text-slate-700">
-            <li><a href="/wiki/encoder-decoder" className="text-blue-600 hover:text-blue-800 underline">Encoder-Decoder Architecture</a> - The architecture that attention improves</li>
-            <li><a href="/wiki/seq2seq" className="text-blue-600 hover:text-blue-800 underline">Sequence-to-Sequence Models</a> - Early models that used fixed-length vectors</li>
-            <li><a href="/wiki/soft-alignment" className="text-blue-600 hover:text-blue-800 underline">Soft Alignment</a> - The weighted attention approach</li>
-            <li><a href="/wiki/bidirectional-rnn" className="text-blue-600 hover:text-blue-800 underline">Bidirectional RNN</a> - Used in the Bahdanau encoder</li>
-            <li><a href="/wiki/transformer-architecture" className="text-blue-600 hover:text-blue-800 underline">Transformer Architecture</a> - Pure attention-based architecture</li>
+            <li><Link to="/wiki/encoder-decoder" className="text-blue-600 hover:text-blue-800 underline">Encoder-Decoder Architecture</Link> - The architecture that attention improves</li>
+            <li><Link to="/wiki/seq2seq" className="text-blue-600 hover:text-blue-800 underline">Sequence-to-Sequence Models</Link> - Early models that used fixed-length vectors</li>
+            <li><Link to="/wiki/soft-alignment" className="text-blue-600 hover:text-blue-800 underline">Soft Alignment</Link> - The weighted attention approach</li>
+            <li><Link to="/wiki/bidirectional-rnn" className="text-blue-600 hover:text-blue-800 underline">Bidirectional RNN</Link> - Used in the Bahdanau encoder</li>
+            <li><Link to="/wiki/transformer-architecture" className="text-blue-600 hover:text-blue-800 underline">Transformer Architecture</Link> - Pure attention-based architecture</li>
           </ul>
         </section>
       </div>

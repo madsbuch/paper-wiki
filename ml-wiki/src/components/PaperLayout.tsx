@@ -3,12 +3,16 @@ import { Link } from "react-router";
 import Header from "./Header";
 
 interface PaperLayoutProps {
+  /**
+   * Not all papers are from ArXiv
+   */
+  arxivId?: string;
+  arxivUrl?: string;
+
   title: string;
   authors: string;
   year: string;
   venue: string;
-  arxivId: string;
-  arxivUrl: string;
   abstract: string;
   keyContributions: string[];
   relatedConcepts: Array<{ name: string; slug: string }>;
@@ -65,7 +69,9 @@ export default function PaperLayout({
                   <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-3 sm:mb-4">
                     {title}
                   </h1>
-                  <p className="text-base sm:text-lg text-slate-600 mb-2 sm:mb-3">{authors}</p>
+                  <p className="text-base sm:text-lg text-slate-600 mb-2 sm:mb-3">
+                    {authors}
+                  </p>
                   <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-slate-500">
                     <span className="flex items-center gap-1">
                       <svg
@@ -161,7 +167,9 @@ export default function PaperLayout({
             <ul className="space-y-2 sm:space-y-3">
               {keyContributions.map((contribution, index) => (
                 <li key={index} className="flex items-start gap-2 sm:gap-3">
-                  <span className="text-violet-500 font-bold mt-0.5 sm:mt-1">•</span>
+                  <span className="text-violet-500 font-bold mt-0.5 sm:mt-1">
+                    •
+                  </span>
                   <span className="text-sm sm:text-base text-slate-700 leading-relaxed">
                     {contribution}
                   </span>
@@ -176,7 +184,9 @@ export default function PaperLayout({
               <span className="text-2xl sm:text-3xl">💡</span>
               Impact
             </h2>
-            <p className="text-sm sm:text-base md:text-lg text-slate-700 leading-relaxed">{impact}</p>
+            <p className="text-sm sm:text-base md:text-lg text-slate-700 leading-relaxed">
+              {impact}
+            </p>
           </div>
 
           {/* Related Concepts */}
@@ -216,7 +226,9 @@ export default function PaperLayout({
 
           {/* Additional Content */}
           {children && (
-            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8">{children}</div>
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8">
+              {children}
+            </div>
           )}
         </article>
       </main>

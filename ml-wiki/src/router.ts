@@ -25,15 +25,18 @@ export type Path =
   | `/papers/chain-of-thought-prompting`
   | `/papers/clones-closed-categories-combinatory-logic`
   | `/papers/constitutional-ai`
+  | `/papers/elements-of-being`
   | `/papers/flash-attention`
   | `/papers/gpt3-few-shot-learners`
   | `/papers/graphrag`
   | `/papers/instructgpt`
+  | `/papers/llm-inference-hardware-challenges`
   | `/papers/lora`
   | `/papers/mathematical-transformers`
   | `/papers/practical-guide-llm-evaluation`
   | `/papers/prompt-tuning`
   | `/papers/resnet`
+  | `/papers/why-properties-are-tropes`
   | `/projects`
   | `/projects/attention-by-hand`
   | `/projects/bert-sentiment`
@@ -71,6 +74,7 @@ export type Path =
   | `/wiki/fine-tuning`
   | `/wiki/global-sensemaking`
   | `/wiki/gpu-memory-hierarchy`
+  | `/wiki/high-bandwidth-memory`
   | `/wiki/identity-mapping`
   | `/wiki/in-context-learning`
   | `/wiki/instruction-following`
@@ -78,6 +82,7 @@ export type Path =
   | `/wiki/io-aware-algorithms`
   | `/wiki/kernel-fusion`
   | `/wiki/knowledge-graph`
+  | `/wiki/kv-cache`
   | `/wiki/layer-normalization`
   | `/wiki/llm-hallucination`
   | `/wiki/low-rank-adaptation`
@@ -89,11 +94,13 @@ export type Path =
   | `/wiki/multicategories`
   | `/wiki/natural-language-inference`
   | `/wiki/next-sentence-prediction`
+  | `/wiki/nominalism`
   | `/wiki/operator-splitting`
   | `/wiki/parameter-efficient-fine-tuning`
   | `/wiki/positional-encoding`
   | `/wiki/ppo`
   | `/wiki/precision-recall`
+  | `/wiki/processing-near-memory`
   | `/wiki/prompt-engineering`
   | `/wiki/query-focused-summarization`
   | `/wiki/reasoning-steps`
@@ -111,6 +118,8 @@ export type Path =
   | `/wiki/tokenization`
   | `/wiki/transfer-learning`
   | `/wiki/transformer-architecture`
+  | `/wiki/tropes`
+  | `/wiki/universals`
   | `/wiki/zero-shot-learning`
 
 export type Params = {

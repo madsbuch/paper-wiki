@@ -1,11 +1,12 @@
-import { useEffect } from 'react';
+import { Link } from "react-router";
 import WikiLayout from "../../components/WikiLayout";
+import { useEffect } from "react";
 
 export default function BlockSparseAttention() {
   useEffect(() => {
     if (window.MathJax) {
       window.MathJax.typesetPromise?.([document.body]).catch((err: Error) =>
-        console.error('MathJax typesetting failed:', err)
+        console.error("MathJax typesetting failed:", err),
       );
     }
   }, []);
@@ -17,25 +18,36 @@ export default function BlockSparseAttention() {
       category="Model Architecture"
       citations={[
         {
-          paper: "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+          paper:
+            "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
           authors: "Dao, T., Fu, D. Y., Ermon, S., Rudra, A., & Ré, C.",
           year: "2022",
-          pages: "6"
-        }
+          pages: "6",
+        },
       ]}
     >
       <div className="space-y-6">
         <section>
           <h2 className="text-2xl font-bold text-slate-900 mb-4">Overview</h2>
           <p className="text-slate-700">
-            <strong>Block-Sparse Attention</strong> is a variant of the attention mechanism that only computes attention for a predefined sparse pattern of blocks, rather than the full dense N×N attention matrix. By restricting attention to specific block patterns, block-sparse attention reduces computational complexity from O(N²) to O(Ns), where s is the sparsity fraction (proportion of blocks computed) [Dao et al., 2022, p.6].
+            <strong>Block-Sparse Attention</strong> is a variant of the
+            attention mechanism that only computes attention for a predefined
+            sparse pattern of blocks, rather than the full dense N×N attention
+            matrix. By restricting attention to specific block patterns,
+            block-sparse attention reduces computational complexity from O(N²)
+            to O(Ns), where s is the sparsity fraction (proportion of blocks
+            computed) [Dao et al., 2022, p.6].
           </p>
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">The Quadratic Cost Problem</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">
+            The Quadratic Cost Problem
+          </h2>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">Standard Dense Attention</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3">
+            Standard Dense Attention
+          </h3>
           <p className="text-slate-700 mb-2">
             <strong>Computation:</strong>
           </p>
@@ -48,9 +60,16 @@ O = PV       # O(N²d) operations`}</pre>
             <strong>Complexity:</strong>
           </p>
           <ul className="list-disc list-inside space-y-2 ml-4 text-slate-700 mb-4">
-            <li><strong>Time:</strong> O(N²d) operations</li>
-            <li><strong>Memory:</strong> O(N²) storage for attention matrix</li>
-            <li><strong>Problem:</strong> Quadratic scaling prevents long sequences (N &gt; 4K difficult, N &gt; 16K infeasible)</li>
+            <li>
+              <strong>Time:</strong> O(N²d) operations
+            </li>
+            <li>
+              <strong>Memory:</strong> O(N²) storage for attention matrix
+            </li>
+            <li>
+              <strong>Problem:</strong> Quadratic scaling prevents long
+              sequences (N &gt; 4K difficult, N &gt; 16K infeasible)
+            </li>
           </ul>
           <p className="text-slate-700">
             <strong>Example:</strong> For N=16K, d=64:
@@ -62,11 +81,16 @@ O = PV       # O(N²d) operations`}</pre>
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">The Sparse Attention Idea</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">
+            The Sparse Attention Idea
+          </h2>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">Key Insight</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3">
+            Key Insight
+          </h3>
           <p className="text-slate-700 mb-4">
-            <strong>Observation:</strong> Not all positions need to attend to all other positions [Dao et al., 2022, p.6].
+            <strong>Observation:</strong> Not all positions need to attend to
+            all other positions [Dao et al., 2022, p.6].
           </p>
           <p className="text-slate-700 mb-2">
             <strong>Intuition:</strong>
@@ -77,12 +101,16 @@ O = PV       # O(N²d) operations`}</pre>
             <li>Many distant token pairs have minimal interaction</li>
           </ul>
           <p className="text-slate-700 mb-4">
-            <strong>Proposal:</strong> Compute attention only for important pairs, set others to zero.
+            <strong>Proposal:</strong> Compute attention only for important
+            pairs, set others to zero.
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">Block-Sparse Structure</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3">
+            Block-Sparse Structure
+          </h3>
           <p className="text-slate-700 mb-4">
-            Instead of element-wise sparsity, use <strong>block-level sparsity</strong> [Dao et al., 2022, p.6]:
+            Instead of element-wise sparsity, use{" "}
+            <strong>block-level sparsity</strong> [Dao et al., 2022, p.6]:
           </p>
           <p className="text-slate-700 mb-2">
             <strong>Why blocks?</strong>
@@ -93,7 +121,8 @@ O = PV       # O(N²d) operations`}</pre>
             <li>IO-aware: Aligns with tiling strategies</li>
           </ol>
           <p className="text-slate-700 mb-2">
-            <strong>Block mask:</strong> Binary matrix M indicating which blocks to compute:
+            <strong>Block mask:</strong> Binary matrix M indicating which blocks
+            to compute:
           </p>
           <ul className="list-disc list-inside space-y-2 ml-4 text-slate-700">
             <li>M[i,j] = 1: Compute attention block between Q_i and K_j</li>
@@ -102,11 +131,16 @@ O = PV       # O(N²d) operations`}</pre>
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Common Sparse Patterns</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">
+            Common Sparse Patterns
+          </h2>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">1. Local (Banded) Attention</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3">
+            1. Local (Banded) Attention
+          </h3>
           <p className="text-slate-700 mb-2">
-            <strong>Pattern:</strong> Each position attends to w neighbors on each side.
+            <strong>Pattern:</strong> Each position attends to w neighbors on
+            each side.
           </p>
           <p className="text-slate-700 mb-2">
             <strong>Block structure:</strong>
@@ -119,15 +153,20 @@ O = PV       # O(N²d) operations`}</pre>
             <strong>Sparsity:</strong> s = w/N (for w &#60;&#60; N)
           </p>
           <p className="text-slate-700 mb-4">
-            <strong>Use case:</strong> Text modeling where nearby context is most important.
+            <strong>Use case:</strong> Text modeling where nearby context is
+            most important.
           </p>
           <p className="text-slate-700">
-            <strong>Example:</strong> With w=256, N=4096: s = 256/4096 = 6.25% (16× reduction)
+            <strong>Example:</strong> With w=256, N=4096: s = 256/4096 = 6.25%
+            (16× reduction)
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">2. Strided (Dilated) Attention</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">
+            2. Strided (Dilated) Attention
+          </h3>
           <p className="text-slate-700 mb-2">
-            <strong>Pattern:</strong> Each position attends to every k-th position.
+            <strong>Pattern:</strong> Each position attends to every k-th
+            position.
           </p>
           <p className="text-slate-700 mb-2">
             <strong>Block structure:</strong>
@@ -139,10 +178,13 @@ O = PV       # O(N²d) operations`}</pre>
             <strong>Sparsity:</strong> s = 1/k
           </p>
           <p className="text-slate-700">
-            <strong>Use case:</strong> Capturing different levels of granularity.
+            <strong>Use case:</strong> Capturing different levels of
+            granularity.
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">3. Local + Global Attention</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">
+            3. Local + Global Attention
+          </h3>
           <p className="text-slate-700 mb-2">
             <strong>Pattern:</strong> Local window + a few global tokens.
           </p>
@@ -154,7 +196,8 @@ O = PV       # O(N²d) operations`}</pre>
             <li>First/last few rows/columns (global tokens)</li>
           </ul>
           <p className="text-slate-700 mb-4">
-            <strong>Sparsity:</strong> s = (w + g)/N, where g is number of global tokens
+            <strong>Sparsity:</strong> s = (w + g)/N, where g is number of
+            global tokens
           </p>
           <p className="text-slate-700 mb-4">
             <strong>Use case:</strong> Document processing with summary tokens.
@@ -168,7 +211,9 @@ O = PV       # O(N²d) operations`}</pre>
             <li>For N=4096: s = (512 + 64)/4096 = 14% (7× reduction)</li>
           </ul>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">4. Fixed Random Pattern</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">
+            4. Fixed Random Pattern
+          </h3>
           <p className="text-slate-700 mb-2">
             <strong>Pattern:</strong> Random subset of blocks.
           </p>
@@ -185,9 +230,12 @@ O = PV       # O(N²d) operations`}</pre>
             <strong>Use case:</strong> When no obvious attention pattern known.
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">5. Block-Local + Block-Global</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">
+            5. Block-Local + Block-Global
+          </h3>
           <p className="text-slate-700 mb-2">
-            <strong>Pattern:</strong> Divide sequence into blocks, attend within block + to all block representatives.
+            <strong>Pattern:</strong> Divide sequence into blocks, attend within
+            block + to all block representatives.
           </p>
           <p className="text-slate-700 mb-2">
             <strong>Block structure:</strong>
@@ -197,7 +245,8 @@ O = PV       # O(N²d) operations`}</pre>
             <li>Additional rows/columns for representatives</li>
           </ul>
           <p className="text-slate-700 mb-4">
-            <strong>Sparsity:</strong> s = (b + r)/N, where b is block size, r is representatives
+            <strong>Sparsity:</strong> s = (b + r)/N, where b is block size, r
+            is representatives
           </p>
           <p className="text-slate-700">
             <strong>Use case:</strong> Hierarchical sequence processing.
@@ -205,14 +254,20 @@ O = PV       # O(N²d) operations`}</pre>
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Block-Sparse FlashAttention</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">
+            Block-Sparse FlashAttention
+          </h2>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">Extending FlashAttention</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3">
+            Extending FlashAttention
+          </h3>
           <p className="text-slate-700 mb-4">
-            FlashAttention naturally extends to block-sparse patterns [Dao et al., 2022, p.6]:
+            FlashAttention naturally extends to block-sparse patterns [Dao et
+            al., 2022, p.6]:
           </p>
           <p className="text-slate-700 mb-2">
-            <strong>Key idea:</strong> Only load and compute blocks where mask M[i,j] = 1.
+            <strong>Key idea:</strong> Only load and compute blocks where mask
+            M[i,j] = 1.
           </p>
           <p className="text-slate-700 mb-2">
             <strong>Algorithm modification:</strong>
@@ -232,16 +287,22 @@ O = PV       # O(N²d) operations`}</pre>
           </p>
           <ul className="list-disc list-inside space-y-2 ml-4 text-slate-700">
             <li>Same tiling and fusion techniques apply</li>
-            <li>Skip blocks efficiently (no computation or memory for zero blocks)</li>
+            <li>
+              Skip blocks efficiently (no computation or memory for zero blocks)
+            </li>
             <li>Exact attention on non-zero blocks (no approximation)</li>
           </ul>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">IO Complexity Analysis</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">
+            IO Complexity Analysis
+          </h3>
           <p className="text-slate-700 mb-4">
-            <strong>Dense FlashAttention:</strong> Θ(N²d²M⁻¹) HBM accesses [Dao et al., 2022, p.3]
+            <strong>Dense FlashAttention:</strong> Θ(N²d²M⁻¹) HBM accesses [Dao
+            et al., 2022, p.3]
           </p>
           <p className="text-slate-700 mb-4">
-            <strong>Block-Sparse FlashAttention:</strong> Θ(Nd + N²d²M⁻¹s) HBM accesses [Dao et al., 2022, p.6]
+            <strong>Block-Sparse FlashAttention:</strong> Θ(Nd + N²d²M⁻¹s) HBM
+            accesses [Dao et al., 2022, p.6]
           </p>
           <p className="text-slate-700 mb-4">
             where s = sparsity fraction (proportion of blocks computed).
@@ -252,17 +313,26 @@ O = PV       # O(N²d) operations`}</pre>
           <ul className="list-disc list-inside space-y-2 ml-4 text-slate-700 mb-4">
             <li>Reduce HBM accesses by ~10×</li>
             <li>Reduce computation by ~10×</li>
-            <li><strong>Result:</strong> ~10× speedup</li>
+            <li>
+              <strong>Result:</strong> ~10× speedup
+            </li>
           </ul>
           <p className="text-slate-700 mb-2">
             <strong>Comparison to other sparse methods:</strong>
           </p>
           <ul className="list-disc list-inside space-y-2 ml-4 text-slate-700">
-            <li>Approximate sparse attention (e.g., LSH, linformer): Faster but less accurate</li>
-            <li>Block-sparse FlashAttention: Faster AND exact (on non-zero blocks)</li>
+            <li>
+              Approximate sparse attention (e.g., LSH, linformer): Faster but
+              less accurate
+            </li>
+            <li>
+              Block-sparse FlashAttention: Faster AND exact (on non-zero blocks)
+            </li>
           </ul>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">Performance Results</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">
+            Performance Results
+          </h3>
           <p className="text-slate-700 mb-4">
             From the FlashAttention paper [Dao et al., 2022, p.11]:
           </p>
@@ -281,26 +351,37 @@ O = PV       # O(N²d) operations`}</pre>
           </p>
           <ul className="list-disc list-inside space-y-2 ml-4 text-slate-700 mb-4">
             <li>2-4× speedup over dense attention</li>
-            <li>Faster than approximate sparse methods (e.g., Performer, Linear Attention)</li>
+            <li>
+              Faster than approximate sparse methods (e.g., Performer, Linear
+              Attention)
+            </li>
             <li>Better accuracy than approximate methods</li>
           </ul>
           <p className="text-slate-700">
-            <strong>Key insight:</strong> IO-aware block-sparse is faster than approximate methods while being exact!
+            <strong>Key insight:</strong> IO-aware block-sparse is faster than
+            approximate methods while being exact!
           </p>
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Sparse Pattern Design Considerations</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">
+            Sparse Pattern Design Considerations
+          </h2>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">1. Information Flow</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3">
+            1. Information Flow
+          </h3>
           <p className="text-slate-700 mb-4">
-            <strong>Question:</strong> Can information flow between all positions?
+            <strong>Question:</strong> Can information flow between all
+            positions?
           </p>
           <p className="text-slate-700 mb-4">
-            <strong>Challenge:</strong> With local-only attention, distant positions can't communicate directly.
+            <strong>Challenge:</strong> With local-only attention, distant
+            positions can't communicate directly.
           </p>
           <p className="text-slate-700 mb-4">
-            <strong>Solution:</strong> Stack multiple layers, each allowing some long-range connections.
+            <strong>Solution:</strong> Stack multiple layers, each allowing some
+            long-range connections.
           </p>
           <p className="text-slate-700">
             <strong>Example:</strong> With local window w=256 and 12 layers:
@@ -310,21 +391,35 @@ O = PV       # O(N²d) operations`}</pre>
             <li>Sufficient for most sequences</li>
           </ul>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">2. Task-Specific Patterns</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">
+            2. Task-Specific Patterns
+          </h3>
           <p className="text-slate-700 mb-4">
             <strong>Different tasks benefit from different patterns:</strong>
           </p>
           <ul className="list-disc list-inside space-y-2 ml-4 text-slate-700 mb-4">
-            <li><strong>Language modeling:</strong> Causal (lower-triangular) with local bias</li>
-            <li><strong>Document classification:</strong> Local + global tokens</li>
-            <li><strong>Protein sequences:</strong> Residue contact patterns</li>
-            <li><strong>Images (as sequences):</strong> 2D local patterns</li>
+            <li>
+              <strong>Language modeling:</strong> Causal (lower-triangular) with
+              local bias
+            </li>
+            <li>
+              <strong>Document classification:</strong> Local + global tokens
+            </li>
+            <li>
+              <strong>Protein sequences:</strong> Residue contact patterns
+            </li>
+            <li>
+              <strong>Images (as sequences):</strong> 2D local patterns
+            </li>
           </ul>
           <p className="text-slate-700">
-            <strong>Strategy:</strong> Design pattern based on inductive bias of the task.
+            <strong>Strategy:</strong> Design pattern based on inductive bias of
+            the task.
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">3. Learnable vs. Fixed Patterns</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">
+            3. Learnable vs. Fixed Patterns
+          </h3>
           <p className="text-slate-700 mb-2">
             <strong>Fixed patterns:</strong>
           </p>
@@ -342,12 +437,16 @@ O = PV       # O(N²d) operations`}</pre>
             <li>Irregular, harder to optimize</li>
           </ul>
           <p className="text-slate-700">
-            <strong>Hybrid:</strong> Fixed structure with learnable parameters (e.g., learned window sizes)
+            <strong>Hybrid:</strong> Fixed structure with learnable parameters
+            (e.g., learned window sizes)
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">4. Gradient Flow</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">
+            4. Gradient Flow
+          </h3>
           <p className="text-slate-700 mb-4">
-            <strong>Challenge:</strong> Sparse attention can create gradient bottlenecks.
+            <strong>Challenge:</strong> Sparse attention can create gradient
+            bottlenecks.
           </p>
           <p className="text-slate-700 mb-2">
             <strong>Mitigation:</strong>
@@ -360,9 +459,13 @@ O = PV       # O(N²d) operations`}</pre>
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Memory and Computational Savings</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">
+            Memory and Computational Savings
+          </h2>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">Memory Savings</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3">
+            Memory Savings
+          </h3>
           <p className="text-slate-700 mb-2">
             <strong>Dense attention:</strong>
           </p>
@@ -375,13 +478,17 @@ O = PV       # O(N²d) operations`}</pre>
           </p>
           <ul className="list-disc list-inside space-y-2 ml-4 text-slate-700 mb-4">
             <li>Store only non-zero blocks: 2 × N² × s × precision</li>
-            <li>Example: N=16K, s=10%, FP16: 2 × 16K² × 0.1 × 2 bytes = 100MB</li>
+            <li>
+              Example: N=16K, s=10%, FP16: 2 × 16K² × 0.1 × 2 bytes = 100MB
+            </li>
           </ul>
           <p className="text-slate-700 mb-4">
             <strong>Savings:</strong> 10× reduction in memory
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">Computational Savings</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3">
+            Computational Savings
+          </h3>
           <p className="text-slate-700 mb-2">
             <strong>Dense attention:</strong>
           </p>
@@ -400,7 +507,9 @@ O = PV       # O(N²d) operations`}</pre>
             <strong>Savings:</strong> s⁻¹ reduction (10× for s=10%)
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">Practical Speedup</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3">
+            Practical Speedup
+          </h3>
           <p className="text-slate-700 mb-2">
             <strong>Factors affecting speedup:</strong>
           </p>
@@ -411,19 +520,25 @@ O = PV       # O(N²d) operations`}</pre>
             <li>Sequence length (longer sequences benefit more)</li>
           </ol>
           <p className="text-slate-700">
-            <strong>Typical speedups:</strong> 2-5× for s=10-20% [Dao et al., 2022, p.11]
+            <strong>Typical speedups:</strong> 2-5× for s=10-20% [Dao et al.,
+            2022, p.11]
           </p>
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Applications and Use Cases</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">
+            Applications and Use Cases
+          </h2>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">Long Sequences</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3">
+            Long Sequences
+          </h3>
           <p className="text-slate-700 mb-4">
             <strong>Problem:</strong> Dense attention infeasible for N &gt; 16K.
           </p>
           <p className="text-slate-700 mb-4">
-            <strong>Solution:</strong> Block-sparse attention enables sequences up to 64K+ [Dao et al., 2022, p.12].
+            <strong>Solution:</strong> Block-sparse attention enables sequences
+            up to 64K+ [Dao et al., 2022, p.12].
           </p>
           <p className="text-slate-700 mb-2">
             <strong>Applications:</strong>
@@ -435,12 +550,15 @@ O = PV       # O(N²d) operations`}</pre>
             <li>Long-context language modeling</li>
           </ul>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">Efficiency-Focused Models</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">
+            Efficiency-Focused Models
+          </h3>
           <p className="text-slate-700 mb-4">
             <strong>Goal:</strong> Reduce cost while maintaining quality.
           </p>
           <p className="text-slate-700 mb-4">
-            <strong>Approach:</strong> Use sparse attention with carefully designed patterns.
+            <strong>Approach:</strong> Use sparse attention with carefully
+            designed patterns.
           </p>
           <p className="text-slate-700 mb-2">
             <strong>Examples:</strong>
@@ -451,24 +569,33 @@ O = PV       # O(N²d) operations`}</pre>
             <li>Sparse Transformers (generative modeling)</li>
           </ul>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">Multi-Resolution Modeling</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">
+            Multi-Resolution Modeling
+          </h3>
           <p className="text-slate-700 mb-4">
-            <strong>Idea:</strong> Attend densely to local context, sparsely to distant context.
+            <strong>Idea:</strong> Attend densely to local context, sparsely to
+            distant context.
           </p>
           <p className="text-slate-700 mb-4">
             <strong>Pattern:</strong> Local + strided or local + global.
           </p>
           <p className="text-slate-700">
-            <strong>Benefit:</strong> Captures both fine-grained and coarse-grained structure.
+            <strong>Benefit:</strong> Captures both fine-grained and
+            coarse-grained structure.
           </p>
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Trade-offs and Limitations</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">
+            Trade-offs and Limitations
+          </h2>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">Accuracy vs. Efficiency</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3">
+            Accuracy vs. Efficiency
+          </h3>
           <p className="text-slate-700 mb-4">
-            <strong>Trade-off:</strong> Sparse attention may miss important long-range dependencies.
+            <strong>Trade-off:</strong> Sparse attention may miss important
+            long-range dependencies.
           </p>
           <p className="text-slate-700 mb-2">
             <strong>Mitigation:</strong>
@@ -479,10 +606,13 @@ O = PV       # O(N²d) operations`}</pre>
             <li>Include global tokens for critical information flow</li>
           </ul>
           <p className="text-slate-700 mb-4">
-            <strong>Empirical finding:</strong> Well-designed sparse patterns often match dense attention accuracy [Dao et al., 2022, p.11].
+            <strong>Empirical finding:</strong> Well-designed sparse patterns
+            often match dense attention accuracy [Dao et al., 2022, p.11].
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">Pattern Generalizability</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3">
+            Pattern Generalizability
+          </h3>
           <p className="text-slate-700 mb-4">
             <strong>Challenge:</strong> Optimal pattern may vary by task.
           </p>
@@ -495,27 +625,37 @@ O = PV       # O(N²d) operations`}</pre>
             <li>Adaptive sparsity</li>
           </ul>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">Implementation Complexity</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3 mt-6">
+            Implementation Complexity
+          </h3>
           <p className="text-slate-700 mb-4">
-            <strong>Dense attention:</strong> Simple, standard implementations available.
+            <strong>Dense attention:</strong> Simple, standard implementations
+            available.
           </p>
           <p className="text-slate-700 mb-4">
-            <strong>Sparse attention:</strong> Requires custom kernels, more complex code.
+            <strong>Sparse attention:</strong> Requires custom kernels, more
+            complex code.
           </p>
           <p className="text-slate-700">
-            <strong>Pragmatic approach:</strong> Use libraries like FlashAttention with sparse support.
+            <strong>Pragmatic approach:</strong> Use libraries like
+            FlashAttention with sparse support.
           </p>
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Creative Analogy: The Party Conversation</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">
+            Creative Analogy: The Party Conversation
+          </h2>
           <p className="text-slate-700 mb-4">
             Imagine a party with N=1000 people.
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">Dense Attention (Full Party)</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3">
+            Dense Attention (Full Party)
+          </h3>
           <p className="text-slate-700 mb-2">
-            <strong>Scenario:</strong> Everyone must hear everyone else's conversation.
+            <strong>Scenario:</strong> Everyone must hear everyone else's
+            conversation.
           </p>
           <p className="text-slate-700 mb-2">
             <strong>Process:</strong>
@@ -532,12 +672,16 @@ O = PV       # O(N²d) operations`}</pre>
             <strong>Time:</strong> Days!
           </p>
           <p className="text-slate-700 mb-4">
-            <strong>Problem:</strong> Infeasible, exhausting, most conversations irrelevant
+            <strong>Problem:</strong> Infeasible, exhausting, most conversations
+            irrelevant
           </p>
 
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">Block-Sparse Attention (Smart Networking)</h3>
+          <h3 className="text-xl font-semibold text-slate-900 mb-3">
+            Block-Sparse Attention (Smart Networking)
+          </h3>
           <p className="text-slate-700 mb-4">
-            <strong>Scenario:</strong> People use efficient conversation patterns.
+            <strong>Scenario:</strong> People use efficient conversation
+            patterns.
           </p>
           <p className="text-slate-700 mb-2">
             <strong>Pattern (Local + Global):</strong>
@@ -553,21 +697,61 @@ O = PV       # O(N²d) operations`}</pre>
             <strong>Savings:</strong> 1M → 15K = 67× reduction!
           </p>
           <p className="text-slate-700 mb-4">
-            <strong>Result:</strong> Feasible in a few hours, most important info captured
+            <strong>Result:</strong> Feasible in a few hours, most important
+            info captured
           </p>
           <p className="text-slate-700">
-            <strong>Key insight:</strong> Most useful information comes from nearby people and key speakers—no need for everyone to talk to everyone.
+            <strong>Key insight:</strong> Most useful information comes from
+            nearby people and key speakers—no need for everyone to talk to
+            everyone.
           </p>
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Related Concepts</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">
+            Related Concepts
+          </h2>
           <ul className="list-disc list-inside space-y-2 ml-4 text-slate-700">
-            <li><a href="/wiki/attention-mechanism" className="text-blue-600 hover:underline">Attention Mechanism</a></li>
-            <li><a href="/wiki/io-aware-algorithms" className="text-blue-600 hover:underline">IO-Aware Algorithms</a></li>
-            <li><a href="/wiki/tiling-techniques" className="text-blue-600 hover:underline">Tiling Techniques</a></li>
-            <li><a href="/wiki/kernel-fusion" className="text-blue-600 hover:underline">Kernel Fusion</a></li>
-            <li><a href="/wiki/transformer-architecture" className="text-blue-600 hover:underline">Transformer Architecture</a></li>
+            <li>
+              <Link
+                to="/wiki/attention-mechanism"
+                className="text-blue-600 hover:underline"
+              >
+                Attention Mechanism
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/wiki/io-aware-algorithms"
+                className="text-blue-600 hover:underline"
+              >
+                IO-Aware Algorithms
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/wiki/tiling-techniques"
+                className="text-blue-600 hover:underline"
+              >
+                Tiling Techniques
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/wiki/kernel-fusion"
+                className="text-blue-600 hover:underline"
+              >
+                Kernel Fusion
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/wiki/transformer-architecture"
+                className="text-blue-600 hover:underline"
+              >
+                Transformer Architecture
+              </Link>
+            </li>
           </ul>
         </section>
       </div>

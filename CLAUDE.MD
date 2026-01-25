@@ -48,6 +48,9 @@ wiki-tech/
 │   ├── generate-audio.js              # Generate essay audio
 │   ├── validate-mdx.js                # Validate MDX syntax
 │   └── README.md
+├── agents/                            # Agent instructions for content creation
+│   ├── process-paper.md               # Instructions for processing PDFs
+│   └── make-wiki-page.md              # Instructions for wiki concept pages
 ├── papers/                            # Source PDF files
 └── CLAUDE.md
 ```
@@ -230,7 +233,32 @@ interface Project {
 
 ## Content Creation Workflows
 
-**For processing papers from PDFs**, follow the instructions in `agents/process-paper.md`.
+This project uses **agent instructions** in the `agents/` directory to guide content creation. Always use the appropriate agent for the task.
+
+### Available Agents
+
+| Agent | File | Use When |
+|-------|------|----------|
+| **Process Paper** | `agents/process-paper.md` | Processing a PDF paper into a paper page + wiki concepts |
+| **Make Wiki Page** | `agents/make-wiki-page.md` | Creating or improving a standalone wiki concept page |
+
+### When to Use Each Agent
+
+**Process Paper** (`agents/process-paper.md`):
+- User says "process this paper" or provides a PDF
+- Creates both the paper page AND any missing wiki concept pages
+- Focuses on extracting key information from the paper
+
+**Make Wiki Page** (`agents/make-wiki-page.md`):
+- User asks to create a wiki page for a concept
+- User asks to improve an existing wiki page
+- When process-paper needs to create a new wiki concept (it references this agent)
+
+### Agent Workflow
+
+1. Read the relevant agent file before starting
+2. Follow the instructions in the agent file
+3. The agents reference each other when needed (e.g., process-paper → make-wiki-page)
 
 ## MDX Syntax Guidelines
 
