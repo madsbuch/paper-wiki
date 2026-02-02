@@ -14,11 +14,15 @@ export type Path =
   | `/essays/learning-without-examples`
   | `/essays/lora-democratizing-ai`
   | `/essays/measuring-what-matters`
+  | `/essays/philosophy-of-composition`
   | `/essays/skip-connection-revolution`
+  | `/essays/societies-of-thought`
+  | `/essays/the-hidden-cost-of-ai-assistance`
   | `/essays/transformers-continuous-mathematics`
   | `/essays/unreasonable-effectiveness-of-scale`
   | `/papers`
   | `/papers/absolute-evaluation-measures-ml-survey`
+  | `/papers/ai-impacts-skill-formation`
   | `/papers/attention-is-all-you-need`
   | `/papers/bahdanau-attention`
   | `/papers/bert`
@@ -36,6 +40,7 @@ export type Path =
   | `/papers/practical-guide-llm-evaluation`
   | `/papers/prompt-tuning`
   | `/papers/resnet`
+  | `/papers/societies-of-thought`
   | `/papers/why-properties-are-tropes`
   | `/projects`
   | `/projects/attention-by-hand`
@@ -61,6 +66,7 @@ export type Path =
   | `/wiki/bottleneck-architecture`
   | `/wiki/chain-of-thought-prompting`
   | `/wiki/closed-categories`
+  | `/wiki/cognitive-offloading`
   | `/wiki/cohens-kappa`
   | `/wiki/combinatory-logic`
   | `/wiki/community-detection`
@@ -89,7 +95,9 @@ export type Path =
   | `/wiki/map-reduce`
   | `/wiki/masked-language-model`
   | `/wiki/matthews-correlation-coefficient`
+  | `/wiki/mechanistic-interpretability`
   | `/wiki/meta-learning`
+  | `/wiki/multi-agent-systems`
   | `/wiki/multi-head-attention`
   | `/wiki/multicategories`
   | `/wiki/natural-language-inference`
@@ -113,7 +121,9 @@ export type Path =
   | `/wiki/scaled-dot-product-attention`
   | `/wiki/self-attention`
   | `/wiki/seq2seq`
+  | `/wiki/society-of-mind`
   | `/wiki/soft-alignment`
+  | `/wiki/sparse-autoencoders`
   | `/wiki/tiling-techniques`
   | `/wiki/tokenization`
   | `/wiki/transfer-learning`

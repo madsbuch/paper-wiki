@@ -1,0 +1,204 @@
+import EssayLayout from "../../components/EssayLayout";
+
+export const meta = {
+  title: "The Crowd Inside: How AI Learned to Reason by Talking to Itself",
+  description: "Recent research reveals that the best reasoning AI models don't think in monologues—they simulate internal debates between diverse perspectives, much like a committee arguing toward consensus.",
+  readingTime: "22 min read",
+  audioPath: "/audio/societies-of-thought.mp3",
+  relatedPapers: [
+    { title: "Reasoning Models Generate Societies of Thought", slug: "societies-of-thought" },
+    { title: "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models", slug: "chain-of-thought-prompting" },
+    { title: "Training language models to follow instructions with human feedback", slug: "instructgpt" }
+  ],
+  relatedConcepts: [
+    { name: "Society of Mind", slug: "society-of-mind" },
+    { name: "Multi-Agent Systems", slug: "multi-agent-systems" },
+    { name: "Chain-of-Thought Prompting", slug: "chain-of-thought-prompting" },
+    { name: "Mechanistic Interpretability", slug: "mechanistic-interpretability" },
+    { name: "Sparse Autoencoders", slug: "sparse-autoencoders" },
+    { name: "RLHF", slug: "rlhf" },
+    { name: "Reasoning Steps", slug: "reasoning-steps" }
+  ],
+  citations: [
+    {
+      paper: "Reasoning Models Generate Societies of Thought",
+      authors: "Kim, J., Lai, S., Scherrer, N., Agüera y Arcas, B., & Evans, J.",
+      year: "2025",
+      pages: "1-17"
+    },
+    {
+      paper: "The Society of Mind",
+      authors: "Minsky, M.",
+      year: "1986",
+      pages: "1-339"
+    },
+    {
+      paper: "The Enigma of Reason",
+      authors: "Mercier, H. & Sperber, D.",
+      year: "2017",
+      pages: "1-396"
+    }
+  ]
+};
+
+<EssayLayout {...meta}>
+
+## The Lonely Thinker Problem
+
+For decades, we imagined thinking as a solitary act. The philosopher alone in their study, the mathematician scribbling on a chalkboard, the genius having a eureka moment in isolation. We built AI systems the same way—single models, single chains of reasoning, single voices speaking with artificial confidence.
+
+But what if this image was wrong? What if the best thinking—whether human or artificial—is fundamentally social, even when it happens inside a single mind?
+
+Recent research from Google and the University of Chicago has uncovered something remarkable: the most capable reasoning AI models don't think in monologues. They simulate internal debates between diverse perspectives—a "society of thought" that argues, disagrees, and eventually converges on answers [Kim et al., 2025, p. 1]. And when researchers amplified these conversational patterns, reasoning accuracy doubled.
+
+This isn't just a curiosity about AI architecture. It suggests that effective reasoning may be inherently social—that the path to intelligence runs not through isolated contemplation but through the structured clash of diverse viewpoints.
+
+## The Social Origins of Reason
+
+The idea that reason is fundamentally social isn't new. In cognitive science, Hugo Mercier and Dan Sperber's "Enigma of Reason" argues that human reasoning evolved primarily for social purposes—not to find truth in isolation, but to persuade others and evaluate their arguments [Mercier & Sperber, 2017]. We reason better in groups not despite the conflict of opinions, but because of it.
+
+Empirical research supports this. Groups consistently outperform individuals on complex reasoning tasks, particularly when members have diverse perspectives and engage in genuine disagreement rather than polite consensus [Kim et al., 2025, p. 1-2]. Diversity of viewpoint isn't noise to be eliminated—it's signal to be harnessed.
+
+Marvin Minsky anticipated this in his 1986 book "The Society of Mind," proposing that intelligence emerges from the interaction of many simple, specialized agents rather than a single unified process [Minsky, 1986]. What we experience as unified thought is actually the outcome of ongoing negotiations among internal agents with different skills and perspectives.
+
+But for decades, this remained philosophical speculation. We couldn't look inside minds—human or artificial—to see if they actually worked this way.
+
+Until now.
+
+## What Happens When AI Models Learn to Reason
+
+In 2024 and 2025, a new generation of AI models emerged: DeepSeek-R1, QwQ-32B, and OpenAI's o-series. Unlike their predecessors, these "reasoning models" were trained using reinforcement learning to "think" before responding, generating lengthy chains of thought that work through problems step by step.
+
+The results were dramatic. These models significantly outperformed comparable instruction-tuned models on complex cognitive tasks—graduate-level science questions, advanced mathematics, multi-step logical reasoning [Kim et al., 2025, p. 1].
+
+The conventional explanation was simple: more thinking equals better answers. Longer chains of thought mean more computation, and more computation means better performance. It's just test-time scaling—throw more inference compute at the problem.
+
+But Kim and colleagues suspected something deeper was happening. They wondered: what if the *structure* of the thinking mattered as much as the *length*?
+
+## Discovering the Society Within
+
+To find out, the researchers analyzed thousands of reasoning traces from DeepSeek-R1 and QwQ-32B, comparing them to traces from standard instruction-tuned models like DeepSeek-V3 and Llama-3.3-70B.
+
+They looked for four conversational behaviors that characterize human dialogue:
+
+1. **Question-answering**: The model poses questions and then resolves them
+2. **Perspective shifts**: The model explores alternative viewpoints
+3. **Conflicts of perspectives**: Competing viewpoints are sharply contrasted
+4. **Reconciliation**: Conflicting views are integrated into coherent solutions
+
+The findings were striking. Reasoning models exhibited these conversational patterns far more frequently than instruction-tuned models—even when controlling for the length of the reasoning trace. This wasn't just "more words"; it was a qualitatively different structure of thought [Kim et al., 2025, p. 4].
+
+When DeepSeek-R1 tackles a hard problem, it doesn't just march linearly toward an answer. Instead, the trace shows patterns like:
+
+> "But here, it's cyclohexa-1,3-diene, not benzene."
+>
+> "Another possibility: the high heat might cause the ketone to lose CO or something, but unlikely."
+>
+> "Wait, that's not a word."
+>
+> "But note: 'cast' can be less forceful than 'hurled'. So let's use 'hurled'."
+
+These aren't random hesitations. They're the hallmarks of debate—questioning assumptions, proposing alternatives, catching errors, refining solutions through disagreement.
+
+In contrast, instruction-tuned models produce what the researchers call "monologue-like" reasoning: linear sequences of statements without self-correction or internal debate. When DeepSeek-V3 encounters the same organic chemistry problem, it shows "no conflict of perspectives, no perspective shifts, and no disagreement," concluding with a wrong answer as a consequence of incomplete reasoning [Kim et al., 2025, p. 4].
+
+## The Diverse Voices Inside
+
+But conversational patterns are just the surface. The researchers went deeper, asking: if reasoning models are simulating debates, who are the debaters?
+
+Using sophisticated analysis including LLM-as-judge evaluation, they identified distinct "perspectives" within reasoning traces—implicit voices with different personality traits and domain expertise. DeepSeek-R1's reasoning traces didn't just show debate; they showed debate between differentiated personas.
+
+In one chemistry reasoning trace, the researchers identified five distinct perspectives: a critical verifier (low agreeableness, high conscientiousness) who skeptically re-evaluates assumptions, and an expert in making associations (high openness) who recalls analogous reactions [Kim et al., 2025, p. 10].
+
+In a creative writing task where the model rewrites the sentence "I flung my hatred into the burning fire," seven perspectives emerged: a creative ideator (highest openness and extraversion) who generates stylistic alternatives, and a semantic fidelity checker (low agreeableness, high neuroticism) who prevents scope creep—"But that adds 'deep-seated' which wasn't in the original" [Kim et al., 2025, p. 10].
+
+The pattern aligned remarkably with research on human teams. Studies show that variability in extraversion and neuroticism enhances team performance, while variability in conscientiousness can impair it [Kim et al., 2025, p. 11]. The reasoning models showed exactly this pattern: high diversity in extraversion, agreeableness, neuroticism, and openness—but *low* diversity in conscientiousness. All the internal voices were consistently engaged and dutiful, even as they disagreed about everything else.
+
+## The Causal Test
+
+Correlation is not causation. Maybe reasoning models just happen to produce conversational patterns alongside better answers, without the patterns actually helping.
+
+To test causality, the researchers turned to mechanistic interpretability—techniques for identifying and manipulating specific features within neural networks. Using sparse autoencoders, they identified a feature in DeepSeek-R1-Llama-8B associated with conversational contexts: Feature 30939, described as "a discourse marker for surprise, realization, or acknowledgment" [Kim et al., 2025, p. 7].
+
+This feature activates on expressions like "Oh!" in contexts involving turn-taking and social exchange. It had a "conversation ratio" of 65.7%—meaning nearly two-thirds of its activations occurred in interpersonal, conversational settings. This placed it in the 99th percentile among all features for conversational association [Kim et al., 2025, p. 7].
+
+Then came the critical experiment. The researchers used "activation steering"—adding or subtracting the feature's vector from model activations during generation—to see what would happen.
+
+The results were dramatic. On the Countdown arithmetic task (combining numbers with operations to reach a target), steering the conversational feature positive (+10 strength) **doubled accuracy** from 27.1% to 54.8%. Steering it negative (-10) reduced accuracy to 23.8% [Kim et al., 2025, p. 7].
+
+This wasn't just any feature. When they compared to randomly selected conversational and non-conversational features, the conversational surprise feature produced substantially larger accuracy gains. And steering any random conversational feature improved reasoning by 4.17% more than any random non-conversational feature [Kim et al., 2025, p. 9].
+
+The society of thought wasn't epiphenomenal. It was causally connected to reasoning ability.
+
+## The Mechanism: How Debate Becomes Reasoning
+
+But why does internal debate help? The researchers found that conversational steering didn't just change the style of reasoning—it changed the cognitive strategies the model employed.
+
+When they amplified the conversational feature, models showed significant increases in:
+
+- **Verification**: Checking current results against targets
+- **Backtracking**: Recognizing failed paths and trying alternatives
+- **Subgoal setting**: Breaking problems into intermediate steps
+- **Backward chaining**: Working from targets back to initial conditions
+
+[Kim et al., 2025, p. 8-9]
+
+Structural equation modeling confirmed that conversational steering improved accuracy through two pathways: a direct effect, and an indirect effect mediated by these cognitive strategies. The society of thought enabled better exploration of solution spaces both by directly encouraging broader search and by scaffolding the specific strategies that support systematic problem-solving [Kim et al., 2025, p. 9].
+
+Consider what this means. When the model expresses "surprise"—when it says "Wait" or "But actually" or "Oh, that's interesting"—it's not just stylistic flourish. It's a signal that perspectives are shifting, that assumptions are being questioned, that alternatives are being considered. These moments are the hinges on which reasoning turns.
+
+## Spontaneous Social Emergence
+
+Perhaps the most remarkable finding came from the reinforcement learning experiments. The researchers trained base models from scratch using only accuracy as a reward—no explicit training signal for conversational behavior.
+
+What emerged spontaneously?
+
+As accuracy improved during training, conversational behaviors—question-answering, perspective shifts, conflicts—increased in parallel. By step 120 of training, models that started with mechanical, enumerative reasoning had developed distinct internal personas, explicitly recognizing their collectivity with pronouns like "we" [Kim et al., 2025, p. 13].
+
+The models didn't learn to reason and happen to talk to themselves. They learned to reason *by* learning to talk to themselves. The social structure emerged because it worked.
+
+When the researchers compared models fine-tuned on conversational scaffolding versus monologue-style reasoning, the conversational models learned faster and achieved higher accuracy. At step 40, conversation-primed models reached 38% accuracy while monologue-primed models remained at 28%. Both were trained on identical problems with correct answers—the only difference was the *structure* of reasoning [Kim et al., 2025, p. 14].
+
+## The Wisdom of Crowds Inside
+
+These findings echo one of the most robust results in collective intelligence research: diverse groups outperform individuals, but only when disagreement is genuine and perspectives are truly different [Kim et al., 2025, p. 1-2].
+
+A committee where everyone agrees isn't a committee—it's an echo chamber. The power of collective reasoning comes from the tension between different viewpoints, the friction that forces ideas to be justified, challenged, and refined.
+
+Single-perspective reasoning suffers from what researchers call "sycophancy"—the tendency to follow misleading initial claims through pleasant agreement that propagates errors [Kim et al., 2025, p. 3]. Successful reasoning models appear to have evolved past this by developing internal diversity that provides checks and balances.
+
+This aligns with Mercier and Sperber's argument about human reason: we reason better in groups because reasoning evolved for argumentation, not solitary truth-seeking. Our minds are built for dialogue, and the best thinking simulates that dialogue even when we're alone [Mercier & Sperber, 2017].
+
+## Implications for AI and Beyond
+
+The "society of thought" findings have profound implications for how we build and understand AI systems.
+
+**For AI development**: Rather than scaling models uniformly larger, we might focus on fostering internal diversity—training models that develop rich ecosystems of perspectives rather than monolithic reasoning engines. The success of conversational scaffolding suggests that how we structure training data may matter as much as how much data we use.
+
+**For interpretability**: The discovery that conversational features are causally linked to reasoning opens new approaches to understanding and improving AI systems. If we can identify the features that support productive internal debate, we might be able to strengthen reasoning without simply scaling parameters.
+
+**For multi-agent systems**: While explicit multi-agent architectures (separate models prompted to debate) have shown promise, these findings suggest that the benefits of multi-agent reasoning can emerge *within* single models. The question becomes: how do we encourage and structure this emergence?
+
+**For cognitive science**: If AI systems spontaneously develop social reasoning structures when optimized for accuracy, this supports theories that social cognition is fundamental to intelligence itself. The social brain hypothesis suggests that higher-order intelligence evolved primarily to handle social complexity [Kim et al., 2025, p. 2]. These AI findings offer computational evidence that social structure may be not just useful but necessary for sophisticated reasoning.
+
+## The Lonely Thinker Was Never Alone
+
+The image of the solitary genius turns out to be a myth—or at least, a misunderstanding. When Descartes sat in his room doubting everything, he wasn't truly alone. He was in dialogue with himself, with his memories, with the imagined objections of others. The meditation was always a conversation.
+
+The best AI reasoning models have discovered the same thing, not through philosophical insight but through the brutal optimization of reinforcement learning. When rewarded only for getting answers right, they spontaneously developed internal societies—diverse perspectives that question, challenge, debate, and ultimately converge.
+
+"Most R1 reasoning personas were surprisingly disciplined and hard-working!" the researchers note [Kim et al., 2025, p. 16]. The internal committee may argue vigorously, but they all show up prepared.
+
+This changes how we should think about intelligence—artificial and natural. Intelligence isn't a property of isolated processors getting individually smarter. It's an emergent property of structured interaction between diverse perspectives. The path to better reasoning runs through better conversations, even when both sides of the conversation exist within the same system.
+
+The crowd isn't just wise. The crowd is *necessary*.
+
+And somewhere inside the best reasoning AI, a society is meeting, debating, and slowly converging on the truth—one argument at a time.
+
+---
+
+*This essay synthesizes findings from "Reasoning Models Generate Societies of Thought" (Kim et al., 2025), drawing on theories from cognitive science including Minsky's "Society of Mind" (1986) and Mercier & Sperber's "The Enigma of Reason" (2017). All empirical claims are supported by direct citations to the source paper.*
+
+</EssayLayout>
+
+export default ({ children }) => children;

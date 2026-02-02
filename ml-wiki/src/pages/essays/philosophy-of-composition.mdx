@@ -1,0 +1,207 @@
+import EssayLayout from "../../components/EssayLayout";
+
+export const meta = {
+  title: "The Philosophy of Composition: Tropes, Transformers, and the Elements of Being",
+  description: "An unexpected bridge between analytic metaphysics and neural network architecture reveals deep structural parallels in how reality and artificial minds compose complex wholes from simple parts.",
+  readingTime: "22 min read",
+  audioPath: "/audio/philosophy-of-composition.mp3",
+  relatedPapers: [
+    { title: "On the Elements of Being", slug: "elements-of-being" },
+    { title: "Why Properties Are Tropes", slug: "why-properties-are-tropes" },
+    { title: "A Mathematical Explanation of Transformers", slug: "mathematical-transformers" }
+  ],
+  relatedConcepts: [
+    { name: "Tropes", slug: "tropes" },
+    { name: "Operator Splitting Methods", slug: "operator-splitting" }
+  ],
+  citations: [
+    {
+      paper: "On the Elements of Being: I",
+      authors: "Williams, D. C.",
+      year: "1953",
+      pages: "3-18"
+    },
+    {
+      paper: "Why Properties Are Tropes",
+      authors: "Jaworski, W.",
+      year: "2016",
+      pages: "Chapter from Structure and the Metaphysics of Mind"
+    },
+    {
+      paper: "A Mathematical Explanation of Transformers for Large Language Models and GPTs",
+      authors: "Tai, X., Liu, H., Li, L., & Chan, R. H.",
+      year: "2025",
+      pages: "1-31"
+    }
+  ]
+};
+
+<EssayLayout {...meta}>
+
+## The Unlikely Conversation
+
+In 1953, the philosopher Donald C. Williams published a paper that would quietly reshape discussions about the nature of reality. "On the Elements of Being" argued for a radical view: the fundamental constituents of the world are not objects or universal properties, but *tropes*—particular instances of properties that exist only once, in one place, at one time [Williams, 1953, p.3].
+
+Seventy years later, a team of mathematicians published a paper explaining how Transformers—the architecture powering modern AI—could be understood as discretizations of continuous integro-differential equations [Tai et al., 2025, p.2]. On the surface, these papers have nothing in common. One concerns the deepest questions of metaphysics; the other, the mathematical foundations of neural networks.
+
+Yet beneath their different vocabularies lies a remarkable structural parallel. Both grapple with the same fundamental question: How do complex wholes arise from simple parts? And both arrive at surprisingly similar answers.
+
+## The Trope Theorist's World
+
+To understand Williams' insight, we must first understand the problem he was solving. Traditional metaphysics offered two unsatisfying accounts of properties.
+
+The first, **realism about universals**, holds that properties like "redness" or "squareness" are abstract entities that exist independently of any particular red or square thing. When we say that two fire trucks are both red, on this view, they literally *share* something—the universal "redness" is wholly present in both trucks simultaneously [Jaworski, 2016]. But this raises puzzling questions. How can one thing be wholly present in multiple places at once? And what connects these ghostly universals to the concrete objects we experience?
+
+The second account, **extreme nominalism**, denies that properties exist at all. There are only particular objects, and when we call two trucks "red," we're just grouping them by linguistic convention. But this makes the genuine similarities between things mysterious. Two fire trucks really do share something that distinguishes them from ambulances—this isn't mere verbal classification.
+
+Williams proposed a third way. What if properties exist, but exist as *particulars*? The redness of this fire truck is a real thing, but it is not the same thing as the redness of that fire truck. Each instance of red is a unique, unrepeatable entity—a trope [Williams, 1953, p.4].
+
+This seemingly small shift has profound implications. If tropes are the basic elements of being, then ordinary objects are not *substances* that somehow *have* properties. Rather, objects are *bundles* of tropes—collections of particular qualities that happen to occur together [Williams, 1953, p.7].
+
+## Concurrence and Resemblance
+
+Williams identified two fundamental relations that structure the trope-theoretic world.
+
+The first is **concurrence**—the relation that holds between tropes when they occur together in the same location. The redness of this apple, its particular spherical shape, its specific weight, its individual tartness—all these tropes are concurrent. They coincide spatiotemporally, bundled together into what we call "the apple" [Williams, 1953, p.7].
+
+Concurrence is what gives us objects. Without it, tropes would float freely, unconnected qualities with no coherent things to which they belong. The apple exists because its component tropes are concurrent—they form a unified bundle that persists through time and occupies a definite region of space.
+
+The second fundamental relation is **resemblance**. While no two tropes are identical, some tropes are more similar to each other than to others. The redness of this fire truck resembles the redness of that fire truck more than it resembles the blueness of the sky [Williams, 1953, p.8].
+
+Resemblance is what gives us kinds. We can speak of "red things" not because they share a universal, but because their respective redness-tropes form a resemblance class—a set of tropes that mutually resemble each other more closely than they resemble tropes outside the set.
+
+Here is the key insight: **everything in the trope theorist's world is built from these two relations**. Concurrence bundles tropes into objects. Resemblance groups tropes into kinds. From these simple operations, the entire structure of reality can be constructed [Williams, 1953, p.9].
+
+## The Mathematician's Transformer
+
+Now let us turn to a seemingly unrelated domain. In 2025, Tai and colleagues published a paper offering a mathematical explanation for why Transformers work [Tai et al., 2025]. Their key insight was that the Transformer architecture can be derived from first principles as a discretization of a continuous evolution equation.
+
+The starting point is an integro-differential equation that describes how a function u—representing the "state" of the system—evolves over time. Each term in the equation corresponds to a different operation: one handles attention, others handle normalization, and still others handle feedforward processing [Tai et al., 2025, p.3].
+
+But here's the challenge: this equation is too complex to solve directly. The operators interact in complicated ways, and there's no closed-form solution.
+
+The solution is **operator splitting**. Instead of solving the complete equation at once, we decompose it into simpler subproblems. Each subproblem involves only one operator, and we solve them sequentially, passing the output of one as the input to the next [Tai et al., 2025, p.18-19].
+
+This is called **Lie splitting**, and it works as follows. Given the current state, we compute the next state by:
+
+1. Apply the attention operator alone
+2. Apply the first normalization operator
+3. Apply each feedforward layer
+4. Apply the skip connection
+5. Apply the final normalization
+
+Each step is tractable in isolation. And when we discretize these continuous operations—turning integrals into sums, derivatives into differences—we recover exactly the standard Transformer architecture [Tai et al., 2025, p.12].
+
+## The Hidden Isomorphism
+
+Here is where the unexpected connection emerges.
+
+Consider what operator splitting does: it takes a complex evolution and decomposes it into simple operations that combine to produce the whole. The attention operator extracts relationships between elements. The normalization operators enforce constraints. The feedforward layers transform the representation. The skip connection preserves information.
+
+Now consider what trope theory does: it takes the complex structure of reality and decomposes it into simple elements that combine to produce the whole. Tropes are the basic constituents. Concurrence bundles them into objects. Resemblance groups them into kinds.
+
+The parallel is structural. In both cases:
+
+1. **The complex is composed from the simple.** Neither Transformers nor reality (on the trope view) has irreducible complexity. Everything can be built from elementary operations or entities.
+
+2. **Composition follows definite rules.** Tropes don't bundle randomly—concurrence has specific requirements (spatiotemporal coincidence). Operators don't combine randomly—splitting has a specific order dictated by the underlying equation.
+
+3. **Two fundamental operations suffice.** Trope theory needs only concurrence and resemblance. The Transformer needs only local operations (feedforward) and non-local operations (attention). Remarkably, attention is essentially a resemblance operation—it computes similarity between elements—while the feedforward layers and normalizations handle local, concurrent transformations.
+
+4. **Order matters.** In Lie splitting, the sequence of operations affects the result. In trope bundles, the specific tropes that are concurrent determine what object exists. Neither system is commutative in general.
+
+## Attention as Resemblance
+
+The deepest parallel concerns the attention mechanism. In a Transformer, attention computes similarity weights between queries and keys, then uses those weights to aggregate values [Tai et al., 2025, p.5].
+
+What does this operation actually do? It compares each query position to every key position, producing similarity weights. These weights then determine how much each value contributes to the output.
+
+This is precisely a resemblance operation. Each position "looks at" every other position and measures how similar they are. Positions with high resemblance contribute strongly to each other; positions with low resemblance contribute weakly.
+
+In trope-theoretic terms, attention computes the resemblance structure over a set of trope-like entities (the token embeddings). Just as resemblance groups tropes into kinds, attention groups tokens into semantically related clusters.
+
+The softmax normalization ensures that resemblances are well-behaved—they sum to one, preventing any single resemblance from dominating arbitrarily. This is analogous to how resemblance in trope theory is typically taken to be a matter of degree, with various formal constraints ensuring coherent resemblance classes.
+
+## Feedforward Layers as Concurrence
+
+What about the feedforward layers? In the mathematical framework, these solve subproblems that transform each position independently, without reference to other positions [Tai et al., 2025, p.9]. They're about what happens *within* a representational bundle, not about relationships *between* bundles.
+
+This corresponds to concurrence. The feedforward layer takes the features concurrent at a given position and transforms them. It's refining the internal structure of each bundle, not computing relationships between bundles.
+
+The interleaving of attention and feedforward layers in Transformers thus mirrors the interplay of resemblance and concurrence in trope theory. First, resemblance (attention) establishes relationships between elements. Then, concurrence (feedforward) refines the internal structure of each element. This alternation continues layer by layer, progressively building complex representations from simple operations.
+
+## Normalization as Constraint
+
+Both frameworks require constraints on their basic operations.
+
+In trope theory, not any arbitrary collection of tropes can form a bundle. The tropes must be genuinely concurrent—they must occupy the same spatiotemporal location. This constraint prevents metaphysical chaos, ensuring that bundles correspond to genuine objects rather than arbitrary gerrymandered collections.
+
+In Transformers, layer normalization plays an analogous role. It projects the representation onto a constraint set—specifically, the set of vectors with unit variance and zero mean [Tai et al., 2025, p.8]. This prevents representational chaos, ensuring that activations remain in a well-behaved range rather than exploding or collapsing.
+
+This is a formal constraint ensuring that the system's states remain "valid"—just as the concurrence requirement ensures that trope bundles remain valid objects. Without such constraints, both systems would degenerate into incoherence.
+
+## Skip Connections and Persistence
+
+Williams emphasized that trope bundles persist through time. The apple today is the same apple as yesterday, even though it has changed slightly. How is this possible if the apple is just a bundle of tropes?
+
+The answer involves a kind of continuity—enough tropes must persist and remain concurrent for the bundle to maintain its identity. The apple can lose a few molecules without ceasing to be that apple, but it cannot lose all its constituent tropes.
+
+Skip connections in Transformers serve an analogous function. By adding the input directly to the output of each sublayer, skip connections ensure continuity of representation. The identity of the token is preserved even as it is transformed [Tai et al., 2025, p.10].
+
+In the operator splitting framework, skip connections arise from terms that average the old and new states, ensuring that transformation is gradual rather than abrupt. Information persists across layers, just as trope bundles persist across time.
+
+## Why This Parallel Matters
+
+One might wonder whether this is mere analogy—an entertaining coincidence without deeper significance. I think it is more than that, for several reasons.
+
+First, **both frameworks solve the same abstract problem**: compositional complexity. How do you build complex, coherent wholes from simple parts? This is perhaps the fundamental question of both metaphysics and representation learning. It would be surprising if successful solutions didn't share structural features.
+
+Second, **the parallel is mathematically precise**. It's not that attention is vaguely "like" resemblance—attention literally computes pairwise similarities, which is exactly what resemblance measures. It's not that feedforward layers are vaguely "like" concurrence—they literally operate on co-located features, which is exactly what concurrence bundles.
+
+Third, **the parallel suggests research directions**. If Transformers implement something like trope theory, then insights from metaphysics might inform architecture design. For instance, trope theorists have developed sophisticated accounts of resemblance relations—perhaps these could inspire novel attention mechanisms. Conversely, the success of Transformers might offer indirect support for trope theory as a correct metaphysics.
+
+## The Deeper Unity
+
+At the deepest level, both trope theory and operator splitting reflect a common insight: **complexity must be compositional to be tractable**.
+
+Williams argued that traditional metaphysics, with its substances and universals, posited irreducible complexity. A substance "has" properties, but the having relation was mysterious—a brute connection between fundamentally different kinds of things. Trope theory dissolves this mystery by making everything the same kind of thing (tropes) related in the same kinds of ways (concurrence and resemblance).
+
+Similarly, Tai and colleagues argued that neural networks, understood as black boxes, involve irreducible complexity. But when viewed as discretizations of continuous equations solved by operator splitting, their complexity becomes compositional—built from simple, well-understood operations with clear mathematical properties.
+
+This is not a coincidence. Compositional structure is what makes understanding possible. Whether we are trying to understand the nature of reality or the behavior of neural networks, we need to decompose wholes into parts and relationships. And the most successful decompositions share common features: simple basic elements, a small number of composition operations, and constraints ensuring coherence.
+
+## Implications for AI
+
+If this analysis is correct, what does it imply for artificial intelligence?
+
+One implication is that **Transformers are doing something metaphysically natural**. They're not arbitrary computational systems; they implement composition principles that reflect deep structures of possibility. This might help explain their unreasonable effectiveness—they are, in a sense, tracking the joints of reality.
+
+Another implication concerns **interpretability**. If attention corresponds to resemblance and feedforward layers to concurrence, then we have conceptual handles for understanding what Transformers compute. A token's representation is a bundle of features (tropes) that are concurrent at that position. Attention computes how that bundle resembles other bundles, determining information flow. Feedforward layers refine the internal structure of each bundle.
+
+A third implication is **architectural**. Trope theory suggests that concurrence and resemblance are not arbitrary operations—they have specific formal properties that constrain how they can combine. Perhaps these constraints could guide architecture search, ruling out combinations that violate metaphysically natural composition principles.
+
+## The Philosophy of Deep Learning
+
+This essay has traced an unexpected connection between analytic metaphysics and neural network architecture. Williams and Tai never conversed, worked in different centuries on different continents, and addressed different problems. Yet they arrived at structurally parallel solutions.
+
+Perhaps this reflects something about the nature of understanding itself. Both philosophy and mathematics seek to decompose complexity into tractable parts. Both prize elegance—solutions that accomplish much with little. Both aim for generality—principles that apply across domains.
+
+The trope theorist asks: What are the elements of being? The neural network theorist asks: What are the elements of computation? That their answers should resemble each other suggests that the question has a determinate answer—that there is a right way to compose complex wholes from simple parts, and that we are converging on it from multiple directions.
+
+This convergence is itself a kind of evidence. When independent inquiries arrive at the same structure, that structure is probably tracking something real. The philosophy of composition may not be mere metaphysical speculation. It may be telling us something about the architecture of mind—both natural and artificial.
+
+Williams titled his paper "On the Elements of Being." Tai titled theirs "A Mathematical Explanation of Transformers." But they might have shared a title: "How Complexity Composes."
+
+For whether we are asking what exists or what computes, the answer seems to involve the same primitive operations: bundling the concurrent and tracing the resemblant. From these elements, both being and thinking are built.
+
+---
+
+## References
+
+- Williams, D. C. (1953). On the elements of being: I. *The Review of Metaphysics*, 7(1), 3-18.
+- Jaworski, W. (2016). Why properties are tropes. In *Structure and the Metaphysics of Mind: How Hylomorphism Solves the Mind-Body Problem*. Oxford University Press.
+- Tai, X., Liu, H., Li, L., & Chan, R. H. (2025). A Mathematical Explanation of Transformers for Large Language Models and GPTs. arXiv preprint arXiv:2510.03989.
+
+</EssayLayout>
+
+export default ({ children }) => children;
